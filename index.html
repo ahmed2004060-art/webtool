@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بناء APK عبر GitHub</title>
+<title>مصنع تطبيقات APK</title>
 <style>
 :root{--bg:#f4f5f7;--card:#fff;--text:#1c1e21;--muted:#7a7f87;--line:#e3e5e8;--accent:#2f6fdb;--ok:#1e8e3e;--err:#d93025}
 *{box-sizing:border-box}
@@ -13,9 +13,12 @@ p.sub{color:var(--muted);font-size:.85rem;margin:0 0 16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
 label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
 input[type=text],input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:1rem;background:var(--bg);color:var(--text);margin-bottom:12px}
+input[type=file]{width:100%;padding:10px;border:1px dashed var(--line);border-radius:10px;background:var(--bg);margin-bottom:6px;font-size:.85rem}
+input[type=color]{width:44px;height:38px;border:1px solid var(--line);border-radius:8px;padding:2px;background:var(--bg)}
+select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.95rem;background:var(--bg);color:var(--text);margin-bottom:12px}
+.fileok{font-size:.8rem;color:var(--ok);margin-bottom:12px;display:none}
 button{width:100%;padding:13px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-size:1rem;font-weight:600;cursor:pointer}
 button:disabled{opacity:.55}
-button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .log{background:#0f1115;color:#d7dade;font-size:.78rem;border-radius:10px;padding:10px;max-height:220px;overflow-y:auto;white-space:pre-wrap;direction:ltr;text-align:left;margin-top:10px;display:none}
 .status{font-size:.85rem;margin-top:8px;display:none;padding:10px;border-radius:10px}
 .status.ok{background:#e6f4ea;color:var(--ok);display:block}
@@ -25,21 +28,43 @@ a.dl{display:block;text-align:center;background:var(--ok);color:#fff;padding:13p
 details{margin-top:6px}
 summary{color:var(--accent);font-size:.85rem;cursor:pointer}
 ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
+.note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.7}
+.icon-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+#iconPreview{border:1px solid var(--line);flex-shrink:0;border-radius:12px;background:
+  linear-gradient(45deg,#eee 25%,transparent 25%),
+  linear-gradient(-45deg,#eee 25%,transparent 25%),
+  linear-gradient(45deg,transparent 75%,#eee 75%),
+  linear-gradient(-45deg,transparent 75%,#eee 75%);
+  background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0}
+.icon-controls{flex:1;min-width:0}
+.color-row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.color-row span{font-size:.78rem;color:var(--muted)}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tab{flex:1;min-width:80px;text-align:center;padding:9px 6px;border:1px solid var(--line);border-radius:10px;font-size:.8rem;cursor:pointer;color:var(--muted)}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.hidden{display:none}
+.glyph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.glyph-btn{aspect-ratio:1;border:2px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:4px}
+.glyph-btn.active{border-color:var(--accent);background:#eaf1ff}
+.glyph-btn canvas{width:100%;height:100%}
+.toggles{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:.82rem}
+.toggles label{display:flex;align-items:center;gap:5px;color:var(--text);margin:0;cursor:pointer}
+.toggles input{width:auto;margin:0}
 </style>
 </head>
 <body>
-<h1>🤖 بناء تطبيق APK عبر GitHub</h1>
-<p class="sub">يرفع المشروع إلى GitHub ويبنيه هناك مجانًا، ثم يعطيك رابط تحميل APK.</p>
+<h1>🤖 مصنع تطبيقات APK</h1>
+<p class="sub">اختار صفحة HTML، صمّم أيقونة احترافية كاملة، واسم التطبيق، ودوس زر واحد — يبنيه على GitHub ويرجّعلك APK.</p>
 
 <div class="card">
   <details>
-    <summary>كيف أحصل على Token من GitHub؟</summary>
+    <summary>كيف أحصل على Token من GitHub؟ (مرة واحدة بس)</summary>
     <ol>
-      <li>افتح github.com وسجّل دخول (أنشئ حساب إن لم يكن لديك).</li>
-      <li>اذهب إلى: Settings ← Developer settings ← Personal access tokens ← Tokens (classic).</li>
-      <li>اضغط Generate new token (classic).</li>
+      <li>افتح github.com وسجّل دخول.</li>
+      <li>Settings ← Developer settings ← Personal access tokens ← Tokens (classic).</li>
+      <li>Generate new token (classic).</li>
       <li>اختر صلاحية <b>repo</b> و<b>workflow</b> فقط.</li>
-      <li>اضغط Generate ثم انسخ الـ Token (يبدأ بـ ghp_).</li>
+      <li>Generate token، وانسخه فورًا (يبدأ بـ ghp_).</li>
     </ol>
   </details>
 </div>
@@ -49,21 +74,443 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
   <input type="text" id="user" placeholder="مثال: ahmed123">
   <label>Personal Access Token</label>
   <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
-  <label>اسم المشروع (Repository) الجديد</label>
-  <input type="text" id="repo" placeholder="mychatapp" value="my-webview-app">
+  <label>اسم التطبيق (هيظهر تحت الأيقونة)</label>
+  <input type="text" id="appname" placeholder="مثال: دردشتي">
+  <label>اسم المشروع (Repository) — كل تطبيق جديد يحتاج اسم مختلف</label>
+  <input type="text" id="repo" placeholder="مثال: my-second-app">
+  <label>صفحة HTML الخاصة بالتطبيق</label>
+  <input type="file" id="htmlfile" accept=".html,text/html">
+  <div class="fileok" id="fileok"></div>
+</div>
+
+<div class="card">
+  <label>🎨 محتوى الأيقونة</label>
+  <div class="tabs">
+    <div class="tab active" id="tabText">نص / إيموجي</div>
+    <div class="tab" id="tabGlyph">مكتبة رموز</div>
+    <div class="tab" id="tabUpload">صورة جاهزة</div>
+  </div>
+
+  <div class="icon-row">
+    <canvas id="iconPreview" width="110" height="110"></canvas>
+    <div class="icon-controls">
+      <div id="textControls">
+        <input type="text" id="iconText" maxlength="2" placeholder="حرف أو إيموجي (اختياري)">
+      </div>
+      <div id="glyphControls" class="hidden">
+        <div class="glyph-grid" id="glyphGrid"></div>
+      </div>
+      <div id="uploadControls" class="hidden">
+        <input type="file" id="iconfile" accept="image/png,image/jpeg">
+      </div>
+    </div>
+  </div>
+
+  <label>شكل الأيقونة</label>
+  <select id="iconShape">
+    <option value="rounded">مربع بزوايا دائرية</option>
+    <option value="circle">دائرة</option>
+    <option value="squircle">سكويركل (Squircle عصري)</option>
+    <option value="square">مربع حاد</option>
+  </select>
+
+  <label>ألوان الخلفية</label>
+  <div class="color-row">
+    <input type="color" id="color1" value="#2f6fdb">
+    <input type="color" id="color2" value="#8e2fdb">
+    <select id="gradDir" style="flex:1;margin:0">
+      <option value="diag">تدرج قطري</option>
+      <option value="horiz">تدرج أفقي</option>
+      <option value="vert">تدرج رأسي</option>
+      <option value="radial">تدرج شعاعي</option>
+      <option value="solid">لون واحد فقط</option>
+    </select>
+  </div>
+
+  <div class="toggles">
+    <label><input type="checkbox" id="fxShine" checked> لمعان زجاجي</label>
+    <label><input type="checkbox" id="fxShadow" checked> ظل خفيف</label>
+    <label><input type="checkbox" id="fxBorder"> إطار خارجي</label>
+  </div>
+  <div class="note">
+    الأيقونة بتتحدّث تلقائيًا وإنت بتصمم. الأداة بتولّد نسختين: نسخة كلاسيكية لكل الأجهزة، ونسخة "تكيّفية" (Adaptive Icon) للأندرويد الحديث بتتحرك وتتكيف مع شكل الأيقونات في هاتفك تلقائيًا.
+  </div>
+</div>
+
+<div class="card">
   <button id="buildBtn">🚀 ابنِ التطبيق الآن</button>
   <div class="status" id="status"></div>
   <div class="log" id="log"></div>
   <div id="dlArea"></div>
+  <div class="note">لتطبيق جديد: غيّر "اسم المشروع"، واختار HTML وأيقونة جديدة، ودوس الزرار تاني.</div>
 </div>
 
 <script>
-const FILES = 
-{"build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    defaultConfig {\n        applicationId \"com.example.chatapp\"\n        minSdk 21\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@android:drawable/sym_def_app_icon\"\n        android:usesCleartextTraffic=\"false\"\n        android:theme=\"@android:style/Theme.DeviceDefault.NoActionBar\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n", "app/src/main/assets/index.html": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>\u062f\u0631\u062f\u0634\u0629 Claude</title>\n<meta name=\"theme-color\" content=\"#1f3a5f\">\n<meta name=\"mobile-web-app-capable\" content=\"yes\">\n<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n<style>\n:root{--bg:#f4f5f7;--card:#fff;--text:#1c1e21;--muted:#7a7f87;--line:#e3e5e8;--me:#1f3a5f;--meText:#fff;--bot:#eef0f3;--accent:#2f6fdb}\n:root[data-theme=dark]{--bg:#14161a;--card:#1d2026;--text:#e8eaed;--muted:#8b9199;--line:#2c3038;--me:#3b6fd4;--meText:#fff;--bot:#262a31;--accent:#6ea0ff}\n*{box-sizing:border-box}\nhtml,body{height:100%;margin:0}\nbody{font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);display:flex;justify-content:center}\n.app{width:100%;max-width:820px;height:100%;background:var(--card);display:flex;flex-direction:column}\nheader{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}\nheader h1{font-size:1.05rem;margin:0;flex:1}\nselect,button,textarea{font:inherit;color:inherit}\nselect{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px;max-width:150px}\n.ib{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}\n.opts{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--muted)}\n.opts label{display:flex;align-items:center;gap:5px;cursor:pointer}\n#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}\n.empty{margin:auto;color:var(--muted);text-align:center;line-height:1.8}\n.msg{max-width:88%;padding:10px 14px;border-radius:14px;line-height:1.75;font-size:.95rem;white-space:pre-wrap;word-break:break-word}\n.msg.user{align-self:flex-start;background:var(--me);color:var(--meText)}\n.msg.bot{align-self:flex-end;background:var(--bot)}\n.msg code{background:rgba(127,127,127,.2);padding:1px 5px;border-radius:4px;direction:ltr;unicode-bidi:embed}\n.msg pre{background:#0f1115;color:#e6e6e6;padding:10px;border-radius:8px;overflow-x:auto;direction:ltr;text-align:left;white-space:pre;margin:8px 0}\n.msg pre code{background:none;padding:0}\n.tools{display:flex;gap:8px;margin-top:6px;font-size:.75rem;color:var(--muted)}\n.tools button{background:none;border:none;color:var(--accent);cursor:pointer;padding:0}\n.bar{padding:10px 14px;border-top:1px solid var(--line);padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}\n.row{display:flex;gap:8px;align-items:flex-end}\ntextarea{flex:1;min-height:44px;max-height:160px;resize:none;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);outline:none}\ntextarea:focus{border-color:var(--accent)}\n#send{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:0 18px;height:44px;font-weight:600;cursor:pointer}\n#send.stop{background:#c0392b}\n#send:disabled{opacity:.5}\n.meta{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:6px}\nbutton:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}\n</style>\n</head>\n<body>\n<div class=\"app\">\n  <header>\n    <h1>\ud83e\udd16 \u062f\u0631\u062f\u0634\u0629 Claude</h1>\n    <select id=\"chats\" title=\"\u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0627\u062a\"></select>\n    <button class=\"ib\" id=\"newchat\" title=\"\u0645\u062d\u0627\u062f\u062b\u0629 \u062c\u062f\u064a\u062f\u0629\">\u2795</button>\n    <select id=\"model\" title=\"\u0627\u0644\u0646\u0645\u0648\u0630\u062c\">\n      <option value=\"anthropic/claude-sonnet-5\">Sonnet 5 (\u0623\u0630\u0643\u0649)</option>\n      <option value=\"anthropic/claude-haiku-4-5\">Haiku 4.5 (\u0623\u062e\u0641 \u0648\u0623\u0633\u0631\u0639)</option>\n      <option value=\"z-ai/glm-5.3\">GLM 5.3</option>\n      <option value=\"z-ai/glm-5.3-prime\">GLM 5.3 Prime (\u0623\u0633\u0631\u0639)</option>\n      <option value=\"moonshotai/kimi-k2\">Kimi K2</option>\n    </select>\n    <button class=\"ib\" id=\"models\" title=\"\u062a\u062d\u0645\u064a\u0644 \u0643\u0644 \u0627\u0644\u0646\u0645\u0627\u0630\u062c \u0627\u0644\u0645\u062a\u0627\u062d\u0629\">\ud83e\udde9</button>\n    <button class=\"ib\" id=\"theme\" title=\"\u0627\u0644\u0648\u0636\u0639 \u0627\u0644\u062f\u0627\u0643\u0646\">\ud83c\udf13</button>\n    <button class=\"ib\" id=\"install\" title=\"\u062a\u062b\u0628\u064a\u062a \u0643\u062a\u0637\u0628\u064a\u0642\" hidden>\ud83d\udcf2</button>\n    <button class=\"ib\" id=\"regen\" title=\"\u0625\u0639\u0627\u062f\u0629 \u062a\u0648\u0644\u064a\u062f \u0627\u0644\u0631\u062f\">\ud83d\udd04</button>\n    <button class=\"ib\" id=\"usage\" title=\"\u0631\u0635\u064a\u062f\u0643 \u0648\u0627\u0633\u062a\u0647\u0644\u0627\u0643\u0643 \u0641\u064a Puter\">\ud83d\udcca</button>\n    <button class=\"ib\" id=\"export\" title=\"\u062a\u0635\u062f\u064a\u0631 \u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0629\">\u2b07\ufe0f</button>\n    <button class=\"ib\" id=\"clear\" title=\"\u062d\u0630\u0641 \u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0629\">\ud83d\uddd1\ufe0f</button>\n  </header>\n\n  <div class=\"opts\">\n    <label>\u0627\u0644\u0634\u062e\u0635\u064a\u0629:\n      <select id=\"persona\">\n        <option value=\"general\">\u0639\u0627\u0645\u0629</option><option value=\"translator\">\u0645\u062a\u0631\u062c\u0645</option>\n        <option value=\"coder\">\u0645\u0628\u0631\u0645\u062c</option><option value=\"teacher\">\u0645\u0639\u0644\u0651\u0645</option>\n        <option value=\"writer\">\u0643\u0627\u062a\u0628</option><option value=\"summ\">\u0645\u0644\u062e\u0651\u0635</option>\n      </select>\n    </label>\n    <label><input type=\"checkbox\" id=\"saver\" checked> \u0648\u0636\u0639 \u062a\u0648\u0641\u064a\u0631 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a (\u0631\u062f\u0648\u062f \u0645\u062e\u062a\u0635\u0631\u0629)</label>\n    <label><input type=\"checkbox\" id=\"ctx\" checked> \u062a\u0630\u0643\u0651\u0631 \u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0629</label>\n    <label><input type=\"checkbox\" id=\"cache\" checked> \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0631\u062f\u0648\u062f \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629</label>\n    <label><input type=\"checkbox\" id=\"stream\"> \u0639\u0631\u0636 \u0627\u0644\u0631\u062f \u0623\u062b\u0646\u0627\u0621 \u0643\u062a\u0627\u0628\u062a\u0647 (\u0623\u0643\u062b\u0631 \u0627\u0633\u062a\u0647\u0644\u0627\u0643\u064b\u0627)</label>\n    <label><input type=\"checkbox\" id=\"eco\" checked> \u0646\u0645\u0648\u0630\u062c \u0627\u0642\u062a\u0635\u0627\u062f\u064a \u062a\u0644\u0642\u0627\u0626\u064a\u064b\u0627 \u0644\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0642\u0635\u064a\u0631\u0629</label>\n    <label>\u0645\u0635\u062f\u0631 \u0627\u0644\u0642\u0631\u0627\u0621\u0629:\n      <select id=\"vsrc\"><option value=\"device\">\u0635\u0648\u062a \u0627\u0644\u062c\u0647\u0627\u0632 (\u0645\u062c\u0627\u0646\u064a)</option><option value=\"cloud\">\u0635\u0648\u062a \u0633\u062d\u0627\u0628\u064a Puter (\u064a\u0633\u062a\u0647\u0644\u0643 \u0631\u0635\u064a\u062f\u064b\u0627)</option></select>\n    </label>\n    <label>\u0627\u0644\u0635\u0648\u062a: <select id=\"voice\"><option value=\"auto\">\u062a\u0644\u0642\u0627\u0626\u064a \u062d\u0633\u0628 \u0627\u0644\u0644\u063a\u0629</option></select></label>\n    <label>\u0644\u063a\u0629 \u0627\u0644\u0625\u0645\u0644\u0627\u0621:\n      <select id=\"mlang\">\n        <option value=\"\">\u062a\u0644\u0642\u0627\u0626\u064a</option><option value=\"ar-SA\">\u0627\u0644\u0639\u0631\u0628\u064a\u0629</option><option value=\"en-US\">English</option>\n        <option value=\"fr-FR\">Fran\u00e7ais</option><option value=\"es-ES\">Espa\u00f1ol</option><option value=\"de-DE\">Deutsch</option>\n        <option value=\"tr-TR\">T\u00fcrk\u00e7e</option><option value=\"ru-RU\">\u0420\u0443\u0441\u0441\u043a\u0438\u0439</option><option value=\"hi-IN\">\u0939\u093f\u0928\u094d\u0926\u0940</option>\n        <option value=\"ur-PK\">\u0627\u0631\u062f\u0648</option><option value=\"fa-IR\">\u0641\u0627\u0631\u0633\u06cc</option><option value=\"zh-CN\">\u4e2d\u6587</option>\n        <option value=\"ja-JP\">\u65e5\u672c\u8a9e</option><option value=\"ko-KR\">\ud55c\uad6d\uc5b4</option><option value=\"id-ID\">Indonesia</option>\n        <option value=\"pt-BR\">Portugu\u00eas</option><option value=\"it-IT\">Italiano</option>\n      </select>\n    </label>\n  </div>\n\n  <div id=\"chat\"></div>\n\n  <div class=\"bar\">\n    <div class=\"row\">\n      <textarea id=\"prompt\" rows=\"1\" placeholder=\"\u0627\u0643\u062a\u0628 \u0633\u0624\u0627\u0644\u0643 \u0647\u0646\u0627...\"></textarea>\n      <button class=\"ib\" id=\"mic\" title=\"\u0625\u0645\u0644\u0627\u0621 \u0635\u0648\u062a\u064a\" style=\"height:44px\">\ud83c\udfa4</button>\n      <button id=\"send\">\u0625\u0631\u0633\u0627\u0644</button>\n    </div>\n    <div class=\"meta\"><span id=\"status\"></span><span id=\"stats\"></span></div>\n  </div>\n</div>\n\n<script>\nconst $ = id => document.getElementById(id);\nconst chatEl = $('chat'), promptEl = $('prompt'), sendBtn = $('send'), statusEl = $('status'), statsEl = $('stats');\n\n// ---------- \u062a\u062d\u0645\u064a\u0644 Puter.js \u0639\u0646\u062f \u0623\u0648\u0644 \u0625\u0631\u0633\u0627\u0644 \u0641\u0642\u0637 (\u0644\u0627 \u0627\u0633\u062a\u0647\u0644\u0627\u0643 \u0639\u0646\u062f \u0641\u062a\u062d \u0627\u0644\u0635\u0641\u062d\u0629) ----------\nlet puterPromise = null;\nfunction loadPuter() {\n  if (typeof puter !== 'undefined') return Promise.resolve();\n  if (!puterPromise) puterPromise = new Promise((res, rej) => {\n    const s = document.createElement('script');\n    s.src = 'https://js.puter.com/v2/';\n    s.onload = res;\n    s.onerror = () => { puterPromise = null; rej(new Error('\u062a\u0639\u0630\u0651\u0631 \u062a\u062d\u0645\u064a\u0644 Puter.js. \u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u0627\u062a\u0635\u0627\u0644.')); };\n    document.head.appendChild(s);\n  });\n  return puterPromise;\n}\n\n// ---------- \u062a\u062e\u0632\u064a\u0646 \u0622\u0645\u0646 ----------\nconst store = {\n  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },\n  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }\n};\n\n// ---------- \u0627\u0644\u0625\u0639\u062f\u0627\u062f\u0627\u062a ----------\nconst MAX_CONTEXT = 6;          // \u0622\u062e\u0631 6 \u0631\u0633\u0627\u0626\u0644 \u0641\u0642\u0637 \u062a\u064f\u0631\u0633\u0644 (\u062a\u0648\u0641\u064a\u0631)\nconst MAX_TOKENS_SAVER = 400;   // \u062d\u062f \u0623\u0642\u0635\u0649 \u0644\u0637\u0648\u0644 \u0627\u0644\u0631\u062f \u0641\u064a \u0648\u0636\u0639 \u0627\u0644\u062a\u0648\u0641\u064a\u0631\nconst MAX_TOKENS_NORMAL = 1500;\nconst SAVER_PROMPT = '\u0623\u062c\u0628 \u0628\u0625\u064a\u062c\u0627\u0632 \u0648\u062f\u0642\u0629 \u0648\u0628\u0646\u0641\u0633 \u0644\u063a\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u060c \u062f\u0648\u0646 \u0645\u0642\u062f\u0645\u0627\u062a \u0623\u0648 \u062a\u0643\u0631\u0627\u0631.';\n\nlet chats = store.get('chats', null) || { c1: { title: '\u0645\u062d\u0627\u062f\u062b\u0629 1', h: store.get('history', []) } };\nlet cur = store.get('cur', 'c1'); if (!chats[cur]) cur = Object.keys(chats)[0];\nlet history = chats[cur].h;   // [{role, content}]\nconst PERSONAS = {\n  general: '',\n  translator: '\u0623\u0646\u062a \u0645\u062a\u0631\u062c\u0645 \u0645\u062d\u062a\u0631\u0641: \u062a\u0631\u062c\u0645 \u0627\u0644\u0646\u0635 \u0628\u062f\u0642\u0629 \u0628\u064a\u0646 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0648\u0627\u0644\u0625\u0646\u062c\u0644\u064a\u0632\u064a\u0629 \u062f\u0648\u0646 \u0634\u0631\u062d \u0625\u0636\u0627\u0641\u064a.',\n  coder: '\u0623\u0646\u062a \u0645\u0647\u0646\u062f\u0633 \u0628\u0631\u0645\u062c\u064a\u0627\u062a \u062e\u0628\u064a\u0631: \u0642\u062f\u0651\u0645 \u0634\u064a\u0641\u0631\u0629 \u0646\u0638\u064a\u0641\u0629 \u0645\u0639 \u0634\u0631\u062d \u0645\u0648\u062c\u0632.',\n  teacher: '\u0623\u0646\u062a \u0645\u0639\u0644\u0651\u0645 \u0635\u0628\u0648\u0631: \u0627\u0634\u0631\u062d \u0628\u0628\u0633\u0627\u0637\u0629 \u0648\u0628\u0623\u0645\u062b\u0644\u0629 \u0648\u062e\u0637\u0648\u0627\u062a \u0645\u062a\u062f\u0631\u062c\u0629.',\n  writer: '\u0623\u0646\u062a \u0643\u0627\u062a\u0628 \u0645\u062d\u062a\u0631\u0641: \u062d\u0633\u0651\u0646 \u0627\u0644\u0635\u064a\u0627\u063a\u0629 \u0648\u0623\u0628\u062f\u0639 \u0628\u0623\u0633\u0644\u0648\u0628 \u0633\u0644\u064a\u0645.',\n  summ: '\u0644\u062e\u0651\u0635 \u0627\u0644\u0646\u0635 \u0641\u064a \u0646\u0642\u0627\u0637 \u0642\u0635\u064a\u0631\u0629 \u0648\u0648\u0627\u0636\u062d\u0629.'\n};\nlet cache = store.get('cache', {});       // {key: reply}\nlet totalChars = store.get('chars', 0);\nlet busy = false, stopFlag = false;\n\nconst prefs = store.get('prefs', {});\n$('model').value = prefs.model || $('model').options[0].value;\n$('saver').checked = prefs.saver ?? true;\n$('ctx').checked = prefs.ctx ?? true;\n$('cache').checked = prefs.cache ?? true;\nconst saveData = !!navigator.connection?.saveData;   // \u0627\u0644\u0645\u062a\u0635\u0641\u062d \u0641\u064a \u0648\u0636\u0639 \u062a\u0648\u0641\u064a\u0631 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a\n$('stream').checked = prefs.stream ?? false;\n$('persona').value = prefs.persona || 'general';\n$('eco').checked = prefs.eco ?? true; $('vsrc').value = prefs.vsrc || 'device'; $('mlang').value = prefs.mlang || '';\nif (prefs.model && ![...$('model').options].some(o => o.value === prefs.model)) {\n  const o = document.createElement('option'); o.value = o.textContent = prefs.model; $('model').appendChild(o); $('model').value = prefs.model;\n}\nif (saveData) $('stream').checked = false;\ndocument.documentElement.dataset.theme = prefs.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');\n\nfunction savePrefs() {\n  store.set('prefs', {\n    model: $('model').value, saver: $('saver').checked, ctx: $('ctx').checked,\n    cache: $('cache').checked, stream: $('stream').checked, persona: $('persona').value, eco: $('eco').checked, vsrc: $('vsrc').value, voice: $('voice').value, mlang: $('mlang').value, theme: document.documentElement.dataset.theme\n  });\n}\n['model', 'saver', 'ctx', 'cache', 'stream', 'persona', 'eco', 'vsrc', 'voice', 'mlang'].forEach(id => $(id).addEventListener('change', savePrefs));\n$('theme').onclick = () => {\n  const d = document.documentElement.dataset;\n  d.theme = d.theme === 'dark' ? 'light' : 'dark';\n  savePrefs();\n};\n\n// ---------- \u0639\u0631\u0636 \u0627\u0644\u0631\u0633\u0627\u0626\u0644 ----------\nconst esc = s => s.replace(/[&<>\"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;' }[c]));\nfunction md(text) {\n  let h = esc(text);\n  h = h.replace(/```(?:\\w+)?\\n?([\\s\\S]*?)```/g, (_, c) => `<pre><code>${c.trim()}</code></pre>`);\n  h = h.replace(/`([^`\\n]+)`/g, '<code>$1</code>');\n  h = h.replace(/\\*\\*([^*\\n]+)\\*\\*/g, '<strong>$1</strong>');\n  return h;\n}\nfunction addMsg(role, text) {\n  const el = document.createElement('div');\n  el.className = 'msg ' + role;\n  if (role === 'bot') el.innerHTML = md(text); else el.textContent = text;\n  chatEl.appendChild(el);\n  chatEl.scrollTop = chatEl.scrollHeight;\n  return el;\n}\nfunction addTools(el, text) {\n  const t = document.createElement('div');\n  t.className = 'tools';\n  const b = document.createElement('button');\n  b.textContent = '\u0646\u0633\u062e';\n  b.onclick = async () => {\n    try { await navigator.clipboard.writeText(text); b.textContent = '\u062a\u0645 \u0627\u0644\u0646\u0633\u062e \u2713'; }\n    catch { b.textContent = '\u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u0646\u0633\u062e'; }\n    setTimeout(() => b.textContent = '\u0646\u0633\u062e', 1500);\n  };\n  const sp = document.createElement('button');\n  sp.textContent = '\u0642\u0631\u0627\u0621\u0629';\n  sp.onclick = () => speak(text, sp);\n  t.append(b, sp);\n  el.appendChild(t);\n}\nfunction render() {\n  chatEl.innerHTML = '';\n  if (!history.length) {\n    chatEl.innerHTML = '<div class=\"empty\">\u0627\u0628\u062f\u0623 \u0645\u062d\u0627\u062f\u062b\u0629 \u062c\u062f\u064a\u062f\u0629 \ud83d\udc4b<br>\u0648\u0636\u0639 \u0627\u0644\u062a\u0648\u0641\u064a\u0631 \u064a\u0642\u0644\u0651\u0644 \u0637\u0648\u0644 \u0627\u0644\u0631\u062f\u0648\u062f \u0648\u062d\u062c\u0645 \u0645\u0627 \u064a\u064f\u0631\u0633\u0644.</div>';\n  } else {\n    history.forEach(m => { const el = addMsg(m.role === 'user' ? 'user' : 'bot', m.content); if (m.role !== 'user') addTools(el, m.content); });\n  }\n  updateStats();\n}\nfunction updateStats() {\n  statsEl.textContent = `\u0627\u0644\u0631\u0633\u0627\u0626\u0644: ${history.length} \u00b7 \u2248 ${Math.round(totalChars / 3.5)} \u0631\u0645\u0632 \u0645\u0633\u062a\u0647\u0644\u0643`;\n}\n\n// ---------- \u0627\u0644\u0625\u0631\u0633\u0627\u0644 ----------\nfunction buildMessages(userText) {\n  const saver = $('saver').checked;\n  const msgs = [];\n  const sys = [PERSONAS[$('persona').value], saver ? SAVER_PROMPT : ''].filter(Boolean).join(' ');\n  if (sys) msgs.push({ role: 'system', content: sys });\n  if ($('ctx').checked) msgs.push(...history.slice(-MAX_CONTEXT));\n  msgs.push({ role: 'user', content: userText });\n  return msgs;\n}\n\nasync function send() {\n  if (busy) { stopFlag = true; return; }\n  const text = promptEl.value.trim();\n  if (!text) { statusEl.textContent = '\u26a0\ufe0f \u0627\u0643\u062a\u0628 \u0633\u0624\u0627\u0644\u064b\u0627 \u0623\u0648\u0644\u064b\u0627.'; return; }\n\n  if (!history.length) chatEl.innerHTML = '';\n  const messages = buildMessages(text);\n  const mdl = pickModel(text);\n  const key = mdl + '|' + JSON.stringify(messages);\n  addMsg('user', text);\n  promptEl.value = ''; promptEl.style.height = 'auto';\n\n  busy = true; stopFlag = false;\n  sendBtn.textContent = '\u0625\u064a\u0642\u0627\u0641'; sendBtn.classList.add('stop');\n  const botEl = addMsg('bot', '\u2026');\n  let reply = '';\n\n  try {\n    if ($('cache').checked && cache[key]) {\n      reply = cache[key];\n      statusEl.textContent = '\ud83d\udcbe \u0645\u0646 \u0627\u0644\u0631\u062f\u0648\u062f \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629 \u2014 \u0644\u0645 \u064a\u064f\u0633\u062a\u0647\u0644\u0643 \u0634\u064a\u0621';\n    } else {\n      statusEl.textContent = '\u23f3 \u062c\u0627\u0631\u064d \u0627\u0644\u0627\u062a\u0635\u0627\u0644...';\n      await loadPuter();\n      statusEl.textContent = '\u23f3 \u062c\u0627\u0631\u064d \u0627\u0644\u0643\u062a\u0627\u0628\u0629...';\n      totalChars += messages.reduce((n, m) => n + m.content.length, 0);\n      const opts = {\n        model: mdl,\n        max_tokens: $('saver').checked ? MAX_TOKENS_SAVER : MAX_TOKENS_NORMAL\n      };\n      if ($('stream').checked) {\n        for await (const part of await puter.ai.chat(messages, { ...opts, stream: true })) {\n          if (stopFlag) break;\n          if (part?.text) {\n            reply += part.text;\n            botEl.innerHTML = md(reply);\n            chatEl.scrollTop = chatEl.scrollHeight;\n          }\n        }\n      } else {\n        // \u0637\u0644\u0628 \u0648\u0627\u062d\u062f \u0628\u062f\u0648\u0646 \u0628\u062b: \u0623\u0642\u0644 \u0639\u062f\u062f \u0627\u062a\u0635\u0627\u0644\u0627\u062a \u0648\u0623\u0642\u0644 \u062d\u0645\u0644 \u0625\u0636\u0627\u0641\u064a\n        const r = await puter.ai.chat(messages, opts);\n        reply = r?.message?.content?.[0]?.text || (typeof r?.message?.content === 'string' ? r.message.content : '');\n      }\n      totalChars += reply.length;\n      if (!stopFlag && reply) {\n        cache[key] = reply;\n        const keys = Object.keys(cache);\n        if (keys.length > 30) delete cache[keys[0]];   // \u062d\u062f \u0623\u0642\u0635\u0649 \u0644\u0644\u062a\u062e\u0632\u064a\u0646\n        store.set('cache', cache);\n      }\n      statusEl.textContent = stopFlag ? '\u23f9\ufe0f \u062a\u0645 \u0627\u0644\u0625\u064a\u0642\u0627\u0641' : '';\n    }\n    if (!reply) reply = '\u0644\u0645 \u064a\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u0646\u0635.';\n    botEl.innerHTML = md(reply);\n    addTools(botEl, reply);\n    history.push({ role: 'user', content: text }, { role: 'assistant', content: reply });\n    if (history.length > 40) history = history.slice(-40);\n    persist(); store.set('chars', totalChars);\n  } catch (e) {\n    console.error(e);\n    botEl.textContent = errText(e);\n    statusEl.textContent = '';\n  } finally {\n    busy = false; stopFlag = false;\n    sendBtn.textContent = '\u0625\u0631\u0633\u0627\u0644'; sendBtn.classList.remove('stop');\n    updateStats();\n  }\n}\n\n// ---------- \u0627\u0644\u0646\u0645\u0627\u0630\u062c \u0648\u0627\u0644\u0635\u0648\u062a ----------\nconst ECO_MODEL = 'anthropic/claude-haiku-4-5';\nfunction pickModel(text) {\n  const heavy = /```|function|class |select |\u0645\u0628\u0631\u0645\u062c/i.test(text) || $('persona').value === 'coder';\n  return ($('eco').checked && text.length < 120 && !heavy) ? ECO_MODEL : $('model').value;\n}\n$('models').onclick = async () => {\n  try {\n    statusEl.textContent = '\u23f3 \u062c\u0627\u0631\u064d \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0645\u0627\u0630\u062c...';\n    await loadPuter();\n    const list = await puter.ai.listModels();\n    const ids = [...new Set(list.map(m => typeof m === 'string' ? m : m.id).filter(Boolean))].sort();\n    const sel = $('model'), keep = sel.value; sel.innerHTML = '';\n    ids.forEach(id => { const o = document.createElement('option'); o.value = o.textContent = id; sel.appendChild(o); });\n    if (ids.includes(keep)) sel.value = keep;\n    statusEl.textContent = '\u2705 \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 ' + ids.length + ' \u0646\u0645\u0648\u0630\u062c\u064b\u0627'; savePrefs();\n  } catch (e) { statusEl.textContent = errText(e); }\n};\nfunction detectLang(t) {\n  const r = [[/[\\u0600-\\u06FF]/, 'ar-SA'], [/[\\u3040-\\u30FF]/, 'ja-JP'], [/[\\uAC00-\\uD7AF]/, 'ko-KR'], [/[\\u4E00-\\u9FFF]/, 'zh-CN'],\n    [/[\\u0900-\\u097F]/, 'hi-IN'], [/[\\u0590-\\u05FF]/, 'he-IL'], [/[\\u0E00-\\u0E7F]/, 'th-TH'], [/[\\u0400-\\u04FF]/, 'ru-RU'], [/[\\u0370-\\u03FF]/, 'el-GR']];\n  for (const [re, l] of r) if (re.test(t)) return l;\n  return navigator.language || 'en-US';\n}\nfunction fillVoices() {\n  if (!('speechSynthesis' in window)) return;\n  const sel = $('voice'), keep = prefs.voice || sel.value;\n  sel.innerHTML = '<option value=\"auto\">\u062a\u0644\u0642\u0627\u0626\u064a \u062d\u0633\u0628 \u0627\u0644\u0644\u063a\u0629</option>';\n  speechSynthesis.getVoices().forEach(v => {\n    const o = document.createElement('option'); o.value = v.voiceURI; o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o);\n  });\n  sel.value = [...sel.options].some(o => o.value === keep) ? keep : 'auto';\n}\nlet curAudio = null;\nasync function speak(text, btn) {\n  if (speechSynthesis.speaking || curAudio) {\n    speechSynthesis.cancel();\n    if (curAudio) { curAudio.pause(); curAudio = null; }\n    btn.textContent = '\u0642\u0631\u0627\u0621\u0629'; return;\n  }\n  const clean = text.replace(/[`*#]/g, '').slice(0, 1500);\n  if ($('vsrc').value === 'cloud') {\n    try {\n      btn.textContent = '...'; await loadPuter();\n      const a = await puter.ai.txt2speech(clean, { provider: 'openai' });\n      curAudio = a; a.onended = () => { curAudio = null; btn.textContent = '\u0642\u0631\u0627\u0621\u0629'; };\n      btn.textContent = '\u0625\u064a\u0642\u0627\u0641'; a.play();\n    } catch (e) { btn.textContent = '\u0642\u0631\u0627\u0621\u0629'; statusEl.textContent = errText(e); }\n    return;\n  }\n  if (!('speechSynthesis' in window)) { btn.textContent = '\u063a\u064a\u0631 \u0645\u062f\u0639\u0648\u0645'; return; }\n  const lang = detectLang(clean), vs = speechSynthesis.getVoices(), u = new SpeechSynthesisUtterance(clean);\n  let v = $('voice').value !== 'auto' ? vs.find(x => x.voiceURI === $('voice').value) : null;\n  if (!v) v = vs.find(x => x.lang.toLowerCase().startsWith(lang.slice(0, 2).toLowerCase()));\n  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = lang;\n  u.onend = () => { btn.textContent = '\u0642\u0631\u0627\u0621\u0629'; };\n  btn.textContent = '\u0625\u064a\u0642\u0627\u0641'; speechSynthesis.speak(u);\n}\n\n// ---------- \u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0627\u062a \u0648\u0627\u0644\u0623\u062e\u0637\u0627\u0621 ----------\nfunction refreshChats() {\n  const sel = $('chats'); sel.innerHTML = '';\n  for (const [id, c] of Object.entries(chats)) {\n    const o = document.createElement('option'); o.value = id; o.textContent = c.title; sel.appendChild(o);\n  }\n  sel.value = cur;\n}\nfunction persist() {\n  chats[cur].h = history;\n  if (!chats[cur].named && history.length) { chats[cur].title = history[0].content.slice(0, 22); chats[cur].named = 1; }\n  store.set('chats', chats); store.set('cur', cur); refreshChats();\n}\nfunction errText(e) {\n  const raw = (() => { try { return JSON.stringify(e); } catch { return ''; } })() + (e?.message || '');\n  if (/insufficient_funds|402/.test(raw)) return '\ud83d\udcb3 \u0627\u0646\u062a\u0647\u0649 \u0631\u0635\u064a\u062f\u0643 \u0627\u0644\u0634\u0647\u0631\u064a \u0627\u0644\u0645\u062c\u0627\u0646\u064a \u0641\u064a Puter. \u064a\u062a\u062c\u062f\u062f \u0623\u0648\u0644 \u0627\u0644\u0634\u0647\u0631\u060c \u0623\u0648 \u064a\u0645\u0643\u0646\u0643 \u0634\u0631\u0627\u0621 \u0631\u0635\u064a\u062f. \u0627\u0636\u063a\u0637 \ud83d\udcca \u0644\u0631\u0624\u064a\u0629 \u0627\u0633\u062a\u0647\u0644\u0627\u0643\u0643.';\n  if (/too_many_requests|429/.test(raw)) return '\u23f1\ufe0f \u0637\u0644\u0628\u0627\u062a \u0643\u062b\u064a\u0631\u0629 \u0641\u064a \u0648\u0642\u062a \u0642\u0635\u064a\u0631. \u0627\u0646\u062a\u0638\u0631 \u0628\u0636\u0639 \u062b\u0648\u0627\u0646\u064d \u062b\u0645 \u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629.';\n  return '\u274c \u062d\u062f\u062b \u062e\u0637\u0623: ' + (e?.message || e?.error?.message || '\u063a\u064a\u0631 \u0645\u0639\u0631\u0648\u0641') + '\\n\u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629\u060c \u0623\u0648 \u062c\u0631\u0651\u0628 \u0646\u0645\u0648\u0630\u062c\u064b\u0627 \u0622\u062e\u0631.';\n}\n\n// ---------- \u0623\u0632\u0631\u0627\u0631 ----------\n$('clear').onclick = () => {\n  if (busy || !confirm('\u062d\u0630\u0641 \u0647\u0630\u0647 \u0627\u0644\u0645\u062d\u0627\u062f\u062b\u0629\u061f')) return;\n  delete chats[cur];\n  if (!Object.keys(chats).length) chats.c1 = { title: '\u0645\u062d\u0627\u062f\u062b\u0629 1', h: [] };\n  cur = Object.keys(chats)[0]; history = chats[cur].h; persist(); render();\n};\n$('newchat').onclick = () => {\n  if (busy) return;\n  cur = 'c' + Date.now(); chats[cur] = { title: '\u0645\u062d\u0627\u062f\u062b\u0629 \u062c\u062f\u064a\u062f\u0629', h: [] }; history = []; persist(); render();\n};\n$('chats').onchange = e => { if (busy) return; cur = e.target.value; history = chats[cur].h; store.set('cur', cur); render(); };\n$('regen').onclick = () => {\n  if (busy || history.length < 2) return;\n  const last = history[history.length - 2];\n  history.splice(-2); persist(); render();\n  promptEl.value = last.content; send();\n};\n$('usage').onclick = () => window.open('https://puter.com/dashboard#usage', '_blank', 'noopener');\nconst SR = window.SpeechRecognition || window.webkitSpeechRecognition;\n$('mic').onclick = () => {\n  if (!SR) { statusEl.textContent = '\u26a0\ufe0f \u0645\u062a\u0635\u0641\u062d\u0643 \u0644\u0627 \u064a\u062f\u0639\u0645 \u0627\u0644\u0625\u0645\u0644\u0627\u0621 \u0627\u0644\u0635\u0648\u062a\u064a.'; return; }\n  const r = new SR(); r.lang = $('mlang').value || navigator.language || 'en-US';\n  r.onresult = e => { promptEl.value += (promptEl.value ? ' ' : '') + e.results[0][0].transcript; };\n  r.onerror = () => { statusEl.textContent = '\u26a0\ufe0f \u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u0625\u0645\u0644\u0627\u0621 \u0627\u0644\u0635\u0648\u062a\u064a.'; };\n  r.onend = () => { if (statusEl.textContent.startsWith('\ud83c\udfa4')) statusEl.textContent = ''; };\n  statusEl.textContent = '\ud83c\udfa4 \u062a\u062d\u062f\u0651\u062b \u0627\u0644\u0622\u0646...'; r.start();\n};\n$('export').onclick = () => {\n  if (!history.length) return;\n  const txt = history.map(m => (m.role === 'user' ? '\u0623\u0646\u062a: ' : 'Claude: ') + m.content).join('\\n\\n');\n  const a = document.createElement('a');\n  a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' }));\n  a.download = 'conversation.txt'; a.click();\n  URL.revokeObjectURL(a.href);\n};\nsendBtn.onclick = send;\npromptEl.addEventListener('keydown', e => {\n  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); send(); }\n});\npromptEl.addEventListener('input', () => {\n  promptEl.style.height = 'auto';\n  promptEl.style.height = Math.min(promptEl.scrollHeight, 160) + 'px';\n});\n\n// ---------- \u062a\u062b\u0628\u064a\u062a \u0643\u062a\u0637\u0628\u064a\u0642 (PWA) ----------\nlet installEvt = null;\nwindow.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('install').hidden = false; });\n$('install').onclick = async () => {\n  if (!installEvt) return;\n  installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('install').hidden = true;\n};\nwindow.addEventListener('appinstalled', () => { $('install').hidden = true; });\nif ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});\nif ('speechSynthesis' in window) { speechSynthesis.onvoiceschanged = fillVoices; fillVoices(); }\nrefreshChats();\nrender();\n<\/script>\n</body>\n</html>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Message;\nimport android.view.ViewGroup;\nimport android.webkit.*;\n\nimport java.io.InputStream;\n\npublic class MainActivity extends Activity {\n\n    // \u0644\u062a\u062d\u0645\u064a\u0644 \u0645\u0648\u0642\u0639 \u0628\u062f\u0644 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0645\u062d\u0644\u064a \u063a\u064a\u0651\u0631 START_URL \u0645\u062b\u0644: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n\n    private WebView web;\n    private PermissionRequest pendingPerm;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        if (Build.VERSION.SDK_INT >= 23 &&\n                checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);\n        }\n        web = new WebView(this);\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        if (b == null) web.loadUrl(START_URL); else web.restoreState(b);\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // \u064a\u062e\u062f\u0645 \u0645\u0644\u0641\u0627\u062a assets \u0639\u0644\u0649 \u0639\u0646\u0648\u0627\u0646 https \u0648\u0647\u0645\u064a \u0644\u064a\u0639\u0645\u0644 \u0627\u0644\u0645\u0648\u0642\u0639 \u0628\u0623\u0635\u0644 (origin) \u0633\u0644\u064a\u0645\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    if (Build.VERSION.SDK_INT >= 23 &&\n                            checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n                        pendingPerm = req;\n                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 2);\n                    } else {\n                        req.grant(req.getResources());\n                    }\n                });\n            }\n\n            // \u0646\u0627\u0641\u0630\u0629 \u0645\u0646\u0628\u062b\u0642\u0629 (\u0645\u062b\u0644 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        if (code == 2 && pendingPerm != null) {\n            if (r.length > 0 && r[0] == PackageManager.PERMISSION_GRANTED) pendingPerm.grant(pendingPerm.getResources());\n            else pendingPerm.deny();\n            pendingPerm = null;\n        }\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">\u062f\u0631\u062f\u0634\u0629 Claude</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\n  push:\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n"}
-;
+const TEMPLATE_FILES = 
+{"build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    defaultConfig {\n        applicationId \"{{PKG}}\"\n        minSdk 21\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher\"\n        android:usesCleartextTraffic=\"false\"\n        android:theme=\"@android:style/Theme.DeviceDefault.NoActionBar\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Message;\nimport android.view.ViewGroup;\nimport android.webkit.*;\n\nimport java.io.InputStream;\n\npublic class MainActivity extends Activity {\n\n    // لتحميل موقع بدل الملف المحلي غيّر START_URL مثل: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n\n    private WebView web;\n    private PermissionRequest pendingPerm;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        if (Build.VERSION.SDK_INT >= 23 &&\n                checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);\n        }\n        web = new WebView(this);\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        if (b == null) web.loadUrl(START_URL); else web.restoreState(b);\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // يخدم ملفات assets على عنوان https وهمي ليعمل الموقع بأصل (origin) سليم\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    if (Build.VERSION.SDK_INT >= 23 &&\n                            checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n                        pendingPerm = req;\n                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 2);\n                    } else {\n                        req.grant(req.getResources());\n                    }\n                });\n            }\n\n            // نافذة منبثقة (مثل تسجيل الدخول)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        if (code == 2 && pendingPerm != null) {\n            if (r.length > 0 && r[0] == PackageManager.PERMISSION_GRANTED) pendingPerm.grant(pendingPerm.getResources());\n            else pendingPerm.deny();\n            pendingPerm = null;\n        }\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">{{APP_NAME}}</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\n  push:\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n", "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_background\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>\n"};
 
 const $ = id => document.getElementById(id);
 const logEl = $('log'), statusEl = $('status'), dlArea = $('dlArea'), btn = $('buildBtn');
+const fileEl = $('htmlfile'), fileok = $('fileok');
+const previewCanvas = $('iconPreview'), previewCtx = previewCanvas.getContext('2d');
+const iconTextEl = $('iconText'), color1El = $('color1'), color2El = $('color2'), gradDirEl = $('gradDir');
+const iconFileEl = $('iconfile'), appnameEl = $('appname'), shapeEl = $('iconShape');
+const fxShineEl = $('fxShine'), fxShadowEl = $('fxShadow'), fxBorderEl = $('fxBorder');
+const tabText = $('tabText'), tabGlyph = $('tabGlyph'), tabUpload = $('tabUpload');
+const textControls = $('textControls'), glyphControls = $('glyphControls'), uploadControls = $('uploadControls');
+const glyphGrid = $('glyphGrid');
+
+let htmlContent = null;
+let uploadedIconImage = null;
+let contentMode = 'text'; // text | glyph | upload
+let selectedGlyph = 'star';
+
+fileEl.addEventListener('change', () => {
+  const f = fileEl.files[0];
+  if(!f){ htmlContent = null; fileok.style.display='none'; return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    htmlContent = reader.result;
+    fileok.textContent = '✓ تم تحميل: ' + f.name + ' (' + Math.round(f.size/1024) + ' كيلوبايت)';
+    fileok.style.display = 'block';
+  };
+  reader.readAsText(f, 'UTF-8');
+});
+
+function setTab(mode){
+  contentMode = mode;
+  [tabText, tabGlyph, tabUpload].forEach(t => t.classList.remove('active'));
+  [textControls, glyphControls, uploadControls].forEach(c => c.classList.add('hidden'));
+  if(mode === 'text'){ tabText.classList.add('active'); textControls.classList.remove('hidden'); }
+  if(mode === 'glyph'){ tabGlyph.classList.add('active'); glyphControls.classList.remove('hidden'); }
+  if(mode === 'upload'){ tabUpload.classList.add('active'); uploadControls.classList.remove('hidden'); }
+  drawPreview();
+}
+tabText.addEventListener('click', () => setTab('text'));
+tabGlyph.addEventListener('click', () => setTab('glyph'));
+tabUpload.addEventListener('click', () => setTab('upload'));
+
+iconFileEl.addEventListener('change', () => {
+  const f = iconFileEl.files[0];
+  if(!f) return;
+  const img = new Image();
+  img.onload = () => { uploadedIconImage = img; drawPreview(); };
+  img.src = URL.createObjectURL(f);
+});
+
+[iconTextEl, color1El, color2El, gradDirEl, appnameEl, shapeEl, fxShineEl, fxShadowEl, fxBorderEl]
+  .forEach(el => el.addEventListener('input', drawPreview));
+
+// ---------- glyph library: hand-drawn vector icons, crisp at any size ----------
+const GLYPHS = {
+  star: (ctx, s) => {
+    ctx.beginPath();
+    for(let i = 0; i < 10; i++){
+      const ang = -Math.PI/2 + i * Math.PI/5;
+      const rad = i % 2 === 0 ? s*0.5 : s*0.22;
+      const x = Math.cos(ang)*rad, y = Math.sin(ang)*rad;
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.closePath(); ctx.fill();
+  },
+  heart: (ctx, s) => {
+    const r = s*0.28;
+    ctx.beginPath();
+    ctx.moveTo(0, s*0.32);
+    ctx.bezierCurveTo(-s*0.5, -s*0.05, -r*1.6, -s*0.55, 0, -s*0.15);
+    ctx.bezierCurveTo(r*1.6, -s*0.55, s*0.5, -s*0.05, 0, s*0.32);
+    ctx.closePath(); ctx.fill();
+  },
+  bolt: (ctx, s) => {
+    ctx.beginPath();
+    ctx.moveTo(s*0.12, -s*0.5); ctx.lineTo(-s*0.28, s*0.06); ctx.lineTo(-s*0.02, s*0.06);
+    ctx.lineTo(-s*0.12, s*0.5); ctx.lineTo(s*0.28, -s*0.1); ctx.lineTo(s*0.02, -s*0.1);
+    ctx.closePath(); ctx.fill();
+  },
+  chat: (ctx, s) => {
+    const w = s*0.8, h = s*0.6, r = s*0.15;
+    ctx.beginPath();
+    ctx.moveTo(-w/2+r, -h/2);
+    ctx.arcTo(w/2, -h/2, w/2, h/2, r);
+    ctx.arcTo(w/2, h/2, -w/2, h/2, r);
+    ctx.arcTo(-w/2, h/2, -w/2, -h/2, r);
+    ctx.arcTo(-w/2, -h/2, w/2, -h/2, r);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-w*0.15, h/2); ctx.lineTo(-w*0.3, h/2+s*0.16); ctx.lineTo(w*0.05, h/2);
+    ctx.closePath(); ctx.fill();
+  },
+  music: (ctx, s) => {
+    ctx.beginPath(); ctx.ellipse(-s*0.28, s*0.32, s*0.16, s*0.12, -0.3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(s*0.28, s*0.22, s*0.16, s*0.12, -0.3, 0, Math.PI*2); ctx.fill();
+    ctx.fillRect(-s*0.28+s*0.14, -s*0.45, s*0.06, s*0.75);
+    ctx.fillRect(s*0.28+s*0.14, -s*0.55, s*0.06, s*0.75);
+    ctx.beginPath();
+    ctx.moveTo(-s*0.14, -s*0.45); ctx.lineTo(s*0.42, -s*0.55); ctx.lineTo(s*0.42, -s*0.4); ctx.lineTo(-s*0.14, -s*0.3);
+    ctx.closePath(); ctx.fill();
+  },
+  gear: (ctx, s) => {
+    const teeth = 8, rOut = s*0.48, rIn = s*0.34, rHole = s*0.18;
+    ctx.beginPath();
+    for(let i = 0; i < teeth*2; i++){
+      const ang = i * Math.PI / teeth;
+      const rad = i % 2 === 0 ? rOut : rIn;
+      const x = Math.cos(ang)*rad, y = Math.sin(ang)*rad;
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.moveTo(rHole, 0); ctx.arc(0,0,rHole,0,Math.PI*2,true);
+    ctx.fill('evenodd');
+  },
+  rocket: (ctx, s) => {
+    ctx.beginPath();
+    ctx.moveTo(0, -s*0.5);
+    ctx.quadraticCurveTo(s*0.28, -s*0.1, s*0.16, s*0.3);
+    ctx.lineTo(-s*0.16, s*0.3);
+    ctx.quadraticCurveTo(-s*0.28, -s*0.1, 0, -s*0.5);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-s*0.16, s*0.15); ctx.lineTo(-s*0.4, s*0.42); ctx.lineTo(-s*0.1, s*0.32); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(s*0.16, s*0.15); ctx.lineTo(s*0.4, s*0.42); ctx.lineTo(s*0.1, s*0.32); ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath(); ctx.arc(0, -s*0.12, s*0.1, 0, Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+  },
+  code: (ctx, s) => {
+    ctx.lineWidth = s*0.09; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.beginPath();
+    ctx.moveTo(-s*0.12, -s*0.4); ctx.lineTo(-s*0.42, 0); ctx.lineTo(-s*0.12, s*0.4);
+    ctx.moveTo(s*0.12, -s*0.4); ctx.lineTo(s*0.42, 0); ctx.lineTo(s*0.12, s*0.4);
+    ctx.stroke();
+  },
+  cart: (ctx, s) => {
+    ctx.lineWidth = s*0.08; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.beginPath();
+    ctx.moveTo(-s*0.4, -s*0.3); ctx.lineTo(-s*0.25, -s*0.3); ctx.lineTo(-s*0.05, s*0.15); ctx.lineTo(s*0.35, s*0.15); ctx.lineTo(s*0.45, -s*0.15); ctx.lineTo(-s*0.15, -s*0.15);
+    ctx.stroke();
+    ctx.beginPath(); ctx.arc(-s*0.02, s*0.35, s*0.08, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(s*0.28, s*0.35, s*0.08, 0, Math.PI*2); ctx.fill();
+  },
+  book: (ctx, s) => {
+    ctx.beginPath();
+    ctx.moveTo(0, -s*0.35);
+    ctx.bezierCurveTo(-s*0.15, -s*0.45, -s*0.45, -s*0.45, -s*0.45, -s*0.3);
+    ctx.lineTo(-s*0.45, s*0.35);
+    ctx.bezierCurveTo(-s*0.45, s*0.22, -s*0.15, s*0.22, 0, s*0.35);
+    ctx.bezierCurveTo(s*0.15, s*0.22, s*0.45, s*0.22, s*0.45, s*0.35);
+    ctx.lineTo(s*0.45, -s*0.3);
+    ctx.bezierCurveTo(s*0.45, -s*0.45, s*0.15, -s*0.45, 0, -s*0.35);
+    ctx.closePath(); ctx.fill();
+  },
+  camera: (ctx, s) => {
+    const w=s*0.8,h=s*0.55,r=s*0.08;
+    ctx.beginPath();
+    ctx.moveTo(-w/2+r, -h/2+s*0.08);
+    ctx.arcTo(w/2, -h/2+s*0.08, w/2, h/2, r);
+    ctx.arcTo(w/2, h/2, -w/2, h/2, r);
+    ctx.arcTo(-w/2, h/2, -w/2, -h/2+s*0.08, r);
+    ctx.arcTo(-w/2, -h/2+s*0.08, w/2, -h/2+s*0.08, r);
+    ctx.closePath(); ctx.fill();
+    ctx.fillRect(-s*0.12, -h/2-s*0.06, s*0.24, s*0.1);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath(); ctx.arc(0, s*0.02, s*0.16, 0, Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.beginPath(); ctx.arc(0, s*0.02, s*0.12, 0, Math.PI*2); ctx.fill();
+  },
+  bell: (ctx, s) => {
+    ctx.beginPath();
+    ctx.arc(0, -s*0.05, s*0.32, Math.PI, 0, false);
+    ctx.lineTo(s*0.4, s*0.28); ctx.lineTo(-s*0.4, s*0.28);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, s*0.4, s*0.09, 0, Math.PI*2); ctx.fill();
+  }
+};
+const GLYPH_NAMES = Object.keys(GLYPHS);
+
+function buildGlyphGrid(){
+  glyphGrid.innerHTML = '';
+  GLYPH_NAMES.forEach(name => {
+    const btn = document.createElement('div');
+    btn.className = 'glyph-btn' + (name === selectedGlyph ? ' active' : '');
+    btn.dataset.name = name;
+    const c = document.createElement('canvas');
+    c.width = 40; c.height = 40;
+    const cx = c.getContext('2d');
+    cx.fillStyle = '#2f6fdb';
+    cx.save(); cx.translate(20, 20); GLYPHS[name](cx, 30); cx.restore();
+    btn.appendChild(c);
+    btn.addEventListener('click', () => {
+      selectedGlyph = name;
+      document.querySelectorAll('.glyph-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      drawPreview();
+    });
+    glyphGrid.appendChild(btn);
+  });
+}
+buildGlyphGrid();
+
+// ---------- shape clip path ----------
+function clipShape(ctx, size, shape){
+  ctx.beginPath();
+  if(shape === 'circle'){
+    ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+  } else if(shape === 'square'){
+    ctx.rect(0, 0, size, size);
+  } else if(shape === 'squircle'){
+    // superellipse approximation (n=4)
+    const n = 4, cx = size/2, cy = size/2, r = size/2;
+    for(let i = 0; i <= 90; i++){
+      const t = i/90 * Math.PI/2;
+      const x = cx + r*Math.pow(Math.abs(Math.cos(t)), 2/n) * Math.sign(Math.cos(t));
+      const y = cy + r*Math.pow(Math.abs(Math.sin(t)), 2/n) * Math.sign(Math.sin(t));
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    for(let q = 1; q < 4; q++){
+      for(let i = 0; i <= 90; i++){
+        const t = q*Math.PI/2 + i/90 * Math.PI/2;
+        const x = cx + r*Math.pow(Math.abs(Math.cos(t)), 2/n) * Math.sign(Math.cos(t));
+        const y = cy + r*Math.pow(Math.abs(Math.sin(t)), 2/n) * Math.sign(Math.sin(t));
+        ctx.lineTo(x,y);
+      }
+    }
+  } else {
+    const r = size * 0.22;
+    ctx.moveTo(r, 0);
+    ctx.arcTo(size, 0, size, size, r);
+    ctx.arcTo(size, size, 0, size, r);
+    ctx.arcTo(0, size, 0, 0, r);
+    ctx.arcTo(0, 0, size, 0, r);
+  }
+  ctx.closePath();
+}
+
+function makeBackgroundFill(ctx, size){
+  const dir = gradDirEl.value;
+  const c1 = color1El.value, c2 = color2El.value;
+  if(dir === 'solid') return c1;
+  if(dir === 'radial'){
+    const g = ctx.createRadialGradient(size*0.35, size*0.3, size*0.05, size/2, size/2, size*0.75);
+    g.addColorStop(0, c2); g.addColorStop(1, c1);
+    return g;
+  }
+  let x0=0,y0=0,x1=size,y1=size;
+  if(dir === 'horiz'){ y0=0; y1=0; x1=size; }
+  if(dir === 'vert'){ x0=0; x1=0; y1=size; }
+  const g = ctx.createLinearGradient(x0,y0,x1,y1);
+  g.addColorStop(0, c1); g.addColorStop(1, c2);
+  return g;
+}
+
+function drawGlyphOrText(ctx, size, contentScale, color){
+  ctx.save();
+  ctx.translate(size/2, size/2);
+  if(fxShadowEl.checked){
+    ctx.shadowColor = 'rgba(0,0,0,0.28)';
+    ctx.shadowBlur = size * 0.035;
+    ctx.shadowOffsetY = size * 0.01;
+  }
+  if(contentMode === 'glyph'){
+    ctx.fillStyle = color;
+    GLYPHS[selectedGlyph](ctx, size * contentScale);
+  } else {
+    let text = (iconTextEl.value || '').trim();
+    if(!text){
+      const name = (appnameEl.value || '').trim();
+      text = name ? name[0] : '★';
+    }
+    text = [...text].slice(0, 2).join('');
+    ctx.fillStyle = color;
+    ctx.font = 'bold ' + Math.round(size * contentScale) + 'px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 0, size*0.015);
+  }
+  ctx.restore();
+}
+
+// legacy icon: full bleed, clipped to selected shape (used on all Android versions as fallback)
+function paintLegacy(ctx, size){
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  clipShape(ctx, size, shapeEl.value);
+  ctx.clip();
+
+  if(contentMode === 'upload' && uploadedIconImage){
+    const img = uploadedIconImage;
+    const s = Math.min(img.width, img.height);
+    const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
+    ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+  } else {
+    ctx.fillStyle = makeBackgroundFill(ctx, size);
+    ctx.fillRect(0, 0, size, size);
+    if(fxShine.checked !== undefined){} // no-op guard
+    if(fxShineEl.checked){
+      const shine = ctx.createLinearGradient(0, 0, 0, size);
+      shine.addColorStop(0, 'rgba(255,255,255,0.22)');
+      shine.addColorStop(0.5, 'rgba(255,255,255,0)');
+      ctx.fillStyle = shine;
+      ctx.fillRect(0, 0, size, size);
+    }
+    drawGlyphOrText(ctx, size, 0.5, '#ffffff');
+  }
+  ctx.restore();
+
+  if(fxBorderEl.checked){
+    ctx.save();
+    clipShape(ctx, size, shapeEl.value);
+    ctx.lineWidth = size * 0.035;
+    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// adaptive background: full-bleed square, no shape clip (system masks it)
+function paintAdaptiveBackground(ctx, size){
+  ctx.clearRect(0, 0, size, size);
+  if(contentMode === 'upload' && uploadedIconImage){
+    ctx.fillStyle = color1El.value;
+    ctx.fillRect(0, 0, size, size);
+  } else {
+    ctx.fillStyle = makeBackgroundFill(ctx, size);
+    ctx.fillRect(0, 0, size, size);
+    if(fxShineEl.checked){
+      const shine = ctx.createLinearGradient(0, 0, 0, size);
+      shine.addColorStop(0, 'rgba(255,255,255,0.22)');
+      shine.addColorStop(0.5, 'rgba(255,255,255,0)');
+      ctx.fillStyle = shine;
+      ctx.fillRect(0, 0, size, size);
+    }
+  }
+}
+
+// adaptive foreground: transparent background, content scaled into the safe zone (~62%)
+function paintAdaptiveForeground(ctx, size){
+  ctx.clearRect(0, 0, size, size);
+  if(contentMode === 'upload' && uploadedIconImage){
+    const img = uploadedIconImage;
+    const s = Math.min(img.width, img.height);
+    const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
+    const d = size * 0.62, off = (size - d) / 2;
+    ctx.drawImage(img, sx, sy, s, s, off, off, d, d);
+  } else {
+    drawGlyphOrText(ctx, size, 0.34, '#ffffff');
+  }
+}
+
+function drawPreview(){
+  paintLegacy(previewCtx, previewCanvas.width);
+}
+drawPreview();
+
+function dataUrlFrom(paintFn, size){
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  paintFn(c.getContext('2d'), size);
+  return c.toDataURL('image/png');
+}
 
 function log(msg){
   logEl.style.display = 'block';
@@ -74,7 +521,7 @@ function setStatus(msg, cls){
   statusEl.className = 'status ' + cls;
   statusEl.textContent = msg;
 }
-function b64encode(str){
+function b64encodeUnicode(str){
   const bytes = new TextEncoder().encode(str);
   let bin = '';
   bytes.forEach(b => bin += String.fromCharCode(b));
@@ -94,13 +541,35 @@ async function gh(path, token, opts = {}){
   return res;
 }
 
+async function uploadFile(user, repo, token, path, base64Content){
+  let sha = undefined;
+  const getRes = await gh('/repos/' + user + '/' + repo + '/contents/' + path, token);
+  if(getRes.ok){
+    const j = await getRes.json();
+    sha = j.sha;
+  }
+  const putRes = await gh('/repos/' + user + '/' + repo + '/contents/' + path, token, {
+    method: 'PUT',
+    body: JSON.stringify({ message: 'update ' + path, content: base64Content, sha })
+  });
+  if(!putRes.ok){
+    const t = await putRes.text();
+    throw new Error('فشل رفع ' + path + ': ' + putRes.status + ' ' + t);
+  }
+}
+
 async function run(){
   const user = $('user').value.trim();
   const token = $('token').value.trim();
+  const appname = appnameEl.value.trim() || 'تطبيقي';
   const repo = $('repo').value.trim().replace(/[^a-zA-Z0-9._-]/g, '-');
 
   if(!user || !token || !repo){
-    setStatus('من فضلك املأ كل الحقول.', 'err');
+    setStatus('من فضلك املأ اليوزر والتوكين واسم المشروع.', 'err');
+    return;
+  }
+  if(!htmlContent){
+    setStatus('اختار ملف HTML للتطبيق أولًا.', 'err');
     return;
   }
 
@@ -110,7 +579,28 @@ async function run(){
   setStatus('جاري التحقق من الحساب...', 'wait');
 
   try{
-    // 1) check repo exists, else create
+    const pkg = 'com.appfactory.' + (repo.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().slice(0, 40) || 'app');
+
+    const textFiles = {};
+    for(const [path, content] of Object.entries(TEMPLATE_FILES)){
+      textFiles[path] = content.replace('{{PKG}}', pkg).replace('{{APP_NAME}}', appname);
+    }
+    textFiles['app/src/main/assets/index.html'] = htmlContent;
+    // duplicate adaptive xml for the round variant name too
+    textFiles['app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml'] =
+      textFiles['app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml'];
+
+    const densities = { mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 };
+    const iconFiles = {};
+    for(const [density, size] of Object.entries(densities)){
+      iconFiles['app/src/main/res/mipmap-' + density + '/ic_launcher.png'] =
+        dataUrlFrom(paintLegacy, size).split(',')[1];
+      iconFiles['app/src/main/res/mipmap-' + density + '/ic_launcher_background.png'] =
+        dataUrlFrom(paintAdaptiveBackground, size).split(',')[1];
+      iconFiles['app/src/main/res/mipmap-' + density + '/ic_launcher_foreground.png'] =
+        dataUrlFrom(paintAdaptiveForeground, size).split(',')[1];
+    }
+
     let r = await gh('/repos/' + user + '/' + repo, token);
     if(r.status === 404){
       log('إنشاء مستودع جديد: ' + repo);
@@ -133,36 +623,23 @@ async function run(){
     }
 
     setStatus('جاري رفع ملفات المشروع...', 'wait');
-    const paths = Object.keys(FILES);
-    for(const path of paths){
+    for(const [path, content] of Object.entries(textFiles)){
       log('رفع: ' + path);
-      // get sha if exists
-      let sha = undefined;
-      const getRes = await gh('/repos/' + user + '/' + repo + '/contents/' + path, token);
-      if(getRes.ok){
-        const j = await getRes.json();
-        sha = j.sha;
-      }
-      const putRes = await gh('/repos/' + user + '/' + repo + '/contents/' + path, token, {
-        method: 'PUT',
-        body: JSON.stringify({
-          message: 'update ' + path,
-          content: b64encode(FILES[path]),
-          sha
-        })
-      });
-      if(!putRes.ok){
-        const t = await putRes.text();
-        throw new Error('فشل رفع ' + path + ': ' + putRes.status + ' ' + t);
-      }
-      await sleep(300);
+      await uploadFile(user, repo, token, path, b64encodeUnicode(content));
+      await sleep(250);
+    }
+
+    setStatus('جاري رفع الأيقونات (كلاسيكية + تكيّفية)...', 'wait');
+    for(const [path, base64] of Object.entries(iconFiles)){
+      log('رفع: ' + path);
+      await uploadFile(user, repo, token, path, base64);
+      await sleep(200);
     }
 
     setStatus('تم الرفع، جاري بدء عملية البناء...', 'wait');
     log('انتظار بدء GitHub Actions...');
     await sleep(6000);
 
-    // find latest workflow run
     let runId = null;
     for(let i = 0; i < 10; i++){
       const runsRes = await gh('/repos/' + user + '/' + repo + '/actions/runs?per_page=1', token);
@@ -176,12 +653,11 @@ async function run(){
       await sleep(3000);
     }
     if(!runId){
-      throw new Error('لم يبدأ البناء بعد. افتح صفحة Actions في GitHub وتأكد أنه بدأ يدويًا.');
+      throw new Error('لم يبدأ البناء بعد. افتح صفحة Actions في GitHub وتأكد أنه بدأ.');
     }
     log('رقم عملية البناء: ' + runId);
-    log('يمكنك متابعته هنا: github.com/' + user + '/' + repo + '/actions/runs/' + runId);
+    log('تقدر تتابعه هنا: github.com/' + user + '/' + repo + '/actions/runs/' + runId);
 
-    // poll status
     let status = 'in_progress', conclusion = null;
     setStatus('جاري البناء... قد يستغرق 3-5 دقائق', 'wait');
     for(let i = 0; i < 60; i++){
@@ -216,7 +692,7 @@ async function run(){
     const blob = await dlRes.blob();
     const url = URL.createObjectURL(blob);
 
-    setStatus('✅ تم! التطبيق جاهز (داخل ملف zip يحتوي APK)', 'ok');
+    setStatus('✅ تم! التطبيق جاهز بأيقونته الكاملة (داخل ملف zip يحتوي APK)', 'ok');
     const a = document.createElement('a');
     a.href = url;
     a.download = repo + '.zip';
