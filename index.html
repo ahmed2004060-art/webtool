@@ -18,7 +18,7 @@ html{background:var(--bg)}
 #pvCard .bar2 select{flex:1}
 #pvCard .pv-phone{width:min(86vw,300px);height:min(70vh,560px);margin:0 auto;padding:9px;border-radius:32px}
 #pvFrame{width:100%;height:100%;border:0;border-radius:24px;background:#fff}
-#themeBtn{position:fixed;top:12px;left:12px;z-index:50;width:44px;height:44px;padding:0;border-radius:50%;font-size:1.3rem;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.25);backdrop-filter:blur(8px)}
+#themeBtn{position:fixed;top:4px;left:4px;z-index:50;width:28px;height:28px;padding:0;border-radius:50%;font-size:.8rem;opacity:.5;background:var(--card);border:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.25);backdrop-filter:blur(8px)}
 .card{backdrop-filter:blur(8px)}
 :root[data-theme=light] .card{background:rgba(255,255,255,.78)}
 :root[data-theme=dark]{--bg:#070b1a;--card:rgba(14,20,44,.68);--text:#e8ecf7;--muted:#9aa6c6;--line:#2b3760;--accent:#6ea8ff;--ok:#5fd68a;--err:#ff7b6e}
@@ -87,50 +87,17 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
 #lgPv{position:relative;display:flex;justify-content:center;padding:10px;margin-bottom:12px;border-radius:14px;background:repeating-conic-gradient(#d5d8dd 0 25%,#fff 0 50%) 0 0/14px 14px;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.18)}
 #lgBig{display:block;width:150px;height:150px}
 #spPv .pv-phone{width:min(70vw,230px);height:min(52vh,420px);margin:0 auto;padding:9px;border-radius:32px}#spFrame{width:100%;height:100%;border:0;border-radius:24px;background:#000}
+.pcard{border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:8px}
+.pcard .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pcard .row button{width:auto;flex:1;min-width:84px;padding:8px;font-size:.8rem}
+.pcard .mono{direction:ltr;unicode-bidi:plaintext;text-align:start;font-size:.75rem;color:var(--muted);margin-top:2px;word-break:break-all}
+.badge{display:inline-block;background:var(--ok);color:#fff;border-radius:8px;padding:1px 7px;font-size:.7rem;vertical-align:middle}
 </style>
 </head>
 <body>
 <canvas id="sky"></canvas>
 <button id="themeBtn" type="button" aria-label="تبديل الوضع">🌙</button>
-<h1>🤖 مصنع تطبيقات APK</h1>
-<p class="sub">اختار صفحة HTML، صمّم أيقونة احترافية كاملة، فعّل مميزات أندرويد حقيقية، ودوس زر واحد.</p>
 
-<div class="card">
-  <details>
-    <summary>كيف أحصل على Token من GitHub؟ (مرة واحدة بس)</summary>
-    <ol>
-      <li>افتح github.com وسجّل دخول.</li>
-      <li>Settings ← Developer settings ← Personal access tokens ← Tokens (classic).</li>
-      <li>Generate new token (classic).</li>
-      <li>اختر صلاحية <b>repo</b> و<b>workflow</b> فقط.</li>
-      <li>Generate token، وانسخه فورًا (يبدأ بـ ghp_).</li>
-    </ol>
-  </details>
-  <details>
-    <summary>مميزات أندرويد الحقيقية — إزاي أستخدمها من صفحتي؟</summary>
-    <div class="js-api">// اهتزاز
-Android.vibrate(200);
-
-// إشعار نظام حقيقي
-Android.notify("عنوان", "نص الإشعار");
-
-// مشاركة نص لتطبيقات تانية
-Android.share("نص هيتشارك");
-
-// لغة التطبيق (ar,en,fr,es,de,tr,ur)
-Android.setLanguage("en");
-var lang = Android.getLanguage();
-
-// الكاميرا والملفات: استخدم عناصر عادية في صفحتك
-&lt;input type="file" accept="image/*" capture="environment"&gt;
-
-// الموقع الجغرافي: أي كود ويب عادي
-navigator.geolocation.getCurrentPosition(pos =&gt; ...);
-
-// التنزيل: أي رابط &lt;a href="..." download&gt; هيشتغل تلقائيًا
-    </div>
-  </details>
-</div>
 
 <div class="card">
   <label>اسم المستخدم على GitHub</label>
@@ -145,6 +112,21 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
   <label>صفحة HTML الخاصة بالتطبيق</label>
   <input type="file" id="htmlfile" accept=".html,text/html">
   <div class="fileok" id="fileok"></div>
+</div>
+
+<div class="card" id="projCard">
+  <label>📚 مشاريعي وسجل ملفات index</label>
+  <div class="status" id="pStatus"></div>
+  <details>
+    <summary>🕘 الملفات المحفوظة على جهازك (بتتحفظ تلقائي أول ما تختارها)</summary>
+    <div id="dList"></div>
+  </details>
+  <details style="margin-top:10px">
+    <summary>☁️ تطبيقاتك على GitHub</summary>
+    <button type="button" id="pRefresh" class="secondary" style="margin-top:8px">🔄 تحديث القائمة</button>
+    <div id="pList"></div>
+  </details>
+  <div id="hList" style="margin-top:10px"></div>
 </div>
 
 <div class="card">
@@ -181,7 +163,6 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
       <div id="libraryControls" class="hidden">
         <input type="text" id="librarySearch" placeholder="ابحث بالإنجليزي: home, rocket, camera...">
         <div class="glyph-grid" id="libraryGrid"></div>
-        <div class="note" style="margin-top:6px">مكتبة Material Symbols من Google — آلاف الأيقونات الاحترافية. اكتب اسم الأيقونة بالإنجليزي.</div>
       </div>
       <div id="uploadControls" class="hidden">
         <input type="file" id="iconfile" accept="image/*">
@@ -194,7 +175,6 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
         <label style="margin-top:8px">حساسية اللون</label><input type="range" id="rmTol" min="5" max="100" value="30" style="width:100%">
         <label>نعومة الحواف</label><input type="range" id="rmFeather" min="0" max="12" value="1" style="width:100%">
         <button type="button" id="rmClear" class="secondary" style="padding:8px;font-size:.8rem">مسح الألوان المختارة</button>
-        <div class="note" style="margin-top:6px">اضغط على الصورة لإضافة أي عدد من الألوان للعزل (بدون اختيار: لون الأركان). لو المعرض ظهر فاضي: اختار من «الملفات» أو «التنزيلات».</div>
       </div>
     </div>
   </div>
@@ -232,9 +212,6 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
     <label><input type="checkbox" id="fxShadow" checked> ظل خفيف</label>
     <label><input type="checkbox" id="fxBorder"> إطار خارجي</label>
   </div>
-  <div class="note">
-    الأداة بتولّد نسختين: كلاسيكية لكل الأجهزة، وتكيّفية (Adaptive Icon) للأندرويد الحديث. لون الخلفية الأول بيُستخدم كمان كشاشة بداية (Splash) للتطبيق.
-  </div>
 </div>
 
 <div class="card">
@@ -246,8 +223,7 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
 <div class="card">
   <label>🌅 شاشة البداية (Splash) — منفصلة عن أيقونة التطبيق</label>
   <div id="spPv"><div class="phone pv-phone"><iframe id="spFrame" sandbox="allow-scripts"></iframe></div>
-    <button type="button" id="spReplay" class="secondary" style="max-width:330px;margin:10px auto 4px;display:block">↻ إعادة تشغيل مشهد الفتح</button>
-    <div class="note" style="text-align:center;margin:0 0 12px">معاينة مستمرة لمشهد الفتح نفسه — العب باللمس والسحب على الصورة.</div></div>
+    <button type="button" id="spReplay" class="secondary" style="max-width:330px;margin:10px auto 4px;display:block">↻ إعادة تشغيل مشهد الفتح</button></div>
   <div class="toggles" style="margin:0 0 10px"><label><input type="checkbox" id="spOn" checked> تفعيل شاشة البداية</label></div>
   <label>صورة الشاشة (اختياري — لو فاضية بيستخدم الأيقونة/اللوجو)</label>
   <input type="file" id="spFile" accept="image/*">
@@ -263,34 +239,55 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
   <label>🎨 مظهر التطبيق من جوه</label>
   <div class="color-row"><label style="margin:0;display:flex;gap:5px;align-items:center;color:var(--text)"><input type="checkbox" id="bgOn"> فرض لون خلفية</label><input type="color" id="bgColor" value="#0f1115"></div>
   <div class="color-row" style="margin-bottom:4px"><label style="margin:0;display:flex;gap:5px;align-items:center;color:var(--text)"><input type="checkbox" id="glowOn" checked> إضاءة الأزرار + لمعة اللمس</label><input type="color" id="glowColor" value="#4da3ff"></div>
-  <div class="note">الخلفية الإجبارية ممكن تخالف تصميم صفحتك، فهي اختيارية. لون الخلفية الأول هنا هو كمان لون بداية التطبيق قبل ظهور الصفحة.</div>
 </div>
 
 <div class="card">
-  <label>🌐 لغة التطبيق</label>
+  <label style="display:flex;align-items:center;gap:6px;color:var(--text)"><svg viewBox="-50 -50 100 100" width="18" height="18" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle r="46"/><ellipse rx="20" ry="46"/><path d="M-46 0H46"/></svg><span>لغة التطبيق</span></label>
   <label>لغة التطبيق الافتراضية</label>
   <select id="langDef"><option value="system">لغة جهاز المستخدم (تلقائي)</option><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="de">Deutsch</option><option value="tr">Türkçe</option><option value="ur">اردو</option></select>
-  <div class="note" style="margin:0 0 10px;color:var(--text)">التطبيق بيمشي تلقائيًا على لغة جهاز المستخدم. لو لغته مش من (العربية، English، Français، Español، Deutsch، Türkçe، اردو) رسائل النظام بتظهر بالإنجليزي.</div>
   <div class="toggles" style="margin:0 0 8px"><label><input type="checkbox" id="langUI" checked> إضافة خيار «اللغة» داخل التطبيق (إعداد عادي: تلقائي أو أي لغة — بدون أيقونة عائمة)</label></div>
-  <div class="note" style="margin:0 0 10px">بيظهر كقايمة عادية في آخر صفحة التطبيق. لو عايزه في مكان معين حط في صفحتك عنصر <code>&lt;div id="app-language-setting"&gt;&lt;/div&gt;</code> وهيظهر جواه.</div>
   <div class="toggles" style="margin:0"><label><input type="checkbox" id="langDir"> ضبط اتجاه الصفحة (RTL/LTR) حسب اللغة</label></div>
-  <div class="note">نصوص صفحتك نفسها لازم تتغير حسب اللغة بإيدك، من خلال navigator.language أو Android.getLanguage().</div>
+</div>
+
+<div class="card" id="permCard">
+  <label>🔐 الأذونات — الموقع يقترح، وأنت توافق</label>
+  <button type="button" id="permScan" class="secondary">🔎 اقرأ صفحتي واقترح الأذونات</button>
+  <div class="toggles" style="margin:8px 0">
+    <label><input type="checkbox" id="perm_cam" checked> 📷 الكاميرا</label>
+    <label><input type="checkbox" id="perm_mic" checked> 🎤 الميكروفون</label>
+    <label><input type="checkbox" id="perm_loc" checked> 📍 الموقع</label>
+    <label><input type="checkbox" id="perm_notif" checked> 🔔 الإشعارات</label>
+    <label><input type="checkbox" id="perm_vib" checked> 📳 الاهتزاز</label>
+    <label><input type="checkbox" id="perm_net" checked> 🌐 الإنترنت</label>
+    <label><input type="checkbox" id="perm_store" checked> 💾 حفظ الملفات (أندرويد 9 وأقل)</label>
+  </div>
+  <div class="status" id="permOut" style="display:none"></div>
+  <label style="margin-top:12px">🕒 الوقت داخل التطبيق</label>
+  <div class="toggles" style="margin:0 0 8px">
+    <label><input type="checkbox" id="timeOn" checked> إضافة <code>AppTime</code> لكل تطبيق (صباح / مساء من وقت الإنترنت مش ساعة الجهاز)</label>
+    <label><input type="checkbox" id="timeTheme"> ضبط الوضع الفاتح/الداكن حسب الوقت (<code>data-daynight</code>)</label>
+  </div>
+</div>
+
+<div class="card" id="chkCard">
+  <label>🔍 فحص الصفحة قبل البناء</label>
+  <button type="button" id="chkBtn" class="secondary">افحص الصفحة الآن</button>
+  <div id="chkOut"></div>
 </div>
 
 <div class="card" id="pvCard">
   <label>📱 معاينة التطبيق (شاشة البداية ثم الصفحة)</label>
   <div class="bar2"><select id="pvLang"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="de">Deutsch</option><option value="tr">Türkçe</option><option value="ur">اردو</option></select><button type="button" id="pvReplay" class="secondary">↻ إعادة</button></div>
   <div class="phone pv-phone"><iframe id="pvFrame" allow="geolocation; camera; microphone" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
-  <div class="note">بتتحدّث لوحدها بعد أي تعديل. القايمة دي لتجربة لغة تانية بس، والتطبيق الحقيقي بيمشي على لغة جهاز المستخدم.</div>
 </div>
 
 <div class="card">
   <div class="toggles" style="margin:0 0 12px"><label><input type="checkbox" id="allowHttp"> السماح بفتح مواقع http (غير مشفّرة)</label></div>
+  <div class="status ok" id="editBadge" style="display:none"></div>
   <button id="buildBtn">🚀 ابنِ التطبيق الآن</button>
   <div class="status" id="status"></div>
   <div class="log" id="log"></div>
   <div id="dlArea"></div>
-  <div class="note">لتطبيق جديد: غيّر "اسم المشروع"، واختار HTML وأيقونة جديدة، ودوس الزرار تاني.</div>
 </div>
 
 <div class="card" id="updCard">
@@ -303,15 +300,107 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
     <div class="toggles" style="margin:0 0 10px"><label><input type="checkbox" id="updAuto" checked> ارفع تلقائي أول ما تختار الملف (من غير ما تدوس زر)</label></div>
     <button type="button" id="updBtn">⬆️ ارفع النسخة الجديدة</button>
     <button type="button" id="updRestore" class="secondary" style="margin-top:8px">↩️ رجّع النسخة الاحتياطية</button>
+    <button type="button" id="histBtn" class="secondary" style="margin-top:8px">📜 سجل نسخ الأداة (معاينة / تنزيل / استرجاع)</button>
+    <button type="button" id="rescueBtn" class="secondary" style="margin-top:8px">🛟 ارفع صفحة الإنقاذ</button>
+    <div id="histList"></div>
     <div class="status" id="updStatus"></div>
     <div id="updLink"></div>
-    <div class="note">بيستخدم اليوزر والتوكين اللي فوق. قبل الرفع بيتأكد إن الملف سليم، وبيحفظ النسخة القديمة في <b>index.backup.html</b>، وبعد الرفع بيستنى GitHub Pages ينشر النسخة وبعدها <b>الصفحة بتفتح لوحدها بالنسخة الجديدة</b>. مش محتاج تحذف أي ملف.</div>
   </details>
 </div>
 
+<div class="card" id="guideCard">
+  <label>📖 الدليل</label>
+  <details><summary>🔑 الحساب — التوكين واليوزر</summary>
+    <p>اليوزر والتوكين بيخلّوا الموقع يكلّم جيت هاب باسمك. بيتحفظوا على جهازك لو علّمت «تذكّر». اسم المشروع لازم يكون مختلف لكل تطبيق جديد، وصفحة HTML هي اللي هتتحوّل لتطبيق.</p>
+<details>
+    <summary>كيف أحصل على Token من GitHub؟ (مرة واحدة بس)</summary>
+    <ol>
+      <li>افتح github.com وسجّل دخول.</li>
+      <li>Settings ← Developer settings ← Personal access tokens ← Tokens (classic).</li>
+      <li>Generate new token (classic).</li>
+      <li>اختر صلاحية <b>repo</b> و<b>workflow</b> فقط.</li>
+      <li>Generate token، وانسخه فورًا (يبدأ بـ ghp_).</li>
+    </ol>
+  </details>
+  </details>
+  <details><summary>📚 مشاريعي وسجل الملفات (قسم الحساب)</summary>
+    <p>كل تطبيق بتبنيه بياخد ID ثابت ورقم إصدار بيزيد لوحده، ويتحفظ معاه ملف الـ HTML الأصلي وإعداداته في المستودع. من «تعديل» ترجّع الصفحة والإعدادات قدامك، تغيّر وتدوس «ابنِ» فيتحدّث نفس التطبيق. «سجل النسخ» بيعرض كل نسخة من صفحتك وتقدر تعاين وتنزّل وتفتح للتعديل. الملفات اللي بتختارها بتتحفظ كمان على جهازك (آخر ٢٠ ملف).</p>
+  </details>
+  <details><summary>🎨 الأيقونة</summary>
+    <p>اختار محتوى الأيقونة: نص أو إيموجي، أو رمز أساسي، أو مكتبة الأيقونات الضخمة (اكتب اسم الأيقونة بالإنجليزي زي home أو camera)، أو صورة جاهزة منك. الأداة بتولّد نسختين: كلاسيكية لكل الأجهزة، وتكيّفية للأندرويد الحديث. لون الخلفية الأول بيُستخدم كمان كشاشة بداية.</p>
+    <p>في الصورة الجاهزة: اضغط على الصورة لإضافة ألوان للعزل (بدون اختيار: لون الأركان). لو المعرض ظهر فاضي اختار من «الملفات». استوديو اللوجو بيتحكم في الشكل والأنماط والتأثيرات ويشتغل على كل الأنواع.</p>
+  </details>
+  <details><summary>🌅 شاشة البداية</summary>
+    <p>شاشة بتظهر وقت فتح التطبيق، منفصلة عن الأيقونة. تقدر تحط صورة، وألوان خلفية، وحركة دخول، ومؤثرات، وتحدد مدة الظهور. المعاينة مستمرة، والعب فيها باللمس والسحب. «فرض لون خلفية» ممكن يخالف تصميم صفحتك فهو اختياري، ولون الخلفية الأول هو كمان لون بداية التطبيق قبل ظهور الصفحة.</p>
+  </details>
+  <details><summary>🌐 اللغة</summary>
+    <p>التطبيق بيمشي تلقائيًا على لغة جهاز المستخدم، واللغات المدعومة: العربية، English، Français، Español، Deutsch، Türkçe، اردو. اللغة بتغيّر رسايل النظام (التنزيل، الحفظ، المشاركة، الإشعارات) وشكل التاريخ والأرقام.</p>
+    <p>«إضافة خيار اللغة داخل التطبيق» بيحط قايمة لغات في آخر صفحة التطبيق، وتقدر تحطها في مكان معين بعنصر <code>&lt;div id="app-language-setting"&gt;&lt;/div&gt;</code>. «ضبط اتجاه الصفحة» بيقلب اليمين/الشمال فقط، مش النصوص. نصوص صفحتك أنت لازم تكتبها بكل لغة، وتقرأ اللغة من <code>navigator.language</code> أو <code>Android.getLanguage()</code>.</p>
+  </details>
+  <details><summary>🔐 الأذونات</summary>
+    <p>«اقرأ صفحتي» بيقترح الأذونات اللي صفحتك بتستخدمها وأنت تعدّل. اللي مش معلّم بيتشال من التطبيق ومش هيتطلب من المستخدم، ولو صفحتك بتستخدمه هتلاقي الميزة دي مش شغالة. القراءة تقريبية وممكن تفوّت استخدام غير مباشر، فراجع القايمة قبل البناء.</p>
+  </details>
+  <details><summary>🕒 الوقت داخل التطبيق</summary>
+    <p>لما تفعّله بيتضاف <code>AppTime</code> لصفحتك. بيقرأ الوقت من الإنترنت مش من ساعة الجهاز. <code>AppTime.period()</code> ترجع morning / afternoon / evening / night. و<code>AppTime.isMorning()</code> و<code>AppTime.now()</code>. و<code>AppTime.tampered</code> بتبقى true لو الساعة اترجّعت لورا. من غير نت بيشتغل بآخر وقت محفوظ. خيار «ضبط الوضع» بيحط <code>data-daynight</code> على الصفحة. ده مش حماية كاملة للتطبيقات المدفوعة.</p>
+  </details>
+  <details><summary>🚀 البناء والفحص والمعاينة</summary>
+    <p>«افحص الصفحة» بيدوّر على أخطاء السكريبت وملفات خارجية مش هتتحمّل وروابط http وIDs مكررة، وبيتشغّل تلقائي قبل البناء. التنبيهات مش بتمنع البناء. المعاينة بتتحدّث لوحدها وقايمة اللغة فيها لتجربة لغة تانية بس. «السماح بفتح مواقع http» اختياري.</p>
+    <p>لتطبيق جديد: غيّر اسم المشروع واختار HTML وأيقونة جديدة وابنِ. لتعديل تطبيق قديم: افتحه من «مشاريعي». لو فشل البناء بيتعرض السبب بعربي.</p>
+  </details>
+  <details><summary>🛠️ الأداة — التحديث والسجلات</summary>
+    <p>«تحديث الأداة» بيرفع نسخة جديدة من الموقع نفسه بعد ما يفحصها، ويحفظ القديمة في <b>index.backup.html</b>، وبعد الرفع بيستنى النشر وبيفتح النسخة الجديدة. لو النسخة الجديدة باظت بيرجّع السابقة لوحده. «سجل نسخ الأداة» يعاين وينزّل ويسترجع أي نسخة، و«صفحة الإنقاذ» ملف منفصل فيه الرجوع لو الموقع الرئيسي باظ.</p>
+    <p>«سجل العمليات» بيسجّل البناء والتحديث والاسترجاع بالتاريخ والنتيجة على جهازك بس، والتوكين مش بيتسجّل، ولو مسحت بيانات المتصفح بيضيع.</p>
+  </details>
+<details>
+    <summary>📲 مميزات أندرويد — إزاي أستخدمها من صفحتي؟</summary>
+    <div class="js-api">// اهتزاز
+Android.vibrate(200);
+
+// إشعار نظام حقيقي
+Android.notify("عنوان", "نص الإشعار");
+
+// مشاركة نص لتطبيقات تانية
+Android.share("نص هيتشارك");
+
+// لغة التطبيق (ar,en,fr,es,de,tr,ur)
+Android.setLanguage("en");
+var lang = Android.getLanguage();
+
+// الكاميرا والملفات: استخدم عناصر عادية في صفحتك
+&lt;input type="file" accept="image/*" capture="environment"&gt;
+
+// الموقع الجغرافي: أي كود ويب عادي
+navigator.geolocation.getCurrentPosition(pos =&gt; ...);
+
+// التنزيل: أي رابط &lt;a href="..." download&gt; هيشتغل تلقائيًا
+    </div>
+  </details>
+</div>
+
+<div class="card" id="opCard">
+  <label>📒 سجل العمليات</label>
+  <button type="button" id="opShow" class="secondary">عرض السجل</button>
+  <button type="button" id="opExp" class="secondary" style="margin-top:8px">⬇️ تصدير كملف</button>
+  <button type="button" id="opClr" class="secondary" style="margin-top:8px">🗑️ مسح السجل</button>
+  <div id="opList"></div>
+</div>
+
+<nav id="secNav"></nav>
+<div id="brand">make apk</div>
+<style>
+body{padding-bottom:74px;padding-top:26px}
+#secNav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;gap:6px;overflow-x:auto;padding:8px;background:none}
+#brand{position:fixed;top:6px;left:50%;transform:translateX(-50%);z-index:40;font:600 .8rem system-ui,sans-serif;letter-spacing:1px;pointer-events:none;color:rgba(255,255,255,.5)}
+:root[data-theme=light] #brand{color:rgba(0,0,0,.5)}
+#guideCard details{margin:8px 0}#guideCard p,#guideCard li{font-size:.88rem;line-height:1.8}
+#secNav button{width:auto;flex:0 0 auto;margin:0;padding:8px 12px;font-size:.85rem;color:#fff;background:#3a3f55;border:0;border-radius:10px}
+#secNav button.on{background:#2d6cdf}
+#chkOut div{margin:4px 0;font-size:.9rem}
+</style>
+
 <script>
 const TEMPLATE_FILES = 
-{"gradle.properties": "android.useAndroidX=true\norg.gradle.jvmargs=-Xmx2048m\n", "build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    defaultConfig {\n        applicationId \"{{PKG}}\"\n        minSdk 24\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n}\ndependencies {\n    implementation 'androidx.core:core:1.12.0'\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n    <uses-permission android:name=\"android.permission.CAMERA\" />\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.VIBRATE\" />\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" android:maxSdkVersion=\"28\" />\n    <uses-permission android:name=\"android.permission.POST_NOTIFICATIONS\" />\n    <uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />\n\n    <queries>\n        <intent><action android:name=\"android.media.action.IMAGE_CAPTURE\" /></intent>\n    </queries>\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:supportsRtl=\"true\"\n        android:roundIcon=\"@mipmap/ic_launcher\"\n        android:usesCleartextTraffic=\"{{CLEARTEXT}}\"\n        android:theme=\"@style/AppTheme\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n\n        <provider\n            android:name=\"androidx.core.content.FileProvider\"\n            android:authorities=\"{{PKG}}.fileprovider\"\n            android:exported=\"false\"\n            android:grantUriPermissions=\"true\">\n            <meta-data\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\n                android:resource=\"@xml/file_paths\" />\n        </provider>\n    </application>\n</manifest>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.app.DownloadManager;\nimport android.app.Notification;\nimport android.app.NotificationChannel;\nimport android.app.NotificationManager;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.location.LocationManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Environment;\nimport android.os.Message;\nimport android.os.Vibrator;\nimport android.os.VibrationEffect;\nimport android.provider.MediaStore;\nimport android.util.SparseArray;\nimport android.view.ViewGroup;\nimport android.webkit.*;\nimport android.widget.Toast;\n\nimport androidx.core.content.FileProvider;\n\nimport java.io.File;\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.text.SimpleDateFormat;\nimport java.util.ArrayList;\nimport java.util.Date;\nimport java.util.List;\nimport java.util.Locale;\n\npublic class MainActivity extends Activity {\n\n    // لتحميل موقع بدل الملف المحلي غيّر START_URL مثل: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n    private static final String CHANNEL_ID = \"default_channel\";\n    // يجعل التواريخ والأرقام (toLocaleString / Intl) تتبع لغة التطبيق حتى لو محرك WebView محتفظ بلغة قديمة\n    private static final String LOCALE_PATCH = \"try{['toLocaleString','toLocaleDateString','toLocaleTimeString'].forEach(function(m){var o=Date.prototype[m];Date.prototype[m]=function(a,b){return o.call(this,a===undefined?l:a,b)}});var nl=Number.prototype.toLocaleString;Number.prototype.toLocaleString=function(a,b){return nl.call(this,a===undefined?l:a,b)};['DateTimeFormat','NumberFormat','Collator','PluralRules','RelativeTimeFormat','ListFormat'].forEach(function(k){var O=Intl[k];if(!O)return;var W=function(a,b){return new O(a===undefined?l:a,b)};W.prototype=O.prototype;W.supportedLocalesOf=O.supportedLocalesOf;Intl[k]=W})}catch(e){}\";\n    private static final int FILE_CHOOSER_RESULT_CODE = 10001;\n\n    private WebView web;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    private ValueCallback<Uri[]> filePathCallback;\n    private String cameraPhotoPath;\n    private boolean langChanging = false;\n    private boolean locSettingsShown = false;\n    private boolean fineAsked = false;\n\n    // ---------- الصلاحيات: كل صلاحية تُطلب لحظة الحاجة إليها فقط ----------\n    private static class Pending {\n        Runnable ok, no;\n        boolean any;\n        String[] perms;\n    }\n    private final SparseArray<Pending> pending = new SparseArray<>();\n    private int nextReq = 0;\n\n    private boolean has(String p) {\n        return checkSelfPermission(p) == PackageManager.PERMISSION_GRANTED;\n    }\n\n    // any=true: يكفي منح واحدة من الصلاحيات (مثل الموقع الدقيق أو التقريبي)\n    private void ask(String[] perms, boolean any, Runnable ok, Runnable no) {\n        List<String> need = new ArrayList<>();\n        boolean anyHas = false;\n        for (String p : perms) {\n            if (has(p)) anyHas = true; else need.add(p);\n        }\n        if (need.isEmpty() || (any && anyHas)) { if (ok != null) ok.run(); return; }\n        Pending pd = new Pending();\n        pd.ok = ok; pd.no = no; pd.any = any; pd.perms = perms;\n        int code = 200 + (nextReq++ % 1000);\n        pending.put(code, pd);\n        requestPermissions(need.toArray(new String[0]), code);\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        Pending pd = pending.get(code);\n        if (pd == null) return;\n        pending.remove(code);\n        boolean granted = !pd.any;\n        for (String perm : pd.perms) {\n            if (pd.any) granted = granted || has(perm); else granted = granted && has(perm);\n        }\n        if (granted) { if (pd.ok != null) pd.ok.run(); }\n        else { if (pd.no != null) pd.no.run(); }\n    }\n\n    // ---------- اللغة ----------\n    private Locale appLocale(Context c) {\n        String l = c.getSharedPreferences(\"app\", MODE_PRIVATE).getString(\"lang\", \"{{DEFAULT_LANG}}\");\n        if (l == null || l.equals(\"system\")) {\n            return android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);\n        }\n        return new Locale(l);\n    }\n\n    // اللغة الفعلية من الإعدادات (لا تعتمد على Locale.getDefault لأن WebView قد يغيّره)\n    private String currentLang() {\n        return appLocale(this).getLanguage();\n    }\n\n    @Override\n    protected void attachBaseContext(Context base) {\n        Locale loc = appLocale(base);\n        Locale.setDefault(loc);\n        android.content.res.Configuration c = new android.content.res.Configuration(base.getResources().getConfiguration());\n        c.setLocale(loc);\n        base = base.createConfigurationContext(c);\n        super.attachBaseContext(base);\n    }\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        createNotificationChannel();\n\n        web = new WebView(this);\n        Locale.setDefault(appLocale(this)); // WebView قد يغيّر اللغة عند إنشائه\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        web.setDownloadListener(downloadListener());\n        web.addJavascriptInterface(new WebAppInterface(), \"Android\");\n        if (b == null || web.restoreState(b) == null) web.loadUrl(START_URL);\n    }\n\n    private void createNotificationChannel() {\n        if (Build.VERSION.SDK_INT >= 26) {\n            NotificationChannel channel = new NotificationChannel(\n                    CHANNEL_ID, getString(R.string.notif_channel), NotificationManager.IMPORTANCE_DEFAULT);\n            NotificationManager mgr = getSystemService(NotificationManager.class);\n            if (mgr != null) mgr.createNotificationChannel(channel);\n        }\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        s.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);\n        s.setGeolocationEnabled(true);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // يخدم ملفات assets على عنوان https وهمي ليعمل الموقع بأصل (origin) سليم\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        if (path.toLowerCase().endsWith(\".html\")) {\n                            java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream();\n                            byte[] buf = new byte[8192]; int n;\n                            while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);\n                            in.close();\n                            String html = new String(bo.toByteArray(), \"UTF-8\");\n                            String lg = currentLang();\n                            String shim = \"<script>(function(){var l=\" + org.json.JSONObject.quote(lg) + \";try{Object.defineProperty(navigator,'language',{get:function(){return l}});Object.defineProperty(navigator,'languages',{get:function(){return [l]}})}catch(e){}\" + LOCALE_PATCH + \"})();</\" + \"script>\";\n                            java.util.regex.Matcher m = java.util.regex.Pattern.compile(\"<head(\\\\s[^>]*)?>\", java.util.regex.Pattern.CASE_INSENSITIVE).matcher(html);\n                            if (m.find()) html = html.substring(0, m.end()) + shim + html.substring(m.end());\n                            else {\n                                m = java.util.regex.Pattern.compile(\"<html[^>]*>\", java.util.regex.Pattern.CASE_INSENSITIVE).matcher(html);\n                                if (m.find()) html = html.substring(0, m.end()) + shim + html.substring(m.end());\n                                else html = shim + html;\n                            }\n                            return new WebResourceResponse(mime(path), \"UTF-8\", new java.io.ByteArrayInputStream(html.getBytes(\"UTF-8\")));\n                        }\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    // لو خدمة الموقع مقفولة في الجهاز يفتح إعداداتها مرة واحدة\n    private void checkLocationServices() {\n        try {\n            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);\n            boolean on = lm != null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER);\n            if (!on && !locSettingsShown) {\n                locSettingsShown = true;\n                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));\n            }\n        } catch (Exception ignored) {}\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n\n            // ميكروفون / كاميرا مطلوبة من داخل الصفحة (getUserMedia): كل واحدة بصلاحيتها فقط\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    List<String> perms = new ArrayList<>();\n                    for (String res : req.getResources()) {\n                        if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(res)) perms.add(Manifest.permission.RECORD_AUDIO);\n                        else if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(res)) perms.add(Manifest.permission.CAMERA);\n                    }\n                    if (perms.isEmpty()) { req.deny(); return; }\n                    ask(perms.toArray(new String[0]), false,\n                            () -> req.grant(req.getResources()),\n                            () -> req.deny());\n                });\n            }\n\n            // إحداثيات GPS مطلوبة من الصفحة (navigator.geolocation)\n            @Override\n            public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {\n                ask(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, true,\n                        () -> {\n                            callback.invoke(origin, true, false);\n                            checkLocationServices();\n                            // لو المستخدم اختار \"تقريبي\" في أندرويد 12+ نطلب \"الدقيق\" مرة واحدة\n                            if (!has(Manifest.permission.ACCESS_FINE_LOCATION) && !fineAsked) {\n                                fineAsked = true;\n                                ask(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, false, null, null);\n                            }\n                        },\n                        () -> callback.invoke(origin, false, false));\n            }\n\n            // اختيار/تصوير ملف من داخل الصفحة (input type=file)\n            @Override\n            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, final FileChooserParams params) {\n                if (filePathCallback != null) filePathCallback.onReceiveValue(null);\n                filePathCallback = callback;\n                if (params != null && params.isCaptureEnabled()) {\n                    // الكاميرا تُطلب فقط لو الصفحة طلبت التصوير (capture)\n                    ask(new String[]{Manifest.permission.CAMERA}, false,\n                            () -> launchChooser(params, true),\n                            () -> launchChooser(params, false));\n                } else {\n                    launchChooser(params, has(Manifest.permission.CAMERA));\n                }\n                return true;\n            }\n\n            // نافذة منبثقة (مثل تسجيل الدخول)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private void launchChooser(WebChromeClient.FileChooserParams params, boolean withCamera) {\n        Intent takePictureIntent = null;\n        if (withCamera) {\n            takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);\n            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {\n                File photoFile = null;\n                try { photoFile = createImageFile(); } catch (IOException ex) { photoFile = null; }\n                if (photoFile != null) {\n                    cameraPhotoPath = photoFile.getAbsolutePath();\n                    Uri photoUri = FileProvider.getUriForFile(\n                            MainActivity.this, getPackageName() + \".fileprovider\", photoFile);\n                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);\n                    takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);\n                } else {\n                    takePictureIntent = null;\n                }\n            } else {\n                takePictureIntent = null;\n            }\n        }\n\n        String type = \"*/*\";\n        if (params != null) {\n            String[] types = params.getAcceptTypes();\n            if (types != null && types.length > 0 && types[0] != null && !types[0].isEmpty()) type = types[0];\n        }\n        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);\n        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);\n        contentSelectionIntent.setType(type);\n\n        Intent[] intentArray = takePictureIntent != null ? new Intent[]{takePictureIntent} : new Intent[0];\n\n        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);\n        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);\n        chooserIntent.putExtra(Intent.EXTRA_TITLE, MainActivity.this.getString(R.string.choose_file));\n        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);\n\n        try {\n            startActivityForResult(chooserIntent, FILE_CHOOSER_RESULT_CODE);\n        } catch (Exception e) {\n            if (filePathCallback != null) { filePathCallback.onReceiveValue(null); filePathCallback = null; }\n        }\n    }\n\n    private File createImageFile() throws IOException {\n        String timeStamp = new SimpleDateFormat(\"yyyyMMdd_HHmmss\", Locale.US).format(new Date());\n        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);\n        return File.createTempFile(\"IMG_\" + timeStamp, \".jpg\", storageDir);\n    }\n\n    // تنزيل الملفات التي تطلبها الصفحة (روابط تحميل عادية) إلى مجلد التنزيلات\n    private DownloadListener downloadListener() {\n        return (url, userAgent, contentDisposition, mimetype, contentLength) -> {\n            if (url.startsWith(\"blob:\") || url.startsWith(\"data:\")) {\n                String fname = URLUtil.guessFileName(url, contentDisposition, mimetype);\n                String js = \"fetch(\" + org.json.JSONObject.quote(url) + \").then(r=>r.blob()).then(b=>{var f=new FileReader();f.onload=function(){Android.saveFile(String(f.result).split(',')[1],\" + org.json.JSONObject.quote(fname) + \",\" + org.json.JSONObject.quote(mimetype == null ? \"\" : mimetype) + \");};f.readAsDataURL(b);});\";\n                runOnUiThread(() -> web.evaluateJavascript(js, null));\n                return;\n            }\n            runOnUiThread(() -> {\n                if (Build.VERSION.SDK_INT <= 28) {\n                    // في أندرويد 9 وأقل التنزيل يحتاج صلاحية التخزين — تُطلب هنا فقط\n                    ask(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, false,\n                            () -> startDownload(url, userAgent, contentDisposition, mimetype),\n                            () -> Toast.makeText(getApplicationContext(), getString(R.string.dl_fail), Toast.LENGTH_SHORT).show());\n                } else {\n                    startDownload(url, userAgent, contentDisposition, mimetype);\n                }\n            });\n        };\n    }\n\n    private void startDownload(String url, String userAgent, String contentDisposition, String mimetype) {\n        try {\n            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));\n            request.setMimeType(mimetype);\n            String cookies = CookieManager.getInstance().getCookie(url);\n            if (cookies != null) request.addRequestHeader(\"cookie\", cookies);\n            request.addRequestHeader(\"User-Agent\", userAgent);\n            String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);\n            request.setTitle(fileName);\n            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);\n            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);\n            DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);\n            if (dm != null) dm.enqueue(request);\n            Toast.makeText(getApplicationContext(), getString(R.string.dl_start), Toast.LENGTH_LONG).show();\n        } catch (Exception e) {\n            Toast.makeText(getApplicationContext(), getString(R.string.dl_fail), Toast.LENGTH_SHORT).show();\n        }\n    }\n\n    private void doSave(String b64, String name, String mime) {\n        try {\n            byte[] data = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);\n            if (name == null || name.isEmpty()) name = \"file_\" + System.currentTimeMillis();\n            name = name.replaceAll(\"[/\\\\\\\\:*?\\\"<>|]\", \"_\");\n            if (mime == null || mime.isEmpty()) mime = \"application/octet-stream\";\n            java.io.OutputStream os;\n            if (Build.VERSION.SDK_INT >= 29) {\n                android.content.ContentValues v = new android.content.ContentValues();\n                v.put(MediaStore.Downloads.DISPLAY_NAME, name);\n                v.put(MediaStore.Downloads.MIME_TYPE, mime);\n                v.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);\n                Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);\n                os = getContentResolver().openOutputStream(uri);\n            } else {\n                File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);\n                dir.mkdirs();\n                os = new java.io.FileOutputStream(new File(dir, name));\n            }\n            os.write(data);\n            os.close();\n            runOnUiThread(() -> Toast.makeText(getApplicationContext(), getString(R.string.saved), Toast.LENGTH_LONG).show());\n        } catch (Exception e) {\n            runOnUiThread(() -> Toast.makeText(getApplicationContext(), getString(R.string.save_fail), Toast.LENGTH_LONG).show());\n        }\n    }\n\n    // جسر جافاسكريبت: الصفحة تقدر تنادي مميزات أندرويد حقيقية عبر Android.xxx()\n    private class WebAppInterface {\n        @JavascriptInterface\n        public void vibrate(long ms) {\n            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);\n            if (v == null) return;\n            if (Build.VERSION.SDK_INT >= 26) {\n                v.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));\n            } else {\n                v.vibrate(ms);\n            }\n        }\n\n        @JavascriptInterface\n        public void notify(final String title, final String message) {\n            runOnUiThread(() -> {\n                Runnable post = () -> {\n                    Notification.Builder builder = Build.VERSION.SDK_INT >= 26\n                            ? new Notification.Builder(MainActivity.this, CHANNEL_ID)\n                            : new Notification.Builder(MainActivity.this);\n                    builder.setContentTitle(title)\n                            .setContentText(message)\n                            .setSmallIcon(R.drawable.ic_stat)\n                            .setAutoCancel(true);\n                    NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\n                    if (mgr != null) mgr.notify((int) System.currentTimeMillis(), builder.build());\n                };\n                if (Build.VERSION.SDK_INT >= 33) {\n                    // صلاحية الإشعارات تُطلب عند أول إشعار فقط\n                    ask(new String[]{Manifest.permission.POST_NOTIFICATIONS}, false, post, null);\n                } else {\n                    post.run();\n                }\n            });\n        }\n\n        @JavascriptInterface\n        public String getLanguage() { return currentLang(); }\n\n        // \"system\" = يتبع لغة الجهاز، أو كود اللغة المختارة يدويًا\n        @JavascriptInterface\n        public String getLanguageMode() {\n            return getSharedPreferences(\"app\", MODE_PRIVATE).getString(\"lang\", \"{{DEFAULT_LANG}}\");\n        }\n\n        @JavascriptInterface\n        public void setLanguage(String code) {\n            if (code == null) return;\n            code = code.trim().toLowerCase(Locale.ROOT);\n            if (!code.matches(\"system|ar|en|fr|es|de|tr|ur\")) return;\n            getSharedPreferences(\"app\", MODE_PRIVATE).edit().putString(\"lang\", code).commit();\n            runOnUiThread(() -> { langChanging = true; recreate(); });\n        }\n\n        @JavascriptInterface\n        public void saveFile(final String b64, final String name, final String mime) {\n            if (Build.VERSION.SDK_INT <= 28) {\n                runOnUiThread(() -> ask(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, false,\n                        () -> new Thread(() -> doSave(b64, name, mime)).start(),\n                        () -> Toast.makeText(getApplicationContext(), getString(R.string.save_fail), Toast.LENGTH_LONG).show()));\n                return;\n            }\n            doSave(b64, name, mime);\n        }\n\n        @JavascriptInterface\n        public void share(final String text) {\n            runOnUiThread(() -> {\n                Intent send = new Intent(Intent.ACTION_SEND);\n                send.setType(\"text/plain\");\n                send.putExtra(Intent.EXTRA_TEXT, text);\n                startActivity(Intent.createChooser(send, getString(R.string.share)));\n            });\n        }\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\n        if (requestCode != FILE_CHOOSER_RESULT_CODE || filePathCallback == null) {\n            super.onActivityResult(requestCode, resultCode, data);\n            return;\n        }\n        Uri[] results = null;\n        if (resultCode == Activity.RESULT_OK) {\n            if (data == null || data.getData() == null) {\n                if (cameraPhotoPath != null) {\n                    results = new Uri[]{Uri.fromFile(new File(cameraPhotoPath))};\n                }\n            } else {\n                String dataString = data.getDataString();\n                if (dataString != null) results = new Uri[]{Uri.parse(dataString)};\n            }\n        }\n        filePathCallback.onReceiveValue(results);\n        filePathCallback = null;\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); if (!langChanging) web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">{{APP_NAME}}</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n        with:\n          gradle-version: '8.5'\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n", "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_background\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>\n", "app/src/main/res/values/colors.xml": "<resources>\n    <color name=\"splash_bg\">{{SPLASH_COLOR}}</color>\n</resources>\n", "app/src/main/res/values/styles.xml": "<resources>\n    <style name=\"AppTheme\" parent=\"android:Theme.DeviceDefault.NoActionBar\">\n        <item name=\"android:windowBackground\">@color/splash_bg</item>\n    </style>\n</resources>\n", "app/src/main/res/xml/file_paths.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<paths>\n    <external-files-path name=\"my_images\" path=\"Pictures\" />\n    <cache-path name=\"my_cache\" path=\".\" />\n</paths>\n"};
+{"gradle.properties": "android.useAndroidX=true\norg.gradle.jvmargs=-Xmx2048m\n", "build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    signingConfigs {\n        debug {\n            storeFile rootProject.file('factory/app.keystore')\n            storePassword 'appfactory'\n            keyAlias 'appkey'\n            keyPassword 'appfactory'\n        }\n    }\n    defaultConfig {\n        applicationId \"{{PKG}}\"\n        minSdk 24\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n}\ndependencies {\n    implementation 'androidx.core:core:1.12.0'\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n    <uses-permission android:name=\"android.permission.CAMERA\" />\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.VIBRATE\" />\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" android:maxSdkVersion=\"28\" />\n    <uses-permission android:name=\"android.permission.POST_NOTIFICATIONS\" />\n    <uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />\n\n    <queries>\n        <intent><action android:name=\"android.media.action.IMAGE_CAPTURE\" /></intent>\n    </queries>\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:supportsRtl=\"true\"\n        android:roundIcon=\"@mipmap/ic_launcher\"\n        android:usesCleartextTraffic=\"{{CLEARTEXT}}\"\n        android:theme=\"@style/AppTheme\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n\n        <provider\n            android:name=\"androidx.core.content.FileProvider\"\n            android:authorities=\"{{PKG}}.fileprovider\"\n            android:exported=\"false\"\n            android:grantUriPermissions=\"true\">\n            <meta-data\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\n                android:resource=\"@xml/file_paths\" />\n        </provider>\n    </application>\n</manifest>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.app.DownloadManager;\nimport android.app.Notification;\nimport android.app.NotificationChannel;\nimport android.app.NotificationManager;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.location.LocationManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Environment;\nimport android.os.Message;\nimport android.os.Vibrator;\nimport android.os.VibrationEffect;\nimport android.provider.MediaStore;\nimport android.util.SparseArray;\nimport android.view.ViewGroup;\nimport android.webkit.*;\nimport android.widget.Toast;\n\nimport androidx.core.content.FileProvider;\n\nimport java.io.File;\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.text.SimpleDateFormat;\nimport java.util.ArrayList;\nimport java.util.Date;\nimport java.util.List;\nimport java.util.Locale;\n\npublic class MainActivity extends Activity {\n\n    // \u0644\u062a\u062d\u0645\u064a\u0644 \u0645\u0648\u0642\u0639 \u0628\u062f\u0644 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0645\u062d\u0644\u064a \u063a\u064a\u0651\u0631 START_URL \u0645\u062b\u0644: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n    private static final String CHANNEL_ID = \"default_channel\";\n    // \u064a\u062c\u0639\u0644 \u0627\u0644\u062a\u0648\u0627\u0631\u064a\u062e \u0648\u0627\u0644\u0623\u0631\u0642\u0627\u0645 (toLocaleString / Intl) \u062a\u062a\u0628\u0639 \u0644\u063a\u0629 \u0627\u0644\u062a\u0637\u0628\u064a\u0642 \u062d\u062a\u0649 \u0644\u0648 \u0645\u062d\u0631\u0643 WebView \u0645\u062d\u062a\u0641\u0638 \u0628\u0644\u063a\u0629 \u0642\u062f\u064a\u0645\u0629\n    private static final String LOCALE_PATCH = \"try{['toLocaleString','toLocaleDateString','toLocaleTimeString'].forEach(function(m){var o=Date.prototype[m];Date.prototype[m]=function(a,b){return o.call(this,a===undefined?l:a,b)}});var nl=Number.prototype.toLocaleString;Number.prototype.toLocaleString=function(a,b){return nl.call(this,a===undefined?l:a,b)};['DateTimeFormat','NumberFormat','Collator','PluralRules','RelativeTimeFormat','ListFormat'].forEach(function(k){var O=Intl[k];if(!O)return;var W=function(a,b){return new O(a===undefined?l:a,b)};W.prototype=O.prototype;W.supportedLocalesOf=O.supportedLocalesOf;Intl[k]=W})}catch(e){}\";\n    private static final int FILE_CHOOSER_RESULT_CODE = 10001;\n\n    private WebView web;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    private ValueCallback<Uri[]> filePathCallback;\n    private String cameraPhotoPath;\n    private boolean langChanging = false;\n    private boolean locSettingsShown = false;\n    private boolean fineAsked = false;\n\n    // ---------- \u0627\u0644\u0635\u0644\u0627\u062d\u064a\u0627\u062a: \u0643\u0644 \u0635\u0644\u0627\u062d\u064a\u0629 \u062a\u064f\u0637\u0644\u0628 \u0644\u062d\u0638\u0629 \u0627\u0644\u062d\u0627\u062c\u0629 \u0625\u0644\u064a\u0647\u0627 \u0641\u0642\u0637 ----------\n    private static class Pending {\n        Runnable ok, no;\n        boolean any;\n        String[] perms;\n    }\n    private final SparseArray<Pending> pending = new SparseArray<>();\n    private int nextReq = 0;\n\n    private boolean has(String p) {\n        return checkSelfPermission(p) == PackageManager.PERMISSION_GRANTED;\n    }\n\n    // any=true: \u064a\u0643\u0641\u064a \u0645\u0646\u062d \u0648\u0627\u062d\u062f\u0629 \u0645\u0646 \u0627\u0644\u0635\u0644\u0627\u062d\u064a\u0627\u062a (\u0645\u062b\u0644 \u0627\u0644\u0645\u0648\u0642\u0639 \u0627\u0644\u062f\u0642\u064a\u0642 \u0623\u0648 \u0627\u0644\u062a\u0642\u0631\u064a\u0628\u064a)\n    private void ask(String[] perms, boolean any, Runnable ok, Runnable no) {\n        List<String> need = new ArrayList<>();\n        boolean anyHas = false;\n        for (String p : perms) {\n            if (has(p)) anyHas = true; else need.add(p);\n        }\n        if (need.isEmpty() || (any && anyHas)) { if (ok != null) ok.run(); return; }\n        Pending pd = new Pending();\n        pd.ok = ok; pd.no = no; pd.any = any; pd.perms = perms;\n        int code = 200 + (nextReq++ % 1000);\n        pending.put(code, pd);\n        requestPermissions(need.toArray(new String[0]), code);\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        Pending pd = pending.get(code);\n        if (pd == null) return;\n        pending.remove(code);\n        boolean granted = !pd.any;\n        for (String perm : pd.perms) {\n            if (pd.any) granted = granted || has(perm); else granted = granted && has(perm);\n        }\n        if (granted) { if (pd.ok != null) pd.ok.run(); }\n        else { if (pd.no != null) pd.no.run(); }\n    }\n\n    // ---------- \u0627\u0644\u0644\u063a\u0629 ----------\n    private Locale appLocale(Context c) {\n        String l = c.getSharedPreferences(\"app\", MODE_PRIVATE).getString(\"lang\", \"{{DEFAULT_LANG}}\");\n        if (l == null || l.equals(\"system\")) {\n            return android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);\n        }\n        return new Locale(l);\n    }\n\n    // \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0641\u0639\u0644\u064a\u0629 \u0645\u0646 \u0627\u0644\u0625\u0639\u062f\u0627\u062f\u0627\u062a (\u0644\u0627 \u062a\u0639\u062a\u0645\u062f \u0639\u0644\u0649 Locale.getDefault \u0644\u0623\u0646 WebView \u0642\u062f \u064a\u063a\u064a\u0651\u0631\u0647)\n    private String currentLang() {\n        return appLocale(this).getLanguage();\n    }\n\n    @Override\n    protected void attachBaseContext(Context base) {\n        Locale loc = appLocale(base);\n        Locale.setDefault(loc);\n        android.content.res.Configuration c = new android.content.res.Configuration(base.getResources().getConfiguration());\n        c.setLocale(loc);\n        base = base.createConfigurationContext(c);\n        super.attachBaseContext(base);\n    }\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        createNotificationChannel();\n\n        web = new WebView(this);\n        Locale.setDefault(appLocale(this)); // WebView \u0642\u062f \u064a\u063a\u064a\u0651\u0631 \u0627\u0644\u0644\u063a\u0629 \u0639\u0646\u062f \u0625\u0646\u0634\u0627\u0626\u0647\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        web.setDownloadListener(downloadListener());\n        web.addJavascriptInterface(new WebAppInterface(), \"Android\");\n        if (b == null || web.restoreState(b) == null) web.loadUrl(START_URL);\n    }\n\n    private void createNotificationChannel() {\n        if (Build.VERSION.SDK_INT >= 26) {\n            NotificationChannel channel = new NotificationChannel(\n                    CHANNEL_ID, getString(R.string.notif_channel), NotificationManager.IMPORTANCE_DEFAULT);\n            NotificationManager mgr = getSystemService(NotificationManager.class);\n            if (mgr != null) mgr.createNotificationChannel(channel);\n        }\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        s.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);\n        s.setGeolocationEnabled(true);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // \u064a\u062e\u062f\u0645 \u0645\u0644\u0641\u0627\u062a assets \u0639\u0644\u0649 \u0639\u0646\u0648\u0627\u0646 https \u0648\u0647\u0645\u064a \u0644\u064a\u0639\u0645\u0644 \u0627\u0644\u0645\u0648\u0642\u0639 \u0628\u0623\u0635\u0644 (origin) \u0633\u0644\u064a\u0645\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        if (path.toLowerCase().endsWith(\".html\")) {\n                            java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream();\n                            byte[] buf = new byte[8192]; int n;\n                            while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);\n                            in.close();\n                            String html = new String(bo.toByteArray(), \"UTF-8\");\n                            String lg = currentLang();\n                            String shim = \"<script>(function(){var l=\" + org.json.JSONObject.quote(lg) + \";try{Object.defineProperty(navigator,'language',{get:function(){return l}});Object.defineProperty(navigator,'languages',{get:function(){return [l]}})}catch(e){}\" + LOCALE_PATCH + \"})();</\" + \"script>\";\n                            java.util.regex.Matcher m = java.util.regex.Pattern.compile(\"<head(\\\\s[^>]*)?>\", java.util.regex.Pattern.CASE_INSENSITIVE).matcher(html);\n                            if (m.find()) html = html.substring(0, m.end()) + shim + html.substring(m.end());\n                            else {\n                                m = java.util.regex.Pattern.compile(\"<html[^>]*>\", java.util.regex.Pattern.CASE_INSENSITIVE).matcher(html);\n                                if (m.find()) html = html.substring(0, m.end()) + shim + html.substring(m.end());\n                                else html = shim + html;\n                            }\n                            return new WebResourceResponse(mime(path), \"UTF-8\", new java.io.ByteArrayInputStream(html.getBytes(\"UTF-8\")));\n                        }\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    // \u0644\u0648 \u062e\u062f\u0645\u0629 \u0627\u0644\u0645\u0648\u0642\u0639 \u0645\u0642\u0641\u0648\u0644\u0629 \u0641\u064a \u0627\u0644\u062c\u0647\u0627\u0632 \u064a\u0641\u062a\u062d \u0625\u0639\u062f\u0627\u062f\u0627\u062a\u0647\u0627 \u0645\u0631\u0629 \u0648\u0627\u062d\u062f\u0629\n    private void checkLocationServices() {\n        try {\n            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);\n            boolean on = lm != null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER);\n            if (!on && !locSettingsShown) {\n                locSettingsShown = true;\n                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));\n            }\n        } catch (Exception ignored) {}\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n\n            // \u0645\u064a\u0643\u0631\u0648\u0641\u0648\u0646 / \u0643\u0627\u0645\u064a\u0631\u0627 \u0645\u0637\u0644\u0648\u0628\u0629 \u0645\u0646 \u062f\u0627\u062e\u0644 \u0627\u0644\u0635\u0641\u062d\u0629 (getUserMedia): \u0643\u0644 \u0648\u0627\u062d\u062f\u0629 \u0628\u0635\u0644\u0627\u062d\u064a\u062a\u0647\u0627 \u0641\u0642\u0637\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    List<String> perms = new ArrayList<>();\n                    for (String res : req.getResources()) {\n                        if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(res)) perms.add(Manifest.permission.RECORD_AUDIO);\n                        else if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(res)) perms.add(Manifest.permission.CAMERA);\n                    }\n                    if (perms.isEmpty()) { req.deny(); return; }\n                    ask(perms.toArray(new String[0]), false,\n                            () -> req.grant(req.getResources()),\n                            () -> req.deny());\n                });\n            }\n\n            // \u0625\u062d\u062f\u0627\u062b\u064a\u0627\u062a GPS \u0645\u0637\u0644\u0648\u0628\u0629 \u0645\u0646 \u0627\u0644\u0635\u0641\u062d\u0629 (navigator.geolocation)\n            @Override\n            public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {\n                ask(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, true,\n                        () -> {\n                            callback.invoke(origin, true, false);\n                            checkLocationServices();\n                            // \u0644\u0648 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0627\u062e\u062a\u0627\u0631 \"\u062a\u0642\u0631\u064a\u0628\u064a\" \u0641\u064a \u0623\u0646\u062f\u0631\u0648\u064a\u062f 12+ \u0646\u0637\u0644\u0628 \"\u0627\u0644\u062f\u0642\u064a\u0642\" \u0645\u0631\u0629 \u0648\u0627\u062d\u062f\u0629\n                            if (!has(Manifest.permission.ACCESS_FINE_LOCATION) && !fineAsked) {\n                                fineAsked = true;\n                                ask(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, false, null, null);\n                            }\n                        },\n                        () -> callback.invoke(origin, false, false));\n            }\n\n            // \u0627\u062e\u062a\u064a\u0627\u0631/\u062a\u0635\u0648\u064a\u0631 \u0645\u0644\u0641 \u0645\u0646 \u062f\u0627\u062e\u0644 \u0627\u0644\u0635\u0641\u062d\u0629 (input type=file)\n            @Override\n            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, final FileChooserParams params) {\n                if (filePathCallback != null) filePathCallback.onReceiveValue(null);\n                filePathCallback = callback;\n                if (params != null && params.isCaptureEnabled()) {\n                    // \u0627\u0644\u0643\u0627\u0645\u064a\u0631\u0627 \u062a\u064f\u0637\u0644\u0628 \u0641\u0642\u0637 \u0644\u0648 \u0627\u0644\u0635\u0641\u062d\u0629 \u0637\u0644\u0628\u062a \u0627\u0644\u062a\u0635\u0648\u064a\u0631 (capture)\n                    ask(new String[]{Manifest.permission.CAMERA}, false,\n                            () -> launchChooser(params, true),\n                            () -> launchChooser(params, false));\n                } else {\n                    launchChooser(params, has(Manifest.permission.CAMERA));\n                }\n                return true;\n            }\n\n            // \u0646\u0627\u0641\u0630\u0629 \u0645\u0646\u0628\u062b\u0642\u0629 (\u0645\u062b\u0644 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private void launchChooser(WebChromeClient.FileChooserParams params, boolean withCamera) {\n        Intent takePictureIntent = null;\n        if (withCamera) {\n            takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);\n            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {\n                File photoFile = null;\n                try { photoFile = createImageFile(); } catch (IOException ex) { photoFile = null; }\n                if (photoFile != null) {\n                    cameraPhotoPath = photoFile.getAbsolutePath();\n                    Uri photoUri = FileProvider.getUriForFile(\n                            MainActivity.this, getPackageName() + \".fileprovider\", photoFile);\n                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);\n                    takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);\n                } else {\n                    takePictureIntent = null;\n                }\n            } else {\n                takePictureIntent = null;\n            }\n        }\n\n        String type = \"*/*\";\n        if (params != null) {\n            String[] types = params.getAcceptTypes();\n            if (types != null && types.length > 0 && types[0] != null && !types[0].isEmpty()) type = types[0];\n        }\n        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);\n        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);\n        contentSelectionIntent.setType(type);\n\n        Intent[] intentArray = takePictureIntent != null ? new Intent[]{takePictureIntent} : new Intent[0];\n\n        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);\n        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);\n        chooserIntent.putExtra(Intent.EXTRA_TITLE, MainActivity.this.getString(R.string.choose_file));\n        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);\n\n        try {\n            startActivityForResult(chooserIntent, FILE_CHOOSER_RESULT_CODE);\n        } catch (Exception e) {\n            if (filePathCallback != null) { filePathCallback.onReceiveValue(null); filePathCallback = null; }\n        }\n    }\n\n    private File createImageFile() throws IOException {\n        String timeStamp = new SimpleDateFormat(\"yyyyMMdd_HHmmss\", Locale.US).format(new Date());\n        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);\n        return File.createTempFile(\"IMG_\" + timeStamp, \".jpg\", storageDir);\n    }\n\n    // \u062a\u0646\u0632\u064a\u0644 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0627\u0644\u062a\u064a \u062a\u0637\u0644\u0628\u0647\u0627 \u0627\u0644\u0635\u0641\u062d\u0629 (\u0631\u0648\u0627\u0628\u0637 \u062a\u062d\u0645\u064a\u0644 \u0639\u0627\u062f\u064a\u0629) \u0625\u0644\u0649 \u0645\u062c\u0644\u062f \u0627\u0644\u062a\u0646\u0632\u064a\u0644\u0627\u062a\n    private DownloadListener downloadListener() {\n        return (url, userAgent, contentDisposition, mimetype, contentLength) -> {\n            if (url.startsWith(\"blob:\") || url.startsWith(\"data:\")) {\n                String fname = URLUtil.guessFileName(url, contentDisposition, mimetype);\n                String js = \"fetch(\" + org.json.JSONObject.quote(url) + \").then(r=>r.blob()).then(b=>{var f=new FileReader();f.onload=function(){Android.saveFile(String(f.result).split(',')[1],\" + org.json.JSONObject.quote(fname) + \",\" + org.json.JSONObject.quote(mimetype == null ? \"\" : mimetype) + \");};f.readAsDataURL(b);});\";\n                runOnUiThread(() -> web.evaluateJavascript(js, null));\n                return;\n            }\n            runOnUiThread(() -> {\n                if (Build.VERSION.SDK_INT <= 28) {\n                    // \u0641\u064a \u0623\u0646\u062f\u0631\u0648\u064a\u062f 9 \u0648\u0623\u0642\u0644 \u0627\u0644\u062a\u0646\u0632\u064a\u0644 \u064a\u062d\u062a\u0627\u062c \u0635\u0644\u0627\u062d\u064a\u0629 \u0627\u0644\u062a\u062e\u0632\u064a\u0646 \u2014 \u062a\u064f\u0637\u0644\u0628 \u0647\u0646\u0627 \u0641\u0642\u0637\n                    ask(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, false,\n                            () -> startDownload(url, userAgent, contentDisposition, mimetype),\n                            () -> Toast.makeText(getApplicationContext(), getString(R.string.dl_fail), Toast.LENGTH_SHORT).show());\n                } else {\n                    startDownload(url, userAgent, contentDisposition, mimetype);\n                }\n            });\n        };\n    }\n\n    private void startDownload(String url, String userAgent, String contentDisposition, String mimetype) {\n        try {\n            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));\n            request.setMimeType(mimetype);\n            String cookies = CookieManager.getInstance().getCookie(url);\n            if (cookies != null) request.addRequestHeader(\"cookie\", cookies);\n            request.addRequestHeader(\"User-Agent\", userAgent);\n            String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);\n            request.setTitle(fileName);\n            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);\n            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);\n            DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);\n            if (dm != null) dm.enqueue(request);\n            Toast.makeText(getApplicationContext(), getString(R.string.dl_start), Toast.LENGTH_LONG).show();\n        } catch (Exception e) {\n            Toast.makeText(getApplicationContext(), getString(R.string.dl_fail), Toast.LENGTH_SHORT).show();\n        }\n    }\n\n    private void doSave(String b64, String name, String mime) {\n        try {\n            byte[] data = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);\n            if (name == null || name.isEmpty()) name = \"file_\" + System.currentTimeMillis();\n            name = name.replaceAll(\"[/\\\\\\\\:*?\\\"<>|]\", \"_\");\n            if (mime == null || mime.isEmpty()) mime = \"application/octet-stream\";\n            java.io.OutputStream os;\n            if (Build.VERSION.SDK_INT >= 29) {\n                android.content.ContentValues v = new android.content.ContentValues();\n                v.put(MediaStore.Downloads.DISPLAY_NAME, name);\n                v.put(MediaStore.Downloads.MIME_TYPE, mime);\n                v.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);\n                Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);\n                os = getContentResolver().openOutputStream(uri);\n            } else {\n                File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);\n                dir.mkdirs();\n                os = new java.io.FileOutputStream(new File(dir, name));\n            }\n            os.write(data);\n            os.close();\n            runOnUiThread(() -> Toast.makeText(getApplicationContext(), getString(R.string.saved), Toast.LENGTH_LONG).show());\n        } catch (Exception e) {\n            runOnUiThread(() -> Toast.makeText(getApplicationContext(), getString(R.string.save_fail), Toast.LENGTH_LONG).show());\n        }\n    }\n\n    // \u062c\u0633\u0631 \u062c\u0627\u0641\u0627\u0633\u0643\u0631\u064a\u0628\u062a: \u0627\u0644\u0635\u0641\u062d\u0629 \u062a\u0642\u062f\u0631 \u062a\u0646\u0627\u062f\u064a \u0645\u0645\u064a\u0632\u0627\u062a \u0623\u0646\u062f\u0631\u0648\u064a\u062f \u062d\u0642\u064a\u0642\u064a\u0629 \u0639\u0628\u0631 Android.xxx()\n    private class WebAppInterface {\n        @JavascriptInterface\n        public void vibrate(long ms) {\n            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);\n            if (v == null) return;\n            if (Build.VERSION.SDK_INT >= 26) {\n                v.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));\n            } else {\n                v.vibrate(ms);\n            }\n        }\n\n        @JavascriptInterface\n        public void notify(final String title, final String message) {\n            runOnUiThread(() -> {\n                Runnable post = () -> {\n                    Notification.Builder builder = Build.VERSION.SDK_INT >= 26\n                            ? new Notification.Builder(MainActivity.this, CHANNEL_ID)\n                            : new Notification.Builder(MainActivity.this);\n                    builder.setContentTitle(title)\n                            .setContentText(message)\n                            .setSmallIcon(R.drawable.ic_stat)\n                            .setAutoCancel(true);\n                    NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\n                    if (mgr != null) mgr.notify((int) System.currentTimeMillis(), builder.build());\n                };\n                if (Build.VERSION.SDK_INT >= 33) {\n                    // \u0635\u0644\u0627\u062d\u064a\u0629 \u0627\u0644\u0625\u0634\u0639\u0627\u0631\u0627\u062a \u062a\u064f\u0637\u0644\u0628 \u0639\u0646\u062f \u0623\u0648\u0644 \u0625\u0634\u0639\u0627\u0631 \u0641\u0642\u0637\n                    ask(new String[]{Manifest.permission.POST_NOTIFICATIONS}, false, post, null);\n                } else {\n                    post.run();\n                }\n            });\n        }\n\n        @JavascriptInterface\n        public String getLanguage() { return currentLang(); }\n\n        // \"system\" = \u064a\u062a\u0628\u0639 \u0644\u063a\u0629 \u0627\u0644\u062c\u0647\u0627\u0632\u060c \u0623\u0648 \u0643\u0648\u062f \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0645\u062e\u062a\u0627\u0631\u0629 \u064a\u062f\u0648\u064a\u064b\u0627\n        @JavascriptInterface\n        public String getLanguageMode() {\n            return getSharedPreferences(\"app\", MODE_PRIVATE).getString(\"lang\", \"{{DEFAULT_LANG}}\");\n        }\n\n        @JavascriptInterface\n        public void setLanguage(String code) {\n            if (code == null) return;\n            code = code.trim().toLowerCase(Locale.ROOT);\n            if (!code.matches(\"system|ar|en|fr|es|de|tr|ur\")) return;\n            getSharedPreferences(\"app\", MODE_PRIVATE).edit().putString(\"lang\", code).commit();\n            runOnUiThread(() -> { langChanging = true; recreate(); });\n        }\n\n        @JavascriptInterface\n        public void saveFile(final String b64, final String name, final String mime) {\n            if (Build.VERSION.SDK_INT <= 28) {\n                runOnUiThread(() -> ask(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, false,\n                        () -> new Thread(() -> doSave(b64, name, mime)).start(),\n                        () -> Toast.makeText(getApplicationContext(), getString(R.string.save_fail), Toast.LENGTH_LONG).show()));\n                return;\n            }\n            doSave(b64, name, mime);\n        }\n\n        @JavascriptInterface\n        public void share(final String text) {\n            runOnUiThread(() -> {\n                Intent send = new Intent(Intent.ACTION_SEND);\n                send.setType(\"text/plain\");\n                send.putExtra(Intent.EXTRA_TEXT, text);\n                startActivity(Intent.createChooser(send, getString(R.string.share)));\n            });\n        }\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\n        if (requestCode != FILE_CHOOSER_RESULT_CODE || filePathCallback == null) {\n            super.onActivityResult(requestCode, resultCode, data);\n            return;\n        }\n        Uri[] results = null;\n        if (resultCode == Activity.RESULT_OK) {\n            if (data == null || data.getData() == null) {\n                if (cameraPhotoPath != null) {\n                    results = new Uri[]{Uri.fromFile(new File(cameraPhotoPath))};\n                }\n            } else {\n                String dataString = data.getDataString();\n                if (dataString != null) results = new Uri[]{Uri.parse(dataString)};\n            }\n        }\n        filePathCallback.onReceiveValue(results);\n        filePathCallback = null;\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); if (!langChanging) web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">{{APP_NAME}}</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\npermissions:\n  contents: write\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n        with:\n          gradle-version: '8.5'\n      - name: Fixed signing key (created once, reused so updates install over old versions)\n        run: |\n          if [ ! -f factory/app.keystore ]; then\n            mkdir -p factory\n            keytool -genkeypair -keystore factory/app.keystore -storepass appfactory -keypass appfactory -alias appkey -keyalg RSA -keysize 2048 -validity 36500 -dname 'CN=App Factory'\n            git config user.name 'github-actions'\n            git config user.email 'actions@github.com'\n            git add factory/app.keystore\n            git commit -m 'Add fixed signing key'\n            git push\n          fi\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n", "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_background\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>\n", "app/src/main/res/values/colors.xml": "<resources>\n    <color name=\"splash_bg\">{{SPLASH_COLOR}}</color>\n</resources>\n", "app/src/main/res/values/styles.xml": "<resources>\n    <style name=\"AppTheme\" parent=\"android:Theme.DeviceDefault.NoActionBar\">\n        <item name=\"android:windowBackground\">@color/splash_bg</item>\n    </style>\n</resources>\n", "app/src/main/res/xml/file_paths.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<paths>\n    <external-files-path name=\"my_images\" path=\"Pictures\" />\n    <cache-path name=\"my_cache\" path=\".\" />\n</paths>\n"};
 
 const $ = id => document.getElementById(id);
 const logEl = $('log'), statusEl = $('status'), dlArea = $('dlArea'), btn = $('buildBtn');
@@ -344,6 +433,7 @@ fileEl.addEventListener('change', () => {
     fileok.textContent = '✓ تم تحميل: ' + f.name + ' (' + Math.round(f.size/1024) + ' كيلوبايت)';
     fileok.style.display = 'block';
     schedulePreview();
+    saveDraft(f.name, htmlContent);
   };
   reader.readAsText(f, 'UTF-8');
 });
@@ -601,10 +691,10 @@ buildGlyphGrid();
 const MATERIAL_ICONS = ['home','rocket_launch','favorite','star','bolt','chat_bubble','music_note',
   'settings','shopping_cart','menu_book','photo_camera','notifications','mail','schedule','public',
   'check_circle','location_on','shield','diamond','celebration','sports_esports','palette','flight',
-  'restaurant','fitness_center','pets','school','medical_services','directions_car','wifi','language',
+  'restaurant','fitness_center','pets','school','medical_services','directions_car','wifi',
   'brush','currency_exchange','fingerprint','code','cloud','eco','theater_comedy','local_fire_department'];
 
-MATERIAL_ICONS.push('lightbulb','key','lock','phone','call','videocam','mic','headphones','tv','smartphone','watch','print','bookmark','flag','thumb_up','emoji_events','emoji_emotions','park','beach_access','pool','hotel','local_cafe','local_pizza','icecream','cake','shopping_bag','storefront','payments','account_balance','savings','trending_up','bar_chart','pie_chart','analytics','calculate','translate','history','timer','alarm','event','calendar_month','map','navigation','explore','directions_bike','directions_run','sports_soccer','sports_basketball','sports_tennis','science','psychology','build','handyman','engineering','memory','terminal','bug_report','database','security','visibility','search','download','upload','share','send','inbox','group','person','face','child_care','volunteer_activism','spa','nightlight','wb_sunny','ac_unit','water_drop','thunderstorm','forest','recycling','coffee','local_florist','checkroom','auto_awesome','movie','podcasts','radio','gavel','anchor','extension','draw','edit','folder','image','apps','dashboard','support_agent','rocket');
+MATERIAL_ICONS.push('lightbulb','key','lock','phone','call','videocam','mic','headphones','tv','smartphone','watch','print','bookmark','flag','thumb_up','emoji_events','emoji_emotions','park','beach_access','pool','hotel','local_cafe','local_pizza','icecream','cake','shopping_bag','storefront','payments','account_balance','savings','trending_up','bar_chart','pie_chart','analytics','calculate','history','timer','alarm','event','calendar_month','map','navigation','explore','directions_bike','directions_run','sports_soccer','sports_basketball','sports_tennis','science','psychology','build','handyman','engineering','memory','terminal','bug_report','database','security','visibility','search','download','upload','share','send','inbox','group','person','face','child_care','volunteer_activism','spa','nightlight','wb_sunny','ac_unit','water_drop','thunderstorm','forest','recycling','coffee','local_florist','checkroom','auto_awesome','movie','podcasts','radio','gavel','anchor','extension','draw','edit','folder','image','apps','dashboard','support_agent','rocket');
 function isValidIcon(name){
   try{
     if(!(document.fonts && document.fonts.check('24px "Material Symbols Outlined"'))) return true;
@@ -618,7 +708,7 @@ function buildLibraryGrid(filter){
   let list = MATERIAL_ICONS.filter(n => !f || n.includes(f));
   if(f && !list.length){
     if(isValidIcon(f)) list = [f];
-    else { libraryGrid.innerHTML = '<div class="note" style="grid-column:1/-1">مفيش أيقونة بالاسم ده. اكتب اسم إنجليزي زي home أو camera (fonts.google.com/icons).</div>'; return; }
+    else { libraryGrid.innerHTML = ''; return; }
   }
   libraryGrid.innerHTML = '';
   list.forEach(name => {
@@ -824,6 +914,7 @@ function stopList(box, defs, mirror){
   const ab = document.createElement('button'); ab.type = 'button'; ab.className = 'secondary'; ab.textContent = '+';
   ab.onclick = () => { const all = box.querySelectorAll('.stop input[type=color]'); const c = add(all.length ? all[all.length - 1].value : '#2f6fdb'); sync(); try { c.click(); } catch(e){} };
   box.appendChild(ab); defs.forEach(add); sync();
+  box._set = cols => { box.querySelectorAll('.stop').forEach(w => w.remove()); (cols && cols.length ? cols : defs).forEach(add); sync(); };
 }
 stopList($('bgStops'), ['#2f6fdb', '#8e2fdb'], ['color1', 'color2']);
 stopList($('spStops'), ['#2f6fdb', '#8e2fdb'], ['spC1', 'spC2']);
@@ -975,13 +1066,21 @@ function langUIRuntime(){
   if(!A[cur]) cur = 'en';
   var host = document.getElementById('app-language-setting');
   if(!host){ host = document.createElement('div'); host.style.cssText = 'margin:24px 16px;padding:12px 0;border-top:1px solid rgba(128,128,128,.35)'; document.body.appendChild(host); }
-  var lab = document.createElement('label'); lab.style.cssText = 'display:block;margin-bottom:6px;font:inherit;opacity:.8'; lab.textContent = '🌐 ' + ({ar:'اللغة',en:'Language',fr:'Langue',es:'Idioma',de:'Sprache',tr:'Dil',ur:'زبان'}[cur]);
-  var sel = document.createElement('select'); sel.style.cssText = 'width:100%;padding:10px;font:inherit;border-radius:8px';
-  var o = document.createElement('option'); o.value = 'system'; o.textContent = A[cur]; sel.appendChild(o);
-  Object.keys(N).forEach(function(k){ var x = document.createElement('option'); x.value = k; x.textContent = N[k]; sel.appendChild(x); });
-  sel.value = mode;
-  sel.onchange = function(){ Android.setLanguage(sel.value); };
-  host.appendChild(lab); host.appendChild(sel);
+  var lab = document.createElement('label'); lab.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:6px;font:inherit;opacity:.8';
+  lab.innerHTML = '<svg viewBox="-50 -50 100 100" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle r="46"/><ellipse rx="20" ry="46"/><path d="M-46 0H46"/></svg>';
+  var lt = document.createElement('span'); lt.textContent = ({ar:'اللغة',en:'Language',fr:'Langue',es:'Idioma',de:'Sprache',tr:'Dil',ur:'زبان'}[cur]); lab.appendChild(lt);
+  var grp = document.createElement('div'); grp.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px';
+  function mkBtn(code, txt, full){
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = txt;
+    var on = (code === mode);
+    b.style.cssText = 'flex:' + (full ? '1 1 100%' : '1 1 calc(50% - 8px)') + ';padding:11px 12px;font:inherit;border-radius:10px;cursor:pointer;color:inherit;width:auto;margin:0;' +
+      'background:' + (on ? 'rgba(10,143,122,.18)' : 'transparent') + ';border:2px solid ' + (on ? '#0a8f7a' : 'rgba(128,128,128,.5)') + ';font-weight:' + (on ? '700' : '400');
+    b.onclick = function(){ Android.setLanguage(code); };
+    grp.appendChild(b);
+  }
+  mkBtn('system', A[cur], true);
+  Object.keys(N).forEach(function(k){ mkBtn(k, N[k], false); });
+  host.appendChild(lab); host.appendChild(grp);
 }
 const LOCALE_PATCH_SRC = "try{['toLocaleString','toLocaleDateString','toLocaleTimeString'].forEach(function(m){var o=Date.prototype[m];Date.prototype[m]=function(a,b){return o.call(this,a===undefined?l:a,b)}});var nl=Number.prototype.toLocaleString;Number.prototype.toLocaleString=function(a,b){return nl.call(this,a===undefined?l:a,b)};['DateTimeFormat','NumberFormat','Collator','PluralRules','RelativeTimeFormat','ListFormat'].forEach(function(k){var O=Intl[k];if(!O)return;var W=function(a,b){return new O(a===undefined?l:a,b)};W.prototype=O.prototype;W.supportedLocalesOf=O.supportedLocalesOf;Intl[k]=W})}catch(e){}";
 function previewShim(lang){
@@ -1037,7 +1136,8 @@ function injectAll(html, o){
     (o.glowOn ? 'document.addEventListener("pointerdown",function(e){var d=document.createElement("div");d.style.cssText="position:fixed;pointer-events:none;z-index:2147483646;width:90px;height:90px;margin:-45px;border-radius:50%;left:"+e.clientX+"px;top:"+e.clientY+"px;background:radial-gradient(circle,' + o.glow + '99,transparent 70%);transition:transform .5s,opacity .5s;transform:scale(.3);opacity:1";document.body.appendChild(d);requestAnimationFrame(function(){d.style.transform="scale(1.6)";d.style.opacity=0});setTimeout(function(){d.remove()},600)},true);' : '') +
     '})();' + (o.splash ? '(' + splashRuntime.toString() + ')(' + JSON.stringify({ fx: o.fx, int: o.int }) + ');' : '') + '(' + langRuntime.toString() + ')(' + JSON.stringify({ dir: o.langDir }) + ');' + (o.langUI ? '(' + langUIRuntime.toString() + ')();' : '') + '<\/script>';
   if(o.preview){ const shim = '<script>(function(){var l=' + JSON.stringify(o.lang) + ';' + LOCALE_PATCH_SRC + '})();(' + previewShim.toString() + ')(' + JSON.stringify(o.lang) + ');<\/script>'; html = /<head(\s[^>]*)?>/i.test(html) ? html.replace(/<head(\s[^>]*)?>/i, m => m + shim) : shim + html; }
-  return insBeforeLastBody(html, js);
+  const tj = ($('timeOn') && $('timeOn').checked) ? '<script>(' + timeRuntime.toString() + ')(' + JSON.stringify({ theme: !!$('timeTheme').checked }) + ');<\/script>' : '';
+  return insBeforeLastBody(html, js + tj);
 }
 
 const LANG_STRINGS = {
@@ -1132,6 +1232,7 @@ async function run(){
     let pkgSeg = repo.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().slice(0, 40) || 'app';
     if(/^[0-9]/.test(pkgSeg)) pkgSeg = 'a' + pkgSeg;
     const pkg = 'com.appfactory.' + pkgSeg;
+    try{ preflightLog(); }catch(e){}
     const splashColor = $('spC1').value;
 
     const textFiles = {};
@@ -1142,6 +1243,7 @@ async function run(){
         .replace(/\{\{SPLASH_COLOR\}\}/g, splashColor)
         .replace(/\{\{DEFAULT_LANG\}\}/g, $('langDef').value)
         .replace(/\{\{CLEARTEXT\}\}/g, $('allowHttp').checked ? 'true' : 'false');
+      if(path.endsWith('AndroidManifest.xml') || path.endsWith('MainActivity.java')) textFiles[path] = applyPerms(path, textFiles[path]);
     }
     const xmlEsc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/^[@?]/, m => '\\' + m);
     const strXml = (m, app) => '<resources>\n' + (app ? '    <string name="app_name" formatted="false">' + xmlEsc(appname) + '</string>\n' : '') +
@@ -1188,6 +1290,21 @@ async function run(){
       log('المستودع موجود بالفعل، سيتم تحديث ملفاته.');
     }
 
+    // ---- هوية التطبيق: ID ثابت + رقم إصدار بيزيد + نسخة قابلة للتعديل محفوظة في المستودع ----
+    let prevCfg = null;
+    try{
+      const cr = await gh('/repos/' + user + '/' + repo + '/contents/factory/config.json', token, { headers: { Accept: 'application/vnd.github.raw+json' } });
+      if(cr.ok) prevCfg = JSON.parse(await cr.text());
+    }catch(e){}
+    const appId = (prevCfg && prevCfg.id) || ('app_' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3));
+    const vc = Math.max(1, ((prevCfg && +prevCfg.versionCode) || 0) + 1);
+    textFiles['app/build.gradle'] = textFiles['app/build.gradle'].replace(/versionCode \d+/, 'versionCode ' + vc).replace(/versionName "[^"]*"/, 'versionName "1.' + (vc - 1) + '"');
+    const ov = await overlayOpts(appname);
+    textFiles['factory/config.json'] = JSON.stringify(collectCfg(appId, vc, pkg, repo, appname, !!(spUserImg && ov.img)), null, 1);
+    textFiles['factory/source.html'] = htmlContent;
+    iconFiles['factory/icon.png'] = dataUrlFrom(paintLegacy, 512).split(',')[1];
+    if(spUserImg && ov.img) iconFiles['factory/splash.png'] = ov.img.split(',')[1];
+    log('ID التطبيق: ' + appId + ' — الإصدار ' + vc);
     const branch = (await r.json()).default_branch || 'main';
     setStatus('جاري رفع الملفات (commit واحد)...', 'wait');
     const base = '/repos/' + user + '/' + repo;
@@ -1224,12 +1341,14 @@ async function run(){
     const treeRes = await gh(base + '/git/trees', token, { method: 'POST', body: JSON.stringify({ base_tree: headCommit.tree.sha, tree: treeItems }) });
     if(!treeRes.ok) throw new Error('فشل إنشاء الشجرة: ' + treeRes.status + ' ' + await treeRes.text());
     const treeSha = (await treeRes.json()).sha;
-    const comRes = await gh(base + '/git/commits', token, { method: 'POST', body: JSON.stringify({ message: 'App Factory build', tree: treeSha, parents: [headSha] }) });
+    const comRes = await gh(base + '/git/commits', token, { method: 'POST', body: JSON.stringify({ message: 'App Factory build v' + vc + ' (' + appname + ')', tree: treeSha, parents: [headSha] }) });
     if(!comRes.ok) throw new Error('فشل إنشاء الـ commit: ' + comRes.status);
     const newSha = (await comRes.json()).sha;
     const updRes = await gh(base + '/git/refs/heads/' + branch, token, { method: 'PATCH', body: JSON.stringify({ sha: newSha }) });
     if(!updRes.ok) throw new Error('فشل تحديث الفرع: ' + updRes.status + ' ' + await updRes.text());
     log('تم رفع ' + entries.length + ' ملف في commit واحد.');
+    markDraftsBuilt().catch(function(){});
+    setTimeout(function(){ if(projLoaded) loadProjects(true); }, 1500);
 
     setStatus('تم الرفع، جاري بدء عملية البناء...', 'wait');
     const prevIds = new Set();
@@ -1281,7 +1400,7 @@ async function run(){
       throw new Error('البناء أخذ وقتًا طويلاً. تابعه يدويًا من رابط Actions أعلاه.');
     }
     if(conclusion !== 'success'){
-      throw new Error('فشل البناء (' + conclusion + '). تابع السجل من رابط Actions أعلاه لمعرفة السبب.');
+      throw new Error('فشل البناء (' + conclusion + '). ' + await explainFail(user, repo, token, runId));
     }
 
     setStatus('تم البناء بنجاح! جاري تجهيز رابط التحميل...', 'wait');
@@ -1325,6 +1444,240 @@ async function run(){
 
 btn.addEventListener('click', run);
 
+// ---------- مشاريعي + سجل الملفات + المسودات المحلية ----------
+const CFG_IDS = ['langDef','allowHttp','spOn','spAnim','spFx','spShape','spSize','spDur','spInt','spIdle','spSkip','bgOn','bgColor','glowOn','glowColor','langUI','langDir','iconShape','iconPattern','gradDir','fxShine','fxShadow','fxBorder'];
+function collectCfg(id, vc, pkg, repo, name, hasSplash){
+  const o = {};
+  CFG_IDS.forEach(k => { const e = $(k); if(e) o[k] = e.type === 'checkbox' ? e.checked : e.value; });
+  o.bgC = stopVals('bgStops'); o.spC = stopVals('spStops');
+  return { v: 1, id: id, name: name, repo: repo, pkg: pkg, versionCode: vc, versionName: '1.' + (vc - 1), updated: new Date().toISOString(), hasSplash: hasSplash, opts: o };
+}
+const pStatus = $('pStatus'), pList = $('pList'), dList = $('dList'), hList = $('hList');
+let projLoaded = false, editCfg = null;
+const RAW = { headers: { Accept: 'application/vnd.github.raw+json' } };
+function pSay(m, c){ pStatus.className = 'status' + (c ? ' ' + c : ''); pStatus.textContent = m || ''; pStatus.style.display = m ? 'block' : 'none'; }
+function creds(){
+  const u = $('user').value.trim(), t = $('token').value.trim();
+  if(!u || !t){ pSay('اكتب اليوزر والتوكين في الكارت اللي فوق الأول.', 'err'); return null; }
+  return { u: u, t: t };
+}
+function mk(tag, cls, txt){ const e = document.createElement(tag); if(cls) e.className = cls; if(txt != null) e.textContent = txt; return e; }
+function pbtn(txt, fn, alt){ const b = mk('button', alt ? 'secondary' : '', txt); b.type = 'button'; b.addEventListener('click', fn); return b; }
+function fmtDate(d){ try{ return new Date(d).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }); }catch(e){ return String(d); } }
+function useHtml(html, name){
+  htmlContent = html;
+  fileok.textContent = '✓ تم تحميل: ' + name + ' (' + Math.round(html.length / 1024) + ' كيلوبايت)';
+  fileok.style.display = 'block';
+  schedulePreview();
+}
+async function previewHtml(html){
+  const o = await overlayOpts(appnameEl.value.trim() || 'تطبيقي');
+  o.preview = true; o.lang = pvLang.value;
+  pvFrame.srcdoc = injectAll(html, o);
+  showSecFor($('pvCard')); $('pvCard').scrollIntoView({ behavior: 'smooth' });
+}
+
+// --- المسودات المحلية (IndexedDB) ---
+function idb(mode, fn){
+  return new Promise((res, rej) => {
+    let r; try{ r = indexedDB.open('af_drafts', 1); }catch(e){ rej(e); return; }
+    r.onupgradeneeded = () => r.result.createObjectStore('d', { keyPath: 'id', autoIncrement: true });
+    r.onerror = () => rej(r.error);
+    r.onsuccess = () => {
+      const db = r.result, tx = db.transaction('d', mode); let out;
+      const q = fn(tx.objectStore('d'));
+      if(q) q.onsuccess = () => { out = q.result; };
+      tx.oncomplete = () => { db.close(); res(out); };
+      tx.onerror = () => rej(tx.error);
+    };
+  });
+}
+async function saveDraft(name, html){
+  try{
+    const all = (await idb('readonly', s => s.getAll())) || [];
+    const ex = all.find(d => d.name === name && d.html === html);
+    if(ex){ ex.date = Date.now(); await idb('readwrite', s => s.put(ex)); }
+    else {
+      await idb('readwrite', s => s.add({ name: name, size: html.length, date: Date.now(), html: html, built: false }));
+      const a2 = ((await idb('readonly', s => s.getAll())) || []).sort((a, b) => b.date - a.date);
+      for(const d of a2.slice(20)) await idb('readwrite', s => s.delete(d.id));
+    }
+  }catch(e){}
+  renderDrafts();
+}
+async function markDraftsBuilt(){
+  if(!htmlContent) return;
+  const all = (await idb('readonly', s => s.getAll())) || [];
+  for(const d of all) if(d.html === htmlContent && !d.built){ d.built = true; await idb('readwrite', s => s.put(d)); }
+  renderDrafts();
+}
+async function renderDrafts(){
+  dList.textContent = '';
+  let all = []; try{ all = (await idb('readonly', s => s.getAll())) || []; }catch(e){}
+  all.sort((a, b) => b.date - a.date);
+  if(!all.length){ dList.appendChild(mk('div', 'note', 'لسه مفيش ملفات. أي ملف HTML تختاره بيتحفظ هنا تلقائي.')); return; }
+  all.forEach(d => {
+    const c = mk('div', 'pcard'), t = mk('div', '', d.name + ' ');
+    t.appendChild(mk('span', 'badge', d.built ? 'اتبنى' : 'جديد')); c.appendChild(t);
+    c.appendChild(mk('div', 'mono', Math.round(d.size / 1024) + ' KB — ' + fmtDate(d.date)));
+    const row = mk('div', 'row');
+    row.appendChild(pbtn('معاينة', () => previewHtml(d.html)));
+    row.appendChild(pbtn('فتح للتعديل', () => { useHtml(d.html, d.name); scrollTo({ top: 0, behavior: 'smooth' }); }, true));
+    row.appendChild(pbtn('حذف', async () => { try{ await idb('readwrite', s => s.delete(d.id)); }catch(e){} renderDrafts(); }, true));
+    c.appendChild(row); dList.appendChild(c);
+  });
+}
+
+// --- مشاريع GitHub ---
+async function loadProjects(silent){
+  const c = creds(); if(!c) return;
+  if(!silent) pSay('جاري قراءة تطبيقاتك من GitHub...', 'wait');
+  try{
+    const repos = [];
+    for(let pg = 1; pg <= 3; pg++){
+      const r = await gh('/user/repos?per_page=100&page=' + pg + '&sort=updated&affiliation=owner', c.t);
+      if(r.status === 401) throw new Error('الـ Token غير صحيح أو منتهي.');
+      if(!r.ok) throw new Error('تعذّر قراءة المستودعات: ' + r.status);
+      const a = await r.json(); repos.push(...a); if(a.length < 100) break;
+    }
+    const toolRepo = ($('updRepo').value || 'webtool').trim();
+    const q = repos.filter(r => !r.fork && r.name !== toolRepo), found = [];
+    async function w(){
+      while(q.length){
+        const r = q.shift();
+        try{
+          const cr = await gh('/repos/' + c.u + '/' + r.name + '/contents/factory/config.json', c.t, RAW);
+          if(cr.ok){ found.push({ repo: r.name, cfg: JSON.parse(await cr.text()), pushed: r.pushed_at }); continue; }
+          if(cr.status === 404){
+            const ar = await gh('/repos/' + c.u + '/' + r.name + '/contents/app/src/main/assets', c.t);
+            if(ar.ok) found.push({ repo: r.name, cfg: null, pushed: r.pushed_at });
+          }
+        }catch(e){}
+      }
+    }
+    await Promise.all([1, 2, 3, 4, 5, 6].map(w));
+    found.sort((a, b) => new Date(b.pushed) - new Date(a.pushed));
+    pList.textContent = '';
+    if(!found.length) pList.appendChild(mk('div', 'note', 'مفيش تطبيقات لسه. ابنِ أول تطبيق وهيظهر هنا.'));
+    found.forEach(p => pList.appendChild(renderProject(p, c)));
+    projLoaded = true;
+    pSay(silent ? '' : 'لقيت ' + found.length + ' تطبيق.', silent ? '' : 'ok');
+  }catch(e){ pSay('خطأ: ' + e.message, 'err'); }
+}
+function renderProject(p, c){
+  const cf = p.cfg, card = mk('div', 'pcard');
+  card.appendChild(mk('b', '', cf ? cf.name : p.repo));
+  card.appendChild(mk('div', 'mono', cf ? ('ID: ' + cf.id + ' · v' + cf.versionCode + ' · ' + p.repo) : (p.repo + ' — اتبنى قبل ميزة الـ ID')));
+  card.appendChild(mk('div', 'mono', fmtDate(p.pushed)));
+  const row = mk('div', 'row');
+  if(cf){
+    row.appendChild(pbtn('تعديل', () => loadProject(p.repo)));
+    row.appendChild(pbtn('سجل النسخ', () => loadHistory(p.repo), true));
+  } else row.appendChild(pbtn('تجهيز للتعديل', () => prepLegacy(p.repo)));
+  row.appendChild(pbtn('تحميل آخر APK', () => dlLatest(p.repo), true));
+  card.appendChild(row);
+  return card;
+}
+function prepLegacy(repo){
+  $('repo').value = repo;
+  pSay('اتحط اسم المشروع «' + repo + '». اختار ملف HTML الأصلي وابنِ مرة واحدة، وبعدها التطبيق يبقى له ID ويتفتح للتعديل من هنا.', 'ok');
+  scrollTo({ top: 0, behavior: 'smooth' });
+}
+function loadIconBlob(blob){
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => { uploadedIconImage = im; srcImg = im; keyColors = []; showPick(); computeCutout(); setTab('upload'); res(); };
+    im.onerror = () => res();
+    im.src = URL.createObjectURL(blob);
+  });
+}
+function loadSplashBlob(blob){
+  return new Promise(res => { const im = new Image(); im.onload = () => { spUserImg = im; res(); }; im.onerror = () => res(); im.src = URL.createObjectURL(blob); });
+}
+function applyCfg(cfg, html){
+  appnameEl.value = cfg.name; $('repo').value = cfg.repo;
+  const o = cfg.opts || {};
+  CFG_IDS.forEach(k => { const e = $(k); if(!e || !(k in o)) return; if(e.type === 'checkbox') e.checked = !!o[k]; else e.value = o[k]; });
+  if($('bgStops')._set) $('bgStops')._set(o.bgC);
+  if($('spStops')._set) $('spStops')._set(o.spC);
+  // الأيقونة بتتحمّل كصورة جاهزة فيها التأثيرات أصلًا، فنقفلها عشان ما تتكرر
+  ['fxShine', 'fxShadow', 'fxBorder'].forEach(k => { $(k).checked = false; });
+  $('iconPattern').value = 'none'; $('lgIso').value = 'off'; $('lgFit').value = 'cover';
+  useHtml(html, cfg.name + ' (v' + cfg.versionCode + ')');
+  ['spSize'].forEach(k => $(k).dispatchEvent(new Event('input', { bubbles: true })));
+  appnameEl.dispatchEvent(new Event('input', { bubbles: true }));
+}
+async function loadProject(repo){
+  const c = creds(); if(!c) return;
+  pSay('جاري تحميل المشروع...', 'wait');
+  try{
+    const b = '/repos/' + c.u + '/' + repo + '/contents/';
+    const cr = await gh(b + 'factory/config.json', c.t, RAW); if(!cr.ok) throw new Error('config.json: ' + cr.status);
+    const cfg = JSON.parse(await cr.text());
+    const sr = await gh(b + 'factory/source.html', c.t, RAW); if(!sr.ok) throw new Error('source.html: ' + sr.status);
+    const html = await sr.text();
+    const ir = await gh(b + 'factory/icon.png', c.t, RAW);
+    let sp = null; if(cfg.hasSplash){ const x = await gh(b + 'factory/splash.png', c.t, RAW); if(x.ok) sp = await x.blob(); }
+    applyCfg(cfg, html);
+    if(ir.ok) await loadIconBlob(await ir.blob());
+    if(sp) await loadSplashBlob(sp); else spUserImg = null;
+    editCfg = cfg;
+    const eb = $('editBadge');
+    eb.textContent = '✏️ وضع التعديل: «' + cfg.name + '» — ID: ' + cfg.id + ' — الحالي v' + cfg.versionCode + ' ← القادم v' + (cfg.versionCode + 1);
+    eb.style.display = 'block';
+    pSay('✅ اتحمّل «' + cfg.name + '». عدّل اللي تحبه وبعدين اضغط «ابنِ» لتحديث نفس التطبيق.', 'ok');
+    scrollTo({ top: 0, behavior: 'smooth' });
+  }catch(e){ pSay('تعذّر التحميل: ' + e.message, 'err'); }
+}
+async function loadHistory(repo){
+  const c = creds(); if(!c) return;
+  hList.textContent = ''; pSay('جاري قراءة سجل النسخ...', 'wait');
+  try{
+    const r = await gh('/repos/' + c.u + '/' + repo + '/commits?path=factory/source.html&per_page=30', c.t);
+    if(!r.ok) throw new Error(r.status);
+    const cm = await r.json();
+    hList.appendChild(mk('label', '', 'سجل ملفات index — ' + repo));
+    if(!cm.length) hList.appendChild(mk('div', 'note', 'مفيش نسخ محفوظة.'));
+    cm.forEach((x, i) => {
+      const card = mk('div', 'pcard'), t = mk('div', '', (x.commit.message || '').split('\n')[0] + ' ');
+      if(i === 0) t.appendChild(mk('span', 'badge', 'الأحدث'));
+      card.appendChild(t);
+      card.appendChild(mk('div', 'mono', x.sha.slice(0, 7) + ' · ' + fmtDate(x.commit.author && x.commit.author.date)));
+      const row = mk('div', 'row');
+      const get = async () => {
+        const rr = await gh('/repos/' + c.u + '/' + repo + '/contents/factory/source.html?ref=' + x.sha, c.t, RAW);
+        if(!rr.ok) throw new Error(rr.status);
+        return rr.text();
+      };
+      row.appendChild(pbtn('معاينة', async () => { try{ previewHtml(await get()); }catch(e){ pSay('تعذّرت المعاينة: ' + e.message, 'err'); } }));
+      row.appendChild(pbtn('فتح للتعديل', async () => { try{ useHtml(await get(), repo + ' @' + x.sha.slice(0, 7)); $('repo').value = repo; scrollTo({ top: 0, behavior: 'smooth' }); }catch(e){ pSay('تعذّر التحميل: ' + e.message, 'err'); } }, true));
+      row.appendChild(pbtn('تنزيل', async () => { try{ const t = await get(); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([t], { type: 'text/html;charset=utf-8' })); a.download = repo + '-' + x.sha.slice(0, 7) + '.html'; document.body.appendChild(a); a.click(); a.remove(); }catch(e){ pSay('تعذّر التنزيل: ' + e.message, 'err'); } }, true));
+      card.appendChild(row); hList.appendChild(card);
+    });
+    pSay('', '');
+  }catch(e){ pSay('تعذّر قراءة السجل: ' + e.message, 'err'); }
+}
+async function dlLatest(repo){
+  const c = creds(); if(!c) return;
+  pSay('جاري البحث عن آخر بناء ناجح...', 'wait');
+  try{
+    const rr = await gh('/repos/' + c.u + '/' + repo + '/actions/runs?status=success&per_page=1', c.t);
+    const run = rr.ok ? ((await rr.json()).workflow_runs || [])[0] : null;
+    if(!run) throw new Error('مفيش بناء ناجح لسه');
+    const ar = await gh('/repos/' + c.u + '/' + repo + '/actions/runs/' + run.id + '/artifacts', c.t);
+    const art = ar.ok ? ((await ar.json()).artifacts || [])[0] : null;
+    if(!art) throw new Error('الملف انتهت صلاحيته (GitHub بيمسح الـ artifacts بعد فترة) — ابنِ التطبيق من جديد');
+    const zr = await gh('/repos/' + c.u + '/' + repo + '/actions/artifacts/' + art.id + '/zip', c.t);
+    if(!zr.ok) throw new Error(zr.status);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(await zr.blob()); a.download = repo + '.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    pSay('✅ بدأ تحميل ' + repo + '.zip (جواه ملف APK)', 'ok');
+  }catch(e){ pSay('تعذّر التحميل: ' + e.message + ' — تقدر تفتح github.com/' + c.u + '/' + repo + '/actions', 'err'); }
+}
+$('pRefresh').addEventListener('click', () => loadProjects());
+$('repo').addEventListener('input', () => { if(editCfg && $('repo').value.trim() !== editCfg.repo){ editCfg = null; $('editBadge').style.display = 'none'; } });
+renderDrafts();
+
 // ---------- remember credentials on this device ----------
 (function(){
   try{
@@ -1354,7 +1707,102 @@ function bytesToB64(buf){
   return btoa(s);
 }
 function b64ToBytes(b){ const x = atob(b), u = new Uint8Array(x.length); for(let i = 0; i < x.length; i++) u[i] = x.charCodeAt(i); return u; }
-async function updRun(restore){
+
+function validateTool(text){
+  if(text.indexOf('TEMPLATE_FILES') < 0 || text.indexOf('id="buildBtn"') < 0) throw new Error('الملف ده مش نسخة صحيحة من الأداة.');
+  const doc = new DOMParser().parseFromString(text, 'text/html');
+  const sc = [...doc.querySelectorAll('script:not([src])')];
+  if(!sc.length) throw new Error('الملف ناقص (مفيش سكريبت).');
+  for(const x of sc){ try{ new Function(x.textContent); }catch(e){ throw new Error('خطأ برمجي في الملف (' + e.message + ')'); } }
+}
+// يفتح النسخة الجديدة في iframe مخفي ويتأكد إنها اشتغلت. 'bad' = اتفتحت وناقصها حاجات أساسية، 'unknown' = مقدرش يفحص (مفيش رجوع تلقائي)
+function healthCheck(live){
+  return new Promise(res => {
+    const f = document.createElement('iframe'); let done = false;
+    f.style.cssText = 'position:fixed;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none';
+    const fin = v => { if(done) return; done = true; try{ f.remove(); }catch(e){} res(v); };
+    f.onload = () => setTimeout(() => {
+      try{
+        const w = f.contentWindow, d = f.contentDocument;
+        fin(d && d.getElementById('buildBtn') && typeof w.updRun === 'function' && typeof w.openPreview === 'function' && typeof w.gh === 'function' ? 'ok' : 'bad');
+      }catch(e){ fin('unknown'); }
+    }, 2500);
+    setTimeout(() => fin('unknown'), 25000);
+    f.src = live + '?hc=' + Date.now();
+    document.body.appendChild(f);
+  });
+}
+function rescueHtml(){
+  const S = 'scr' + 'ipt';
+  return '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>صفحة الإنقاذ</title><style>body{font-family:sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#111;color:#eee}input,button{width:100%;padding:12px;margin:6px 0;font-size:16px;box-sizing:border-box;border-radius:8px;border:1px solid #666;background:#222;color:#eee}button{background:#2d6cdf;border:0;color:#fff}.r{border:1px solid #555;border-radius:8px;padding:10px;margin:8px 0}.r small{display:block;opacity:.7}</style></head><body><h2>🛟 صفحة الإنقاذ</h2><p>لو الموقع الرئيسي باظ، اختار نسخة سليمة من هنا وارجع لها.</p><input id="u" placeholder="اليوزر"><input id="r" placeholder="اسم المستودع"><input id="t" type="password" placeholder="Token"><button id="go">عرض النسخ</button><div id="s"></div><div id="l"></div><' + S + '>' +
+  'var $=function(i){return document.getElementById(i)};function say(m){$("s").textContent=m}' +
+  'try{$("u").value=localStorage.getItem("af_user")||"";$("t").value=localStorage.getItem("af_token")||"";$("r").value=localStorage.getItem("af_updrepo")||location.pathname.split("/")[1]||"webtool"}catch(e){}' +
+  'function g(p,o){o=o||{};o.headers={Authorization:"Bearer "+$("t").value.trim(),Accept:"application/vnd.github+json"};return fetch("https://api.github.com"+p,o)}' +
+  'function P(){return "/repos/"+$("u").value.trim()+"/"+$("r").value.trim()}' +
+  '$("go").onclick=async function(){say("جاري التحميل...");$("l").innerHTML="";try{var r=await g(P()+"/commits?path=index.html&per_page=30");if(!r.ok)throw new Error("فشل: "+r.status);var a=await r.json();say("");a.forEach(function(c){var d=document.createElement("div");d.className="r";var t=document.createElement("div");t.textContent=c.commit.message.split("\\n")[0];var m=document.createElement("small");m.textContent=new Date(c.commit.committer.date).toLocaleString("ar")+" — "+c.sha.slice(0,7);var b=document.createElement("button");b.textContent="↩️ ارجع للنسخة دي";b.onclick=function(){back(c.sha)};d.appendChild(t);d.appendChild(m);d.appendChild(b);$("l").appendChild(d)})}catch(e){say("خطأ: "+e.message)}};' +
+  'async function back(sha){if(!confirm("ترجّع النسخة دي؟"))return;say("جاري الاسترجاع...");try{var r=await g(P()+"/contents/index.html?ref="+sha);if(!r.ok)throw new Error("تعذّر قراءة النسخة");var j=await r.json();var c=(j.content||"").replace(/\\s/g,"");if(atob(c).indexOf("TEMPLATE_FILES")<0)throw new Error("النسخة دي مش صالحة");var x=await g(P()+"/contents/index.html");var sh=x.ok?(await x.json()).sha:undefined;var p=await g(P()+"/contents/index.html",{method:"PUT",body:JSON.stringify({message:"Rescue restore "+sha.slice(0,7),content:c,sha:sh})});if(!p.ok)throw new Error("فشل الرفع: "+p.status);say("✅ اتسترجعت. استنى دقيقة وافتح الموقع.")}catch(e){say("خطأ: "+e.message)}}' +
+  '</' + S + '></body></html>';
+}
+function hCreds(){
+  const user = $('user').value.trim(), token = $('token').value.trim(), repo = $('updRepo').value.trim();
+  if(!user || !token || !repo){ updSay('املأ اليوزر والتوكين (فوق) واسم مستودع الأداة.', 'err'); return null; }
+  return { user, token, repo, base: '/repos/' + user + '/' + repo + '/contents/' };
+}
+async function histFile(c, sha){
+  const r = await gh(c.base + 'index.html?ref=' + encodeURIComponent(sha), c.token);
+  if(!r.ok) throw new Error('تعذّر قراءة النسخة: ' + r.status);
+  return b64ToBytes(((await r.json()).content || '').replace(/\s/g, ''));
+}
+async function histLoad(){
+  const c = hCreds(); if(!c) return;
+  const box = $('histList'); box.textContent = ''; updSay('جاري تحميل السجل...', 'wait');
+  try{
+    const r = await gh('/repos/' + c.user + '/' + c.repo + '/commits?path=index.html&per_page=30', c.token);
+    if(!r.ok) throw new Error('فشل تحميل السجل: ' + r.status);
+    const list = await r.json(); updSay('', '');
+    if(!list.length) box.textContent = 'مفيش نسخ.';
+    list.forEach((it, i) => {
+      const row = document.createElement('div'); row.style.cssText = 'border:1px solid rgba(128,128,128,.5);border-radius:8px;padding:8px;margin:8px 0';
+      const t = document.createElement('div'); t.textContent = (i === 0 ? '⭐ الحالية — ' : '') + it.commit.message.split('\n')[0];
+      const m = document.createElement('small'); m.style.display = 'block'; m.textContent = new Date(it.commit.committer.date).toLocaleString('ar') + ' — ' + it.sha.slice(0, 7);
+      row.append(t, m);
+      [['👁️ معاينة', 'pv'], ['⬇️ تنزيل', 'dl'], ['↩️ استرجاع', 'rs']].forEach(([lbl, k]) => {
+        if(k === 'rs' && i === 0) return;
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'secondary'; b.style.marginTop = '6px'; b.textContent = lbl;
+        b.onclick = async () => {
+          try{
+            if(k === 'rs'){ if(confirm('ترجّع النسخة دي مكان الحالية؟ (الحالية بتتحفظ في index.backup.html)')) updRun(true, it.sha); return; }
+            const w = k === 'pv' ? window.open('', '_blank') : null;
+            const bytes = await histFile(c, it.sha);
+            const url = URL.createObjectURL(new Blob([bytes], { type: 'text/html;charset=utf-8' }));
+            if(k === 'pv'){ if(w) w.location = url; else location.href = url; }
+            else { const a = document.createElement('a'); a.href = url; a.download = 'index-' + it.commit.committer.date.slice(0, 10) + '-' + it.sha.slice(0, 7) + '.html'; document.body.appendChild(a); a.click(); a.remove(); }
+          }catch(e){ updSay('خطأ: ' + e.message, 'err'); }
+        };
+        row.appendChild(b);
+      });
+      box.appendChild(row);
+    });
+  }catch(e){ updSay('خطأ: ' + e.message, 'err'); }
+}
+async function rescuePush(){
+  const c = hCreds(); if(!c) return;
+  try{
+    updSay('جاري رفع صفحة الإنقاذ...', 'wait');
+    const rr = await gh('/repos/' + c.user + '/' + c.repo, c.token);
+    if(!rr.ok) throw new Error('تعذّر الوصول للمستودع: ' + rr.status);
+    const branch = (await rr.json()).default_branch || 'main';
+    const x = await gh(c.base + 'rescue.html?ref=' + encodeURIComponent(branch), c.token);
+    const sha = x.ok ? (await x.json()).sha : undefined;
+    const r = await gh(c.base + 'rescue.html', c.token, { method: 'PUT', body: JSON.stringify({ message: 'Rescue page', content: bytesToB64(new TextEncoder().encode(rescueHtml())), sha, branch }) });
+    if(!r.ok) throw new Error('فشل الرفع: ' + r.status);
+    const live = 'https://' + c.user + '.github.io/' + c.repo + '/rescue.html';
+    updSay('✅ اترفعت. احفظ الرابط ده عندك (يشتغل حتى لو الموقع الرئيسي باظ): ' + live, 'ok');
+  }catch(e){ updSay('خطأ: ' + e.message, 'err'); }
+}
+$('histBtn').addEventListener('click', histLoad);
+$('rescueBtn').addEventListener('click', rescuePush);
+async function updRun(restore, sha){
   const user = $('user').value.trim(), token = $('token').value.trim(), repo = $('updRepo').value.trim(), f = $('updFile').files[0];
   $('updLink').innerHTML = '';
   if(!user || !token || !repo){ updSay('املأ اليوزر والتوكين (فوق) واسم مستودع الأداة.', 'err'); return; }
@@ -1392,23 +1840,27 @@ async function updRun(restore){
 
     async function put(path, b64, msg){
       let sha;
-      if(path === 'index.html') sha = curSha;
-      else { const x = await gh(base + path + q, token); if(x.ok) sha = (await x.json()).sha; }
+      const x = await gh(base + path + q, token); if(x.ok) sha = (await x.json()).sha;
       const r = await gh(base + path, token, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64, sha: sha, branch: branch }) });
       if(!r.ok) throw new Error('فشل رفع ' + path + ': ' + r.status + ' ' + (await r.text()).slice(0, 200));
     }
     if(restore){
-      const bg = await gh(base + 'index.backup.html' + q, token);
-      if(!bg.ok) throw new Error('مفيش نسخة احتياطية (index.backup.html) في المستودع.');
+      const bg = await gh(base + (sha ? 'index.html?ref=' + encodeURIComponent(sha) : 'index.backup.html' + q), token);
+      if(!bg.ok) throw new Error(sha ? 'تعذّر قراءة النسخة المختارة.' : 'مفيش نسخة احتياطية (index.backup.html) في المستودع.');
       buf = b64ToBytes(((await bg.json()).content || '').replace(/\s/g, '')).buffer;
-      updSay('جاري استرجاع النسخة الاحتياطية...', 'wait');
-      await put('index.html', bytesToB64(buf), 'Restore backup');
+      if(sha){
+        validateTool(new TextDecoder('utf-8').decode(buf));
+        if(curB64){ updSay('جاري حفظ نسخة احتياطية من الحالية...', 'wait'); await put('index.backup.html', curB64, 'Backup before restore'); }
+      }
+      updSay('جاري استرجاع النسخة...', 'wait');
+      await put('index.html', bytesToB64(buf), sha ? 'Restore version ' + sha.slice(0, 7) : 'Restore backup');
     } else {
       if(curB64){ updSay('جاري حفظ نسخة احتياطية...', 'wait'); await put('index.backup.html', curB64, 'Backup before self-update'); }
       updSay('جاري رفع النسخة الجديدة...', 'wait');
       await put('index.html', bytesToB64(buf), 'Self-update tool');
     }
 
+    if(!restore){ try{ await put('rescue.html', bytesToB64(new TextEncoder().encode(rescueHtml())), 'Rescue page'); }catch(e){} }
     // wait until GitHub Pages really serves the new file, then open it automatically
     const wanted = new TextDecoder('utf-8').decode(buf);
     const live = 'https://' + user + '.github.io/' + repo + '/';
@@ -1423,6 +1875,14 @@ async function updRun(restore){
       try{ const r = await fetch(live + '?v=' + Date.now(), { cache: 'no-store' }); if(r.ok && (await r.text()) === wanted) served = true; }catch(e){}
     }
     if(served){
+      updSay('جاري فحص النسخة الجديدة...', 'wait');
+      const hc = await healthCheck(live);
+      if(hc === 'bad' && curB64 && !(restore && !sha)){
+        updSay('⚠️ النسخة الجديدة فيها مشكلة — جاري الرجوع للنسخة السابقة تلقائيًا...', 'wait');
+        await put('index.html', curB64, 'Auto rollback (new version failed health check)');
+        updSay('↩️ رجعت النسخة السابقة تلقائيًا. النسخة اللي فشلت لسه موجودة في سجل النسخ. استنى دقيقة وافتح الرابط.', 'err');
+        return;
+      }
       updSay('✅ النسخة الجديدة اتنشرت — جاري فتحها...', 'ok');
       setTimeout(() => { location.href = live + '?v=' + Date.now(); }, 800);
     } else {
@@ -1444,6 +1904,211 @@ $('updFile').addEventListener('change', () => { if($('updAuto').checked && $('up
   }catch(e){}
   $('updRepo').addEventListener('input', () => { try{ localStorage.setItem('af_updrepo', $('updRepo').value.trim()); }catch(e){} });
   $('updAuto').addEventListener('change', () => { try{ localStorage.setItem('af_updauto', $('updAuto').checked ? '1' : '0'); }catch(e){} });
+})();
+
+// ================= الدفعة 2 و 3 =================
+CFG_IDS.push('perm_cam', 'perm_mic', 'perm_loc', 'perm_notif', 'perm_vib', 'perm_net', 'perm_store', 'timeOn', 'timeTheme');
+
+// ---- الوقت داخل التطبيق (بيتحقن في صفحة التطبيق نفسها) ----
+function timeRuntime(o){
+  var K = 'af_time', S = null, T = { trusted: false, tampered: false, source: 'device' }, last = '';
+  try{ S = JSON.parse(localStorage.getItem(K) || 'null'); }catch(e){}
+  function est(){
+    var d = Date.now();
+    if(!S){ T.source = 'device'; return d; }
+    var b = S.srv + (d - S.dev);
+    if(d < S.dev - 60000){ T.tampered = true; b = Math.max(b, S.max || S.srv); }
+    T.source = T.trusted ? 'network' : 'saved';
+    return b;
+  }
+  T.now = function(){ return new Date(est()); };
+  T.hour = function(){ return T.now().getHours(); };
+  T.period = function(){ var h = T.hour(); return h >= 5 && h < 12 ? 'morning' : h < 17 ? 'afternoon' : h < 21 ? 'evening' : 'night'; };
+  T.isMorning = function(){ return T.period() === 'morning'; };
+  T.isAM = function(){ return T.hour() < 12; };
+  T.isDay = function(){ var h = T.hour(); return h >= 6 && h < 18; };
+  function apply(){
+    var r = document.documentElement, p = T.period(), day = T.isDay();
+    r.setAttribute('data-time', p); r.setAttribute('data-daynight', day ? 'day' : 'night');
+    if(o && o.theme) r.style.colorScheme = day ? 'light' : 'dark';
+    if(p !== last){ last = p; try{ window.dispatchEvent(new CustomEvent('apptimechange', { detail: { period: p, day: day } })); }catch(e){} }
+  }
+  var srcs = [
+    ['https://worldtimeapi.org/api/timezone/Etc/UTC', function(r){ return r.json().then(function(j){ return j.unixtime * 1000; }); }],
+    ['https://timeapi.io/api/Time/current/zone?timeZone=UTC', function(r){ return r.json().then(function(j){ return Date.parse(j.dateTime + 'Z'); }); }],
+    ['https://www.cloudflare.com/cdn-cgi/trace', function(r){ return r.text().then(function(t){ var m = /ts=([0-9.]+)/.exec(t); return m ? parseFloat(m[1]) * 1000 : NaN; }); }]
+  ];
+  function one(i){
+    if(i >= srcs.length) return Promise.resolve(false);
+    var c = window.AbortController ? new AbortController() : null, tm = setTimeout(function(){ if(c) c.abort(); }, 6000);
+    return fetch(srcs[i][0], { cache: 'no-store', signal: c ? c.signal : undefined }).then(function(r){ if(!r.ok) throw 0; return srcs[i][1](r); })
+      .then(function(ms){ clearTimeout(tm); if(!(ms > 1.6e12)) throw 0; S = { dev: Date.now(), srv: ms, max: Math.max(ms, (S && S.max) || 0) }; try{ localStorage.setItem(K, JSON.stringify(S)); }catch(e){} T.trusted = true; T.tampered = false; return true; })
+      .catch(function(){ clearTimeout(tm); return one(i + 1); });
+  }
+  T.sync = function(){ return one(0).then(function(ok){ apply(); return ok; }); };
+  T.ready = T.sync();
+  apply(); setInterval(apply, 60000); setInterval(T.sync, 1800000);
+  window.addEventListener('online', T.sync);
+  window.AppTime = T;
+}
+
+// ---- الأذونات ----
+const PERM_MAP = {
+  perm_cam: ['CAMERA'], perm_mic: ['RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS'], perm_loc: ['ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION'],
+  perm_notif: ['POST_NOTIFICATIONS'], perm_vib: ['VIBRATE'], perm_net: ['INTERNET'], perm_store: ['WRITE_EXTERNAL_STORAGE']
+};
+const PERM_NAME = { perm_cam: 'الكاميرا', perm_mic: 'الميكروفون', perm_loc: 'الموقع', perm_notif: 'الإشعارات', perm_vib: 'الاهتزاز', perm_net: 'الإنترنت', perm_store: 'حفظ الملفات' };
+function applyPerms(path, txt){
+  Object.keys(PERM_MAP).forEach(k => {
+    if($(k).checked) return;
+    if(path.endsWith('AndroidManifest.xml')) PERM_MAP[k].forEach(n => { txt = txt.replace(new RegExp('[ \\t]*<uses-permission android:name="android\\.permission\\.' + n + '"[^>]*/>\\s*\\n', 'g'), ''); });
+    else if(k === 'perm_vib') txt = txt.replace('public void vibrate(long ms) {', 'public void vibrate(long ms) { if (true) return;');
+  });
+  return txt;
+}
+function detectPerms(h){
+  const ext = (h.match(/https?:\/\/[^\s"'<>)\\]+/gi) || []).filter(u => !/^https?:\/\/(www\.w3\.org|appassets\.local)/i.test(u));
+  return {
+    perm_cam: /getUserMedia\s*\([^)]*video|capture\s*=|facingMode/i.test(h),
+    perm_mic: /getUserMedia\s*\([^)]*audio|MediaRecorder|SpeechRecognition|webkitSpeechRecognition/i.test(h),
+    perm_loc: /geolocation/i.test(h),
+    perm_notif: /Android\s*\.\s*notify|new\s+Notification\s*\(|Notification\s*\.\s*requestPermission/i.test(h),
+    perm_vib: /Android\s*\.\s*vibrate|navigator\s*\.\s*vibrate/i.test(h),
+    perm_net: ext.length > 0 || /WebSocket|EventSource/.test(h),
+    perm_store: /Android\s*\.\s*saveFile|\sdownload\s*=|\.download\s*=|createObjectURL/i.test(h)
+  };
+}
+function permScan(){
+  if(!htmlContent){ const o = $('permOut'); o.style.display = 'block'; o.className = 'status err'; o.textContent = 'اختار صفحة HTML الأول.'; return; }
+  const d = detectPerms(htmlContent), on = [];
+  Object.keys(d).forEach(k => { $(k).checked = d[k]; if(d[k]) on.push(PERM_NAME[k]); });
+  const o = $('permOut'); o.style.display = 'block'; o.className = 'status ok';
+  o.textContent = 'اتعلّم: ' + (on.length ? on.join('، ') : 'ولا إذن') + '. راجع القايمة وعدّل قبل البناء.';
+  $('perm_cam').dispatchEvent(new Event('change', { bubbles: true }));
+}
+$('permScan').addEventListener('click', permScan);
+
+// ---- فحص الصفحة ----
+function preflight(){
+  const R = [], h = htmlContent;
+  if(!h){ return [['err', 'مفيش صفحة HTML مختارة.']]; }
+  if(h.length > 5e6) R.push(['warn', 'الصفحة كبيرة (' + Math.round(h.length / 1048576) + ' ميجا) وممكن التطبيق يبقى تقيل.']);
+  const doc = new DOMParser().parseFromString(h, 'text/html');
+  [...doc.querySelectorAll('script:not([src])')].forEach((sc, i) => {
+    const t = (sc.getAttribute('type') || '').toLowerCase();
+    if(t && !/javascript|^text\/babel$/.test(t) || t === 'module' || /babel/.test(t)) return;
+    try{ new Function(sc.textContent); }catch(e){ R.push(['err', 'خطأ برمجي في سكريبت رقم ' + (i + 1) + ': ' + e.message]); }
+  });
+  if(!doc.querySelector('meta[name=viewport]')) R.push(['warn', 'مفيش <meta name="viewport"> — الصفحة ممكن تظهر صغيرة على الموبايل.']);
+  const rel = u => u && !/^(https?:|data:|blob:|#|javascript:|mailto:|tel:|\/\/)/i.test(u);
+  doc.querySelectorAll('script[src],link[rel=stylesheet][href],img[src],source[src],video[src],audio[src]').forEach(e => {
+    const u = e.getAttribute('src') || e.getAttribute('href');
+    if(rel(u)) R.push(['warn', 'ملف خارجي محلي مش هيتحمّل: ' + u.slice(0, 60) + ' — حط كل حاجة جوه ملف HTML واحد (أو حوّلها data:).']);
+  });
+  const ids = {}, dup = new Set();
+  doc.querySelectorAll('[id]').forEach(e => { if(ids[e.id]) dup.add(e.id); ids[e.id] = 1; });
+  if(dup.size) R.push(['warn', 'IDs مكررة: ' + [...dup].slice(0, 5).join('، ')]);
+  if(/file:\/\//i.test(h)) R.push(['warn', 'الصفحة فيها روابط file:// ومش هتشتغل في التطبيق.']);
+  if(!$('allowHttp').checked && /['"(]http:\/\/(?!www\.w3\.org)/i.test(h)) R.push(['warn', 'الصفحة فيها روابط http غير مشفّرة، وخيار السماح بيها مقفول.']);
+  const d = detectPerms(h);
+  Object.keys(d).forEach(k => { if(d[k] && !$(k).checked) R.push(['warn', 'صفحتك شكلها بتستخدم ' + PERM_NAME[k] + ' لكن إذنها مش معلّم.']); });
+  if(!$('langUI').checked && /Android\.setLanguage/.test(h)) R.push(['warn', 'صفحتك بتنادي setLanguage لكن خيار اللغة مقفول (ده عادي لو انت اللي بتديره).']);
+  if(!R.length) R.push(['ok', 'مفيش مشاكل ظاهرة.']);
+  return R;
+}
+function showChk(R){
+  const o = $('chkOut'); o.textContent = '';
+  R.forEach(([l, m]) => o.appendChild(mk('div', '', (l === 'err' ? '❌ ' : l === 'warn' ? '⚠️ ' : '✅ ') + m)));
+}
+function preflightLog(){
+  const R = preflight(); showChk(R);
+  R.forEach(([l, m]) => log((l === 'err' ? '❌ ' : l === 'warn' ? '⚠️ ' : '✅ ') + 'فحص: ' + m));
+  log('الأذونات: ' + (Object.keys(PERM_MAP).filter(k => $(k).checked).map(k => PERM_NAME[k]).join('، ') || 'بدون'));
+}
+$('chkBtn').addEventListener('click', () => showChk(preflight()));
+$('htmlfile').addEventListener('change', () => setTimeout(() => { if(htmlContent){ permScan(); showChk(preflight()); } }, 800));
+
+// ---- شرح أخطاء البناء ----
+async function explainFail(user, repo, token, runId){
+  const link = 'github.com/' + user + '/' + repo + '/actions/runs/' + runId;
+  let step = '', txt = '';
+  try{
+    const jr = await gh('/repos/' + user + '/' + repo + '/actions/runs/' + runId + '/jobs', token);
+    if(jr.ok){
+      const job = ((await jr.json()).jobs || []).find(j => j.conclusion === 'failure') || null;
+      if(job){
+        const st = (job.steps || []).find(x => x.conclusion === 'failure'); step = st ? st.name : '';
+        try{ const lr = await gh('/repos/' + user + '/' + repo + '/actions/jobs/' + job.id + '/logs', token); if(lr.ok) txt = (await lr.text()).slice(-9000); }catch(e){}
+      }
+    }
+  }catch(e){}
+  const rules = [
+    [/Could not resolve|UnknownHost|Connection (reset|timed out)|Read timed out|503 Service/i, 'مشكلة شبكة مؤقتة عند جيت هاب أو جوجل. أعد البناء بعد دقايق.'],
+    [/Resource not accessible|permission denied|403|rejected|not permitted/i, 'الـ Token أو المستودع ناقصه صلاحية. اتأكد من صلاحيتي repo وworkflow.'],
+    [/AAPT|resource linking failed|resource .* not found/i, 'مورد ناقص أو اسم غير صالح (غالبًا اسم التطبيق أو الأيقونة). جرّب اسمًا أبسط.'],
+    [/cannot find symbol|error: .*\.java|compilation failed/i, 'خطأ في كود الجافا بتاع القالب. بلّغني بنص الخطأ من صفحة Actions.'],
+    [/No space left/i, 'مساحة خادم البناء خلصت. أعد البناء.'],
+    [/keytool|keystore/i, 'مشكلة في مفتاح التوقيع. احذف مجلد factory من المستودع وابنِ تاني (هيتعمل مفتاح جديد، والتحديث فوق القديم مش هيشتغل).']
+  ];
+  let why = ''; for(const [re, m] of rules) if(re.test(txt)){ why = m; break; }
+  const t = /Execution failed for task '([^']+)'/.exec(txt);
+  if(!why) why = /Build APK/i.test(step) ? 'فشل تجميع التطبيق نفسه.' : /signing/i.test(step) ? 'فشل إنشاء مفتاح التوقيع أو رفعه (صلاحية الكتابة).' : step ? 'فشلت خطوة: ' + step + '.' : 'السبب غير واضح.';
+  return why + (t ? ' (المرحلة ' + t[1] + ')' : '') + ' التفاصيل: ' + link;
+}
+
+// ---- سجل العمليات ----
+const OPK = 'af_oplog';
+function opGet(){ try{ return JSON.parse(localStorage.getItem(OPK) || '[]'); }catch(e){ return []; } }
+function opLog(kind, msg, ok){
+  try{
+    const a = opGet(), r = ($('repo') && $('repo').value.trim()) || '';
+    a.unshift({ t: new Date().toISOString(), k: kind, m: (kind === 'بناء' && r ? '[' + r + '] ' : '') + String(msg).slice(0, 300), ok: !!ok });
+    localStorage.setItem(OPK, JSON.stringify(a.slice(0, 200)));
+  }catch(e){}
+}
+{
+  const _ss = setStatus; setStatus = function(m, c){ _ss.apply(this, arguments); if(/^(✅|خطأ)/.test(m || '')) opLog('بناء', m, c !== 'err'); };
+  const _us = updSay; updSay = function(m, c){ _us.apply(this, arguments); if(/^(✅|خطأ|↩️|⚠️)/.test(m || '')) opLog('تحديث الأداة', m, c !== 'err'); };
+}
+function opRender(){
+  const box = $('opList'); box.textContent = ''; const a = opGet();
+  if(!a.length) box.appendChild(mk('div', 'note', 'السجل فاضي.'));
+  a.forEach(x => {
+    const d = mk('div', 'pcard'); d.appendChild(mk('div', '', (x.ok ? '✅ ' : '❌ ') + x.k));
+    d.appendChild(mk('div', '', x.m)); d.appendChild(mk('div', 'mono', fmtDate(x.t))); box.appendChild(d);
+  });
+}
+$('opShow').addEventListener('click', opRender);
+$('opClr').addEventListener('click', () => { if(confirm('تمسح السجل؟')){ try{ localStorage.removeItem(OPK); }catch(e){} opRender(); } });
+$('opExp').addEventListener('click', () => {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(opGet(), null, 1)], { type: 'application/json' }));
+  a.download = 'oplog-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(a); a.click(); a.remove();
+});
+
+// ---- كل قسم في صفحة لوحده ----
+const SECS = [
+  ['acc', '👤 الحساب', () => [$('user').closest('.card'), $('projCard')]],
+  ['icon', '🎨 الأيقونة', () => [$('tabText').closest('.card'), $('logoStudio').closest('.card')]],
+  ['splash', '🌅 البداية', () => [$('spFrame').closest('.card')]],
+  ['lang', '🌐 اللغة والأذونات', () => [$('langDef').closest('.card'), $('permCard')]],
+  ['build', '🚀 البناء', () => [$('chkCard'), $('pvCard'), $('buildBtn').closest('.card')]],
+  ['tool', '🛠️ الأداة', () => [$('updCard'), $('opCard')]],
+  ['guide', '📖 الدليل', () => [$('guideCard')]]
+];
+function showSec(k){
+  document.querySelectorAll('.card').forEach(c => { c.style.display = (k === 'all' || c.dataset.sec === k) ? '' : 'none'; });
+  document.querySelectorAll('#secNav button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
+  try{ localStorage.setItem('af_sec', k); }catch(e){}
+  scrollTo({ top: 0 });
+}
+function showSecFor(el){ const c = el && el.closest('.card'); if(c && c.style.display === 'none') showSec(c.dataset.sec); }
+(function(){
+  const nav = $('secNav');
+  SECS.concat([['all', '▦ الكل']]).forEach(([k, t, f]) => {
+    if(f) f().forEach(c => { if(c) c.dataset.sec = k; });
+    const b = mk('button', '', t); b.type = 'button'; b.dataset.k = k; b.addEventListener('click', () => showSec(b.classList.contains('on') && k !== 'all' ? 'none' : k)); nav.appendChild(b);
+  });
+  showSec('none');
 })();
 setTimeout(() => openPreview(), 500);
 </script>
