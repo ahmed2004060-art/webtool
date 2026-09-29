@@ -268,9 +268,9 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
 
 <div class="card">
   <label>🌐 لغة التطبيق</label>
-  <label>اللغة عند أول فتح للتطبيق</label>
+  <label>لغة التطبيق الافتراضية</label>
   <select id="langDef"><option value="system">لغة جهاز المستخدم (تلقائي)</option><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="de">Deutsch</option><option value="tr">Türkçe</option><option value="ur">اردو</option></select>
-  <div class="note" style="margin:0 0 10px;color:var(--text)">التطبيق بيبدأ باللغة المختارة فوق، والمستخدم يقدر يغيّرها بنفسه من جوه التطبيق (تلقائي أو أي لغة) عن طريق خيار اللغة في الإعدادات. لو لغة الجهاز مش من (العربية، English، Français، Español، Deutsch، Türkçe، اردو) رسائل النظام بتظهر بالإنجليزي.</div>
+  <div class="note" style="margin:0 0 10px;color:var(--text)">التطبيق بيمشي تلقائيًا على لغة جهاز المستخدم. لو لغته مش من (العربية، English، Français، Español، Deutsch، Türkçe، اردو) رسائل النظام بتظهر بالإنجليزي.</div>
   <div class="toggles" style="margin:0 0 8px"><label><input type="checkbox" id="langUI" checked> إضافة خيار «اللغة» داخل التطبيق (إعداد عادي: تلقائي أو أي لغة — بدون أيقونة عائمة)</label></div>
   <div class="note" style="margin:0 0 10px">بيظهر كقايمة عادية في آخر صفحة التطبيق. لو عايزه في مكان معين حط في صفحتك عنصر <code>&lt;div id="app-language-setting"&gt;&lt;/div&gt;</code> وهيظهر جواه.</div>
   <div class="toggles" style="margin:0"><label><input type="checkbox" id="langDir"> ضبط اتجاه الصفحة (RTL/LTR) حسب اللغة</label></div>
@@ -294,7 +294,7 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
 </div>
 
 <div class="card" id="updCard">
-  <details open>
+  <details>
     <summary>🔄 تحديث الأداة نفسها (من غير ما تفتح GitHub)</summary>
     <label style="margin-top:10px">اسم مستودع الأداة</label>
     <input type="text" id="updRepo" value="webtool">
