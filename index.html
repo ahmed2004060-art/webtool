@@ -1445,11 +1445,6 @@ $('updFile').addEventListener('change', () => { if($('updAuto').checked && $('up
   $('updRepo').addEventListener('input', () => { try{ localStorage.setItem('af_updrepo', $('updRepo').value.trim()); }catch(e){} });
   $('updAuto').addEventListener('change', () => { try{ localStorage.setItem('af_updauto', $('updAuto').checked ? '1' : '0'); }catch(e){} });
 })();
-// choosing the default language must drive the preview (it used to snap back to the old preview language)
-$('langDef').addEventListener('change', () => {
-  const v = $('langDef').value === 'system' ? (navigator.language || 'en').slice(0, 2).toLowerCase() : $('langDef').value;
-  pvLang.value = [...pvLang.options].some(x => x.value === v) ? v : 'en';
-});
 setTimeout(() => openPreview(), 500);
 </script>
 
