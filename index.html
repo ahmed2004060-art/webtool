@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مصنع تطبيقات APK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Poppins:wght@700;800&family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,1,0&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f5f7;--card:#fff;--text:#1c1e21;--muted:#7a7f87;--line:#e3e5e8;--accent:#2f6fdb;--ok:#1e8e3e;--err:#d93025}
 *{box-sizing:border-box}
@@ -19,6 +23,7 @@ select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:1
 .fileok{font-size:.8rem;color:var(--ok);margin-bottom:12px;display:none}
 button{width:100%;padding:13px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-size:1rem;font-weight:600;cursor:pointer}
 button:disabled{opacity:.55}
+button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .log{background:#0f1115;color:#d7dade;font-size:.78rem;border-radius:10px;padding:10px;max-height:220px;overflow-y:auto;white-space:pre-wrap;direction:ltr;text-align:left;margin-top:10px;display:none}
 .status{font-size:.85rem;margin-top:8px;display:none;padding:10px;border-radius:10px}
 .status.ok{background:#e6f4ea;color:var(--ok);display:block}
@@ -29,13 +34,16 @@ details{margin-top:6px}
 summary{color:var(--accent);font-size:.85rem;cursor:pointer}
 ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
 .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.7}
-.icon-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
-#iconPreview{border:1px solid var(--line);flex-shrink:0;border-radius:12px;background:
+.phone{width:130px;height:260px;background:#1c1e21;border-radius:26px;padding:8px;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.phone-screen{width:100%;height:100%;background:linear-gradient(160deg,#eef1f6,#dfe4ec);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+#iconPreview{border-radius:22%;background:
   linear-gradient(45deg,#eee 25%,transparent 25%),
   linear-gradient(-45deg,#eee 25%,transparent 25%),
   linear-gradient(45deg,transparent 75%,#eee 75%),
   linear-gradient(-45deg,transparent 75%,#eee 75%);
-  background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0}
+  background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0}
+#previewLabel{font-size:.68rem;color:#333;max-width:90px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
 .icon-controls{flex:1;min-width:0}
 .color-row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
 .color-row span{font-size:.78rem;color:var(--muted)}
@@ -43,18 +51,19 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
 .tab{flex:1;min-width:80px;text-align:center;padding:9px 6px;border:1px solid var(--line);border-radius:10px;font-size:.8rem;cursor:pointer;color:var(--muted)}
 .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .hidden{display:none}
-.glyph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.glyph-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:8px}
 .glyph-btn{aspect-ratio:1;border:2px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:4px}
 .glyph-btn.active{border-color:var(--accent);background:#eaf1ff}
 .glyph-btn canvas{width:100%;height:100%}
 .toggles{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:.82rem}
 .toggles label{display:flex;align-items:center;gap:5px;color:var(--text);margin:0;cursor:pointer}
 .toggles input{width:auto;margin:0}
+.js-api{background:#0f1115;color:#9fd39f;font-size:.72rem;border-radius:10px;padding:10px;direction:ltr;text-align:left;line-height:1.7;overflow-x:auto}
 </style>
 </head>
 <body>
 <h1>🤖 مصنع تطبيقات APK</h1>
-<p class="sub">اختار صفحة HTML، صمّم أيقونة احترافية كاملة، واسم التطبيق، ودوس زر واحد — يبنيه على GitHub ويرجّعلك APK.</p>
+<p class="sub">اختار صفحة HTML، صمّم أيقونة احترافية كاملة، فعّل مميزات أندرويد حقيقية، ودوس زر واحد.</p>
 
 <div class="card">
   <details>
@@ -66,6 +75,26 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
       <li>اختر صلاحية <b>repo</b> و<b>workflow</b> فقط.</li>
       <li>Generate token، وانسخه فورًا (يبدأ بـ ghp_).</li>
     </ol>
+  </details>
+  <details>
+    <summary>مميزات أندرويد الحقيقية — إزاي أستخدمها من صفحتي؟</summary>
+    <div class="js-api">// اهتزاز
+Android.vibrate(200);
+
+// إشعار نظام حقيقي
+Android.notify("عنوان", "نص الإشعار");
+
+// مشاركة نص لتطبيقات تانية
+Android.share("نص هيتشارك");
+
+// الكاميرا والملفات: استخدم عناصر عادية في صفحتك
+&lt;input type="file" accept="image/*" capture="environment"&gt;
+
+// الموقع الجغرافي: أي كود ويب عادي
+navigator.geolocation.getCurrentPosition(pos =&gt; ...);
+
+// التنزيل: أي رابط &lt;a href="..." download&gt; هيشتغل تلقائيًا
+    </div>
   </details>
 </div>
 
@@ -87,18 +116,42 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
   <label>🎨 محتوى الأيقونة</label>
   <div class="tabs">
     <div class="tab active" id="tabText">نص / إيموجي</div>
-    <div class="tab" id="tabGlyph">مكتبة رموز</div>
+    <div class="tab" id="tabGlyph">رموز أساسية</div>
+    <div class="tab" id="tabLibrary">مكتبة أيقونات ضخمة</div>
+    <div class="tab" id="tabAI">لوجو بالذكاء الاصطناعي</div>
     <div class="tab" id="tabUpload">صورة جاهزة</div>
   </div>
 
   <div class="icon-row">
-    <canvas id="iconPreview" width="110" height="110"></canvas>
+    <div class="phone">
+      <div class="phone-screen">
+        <canvas id="iconPreview" width="72" height="72"></canvas>
+        <div id="previewLabel">تطبيقي</div>
+      </div>
+    </div>
     <div class="icon-controls">
       <div id="textControls">
         <input type="text" id="iconText" maxlength="2" placeholder="حرف أو إيموجي (اختياري)">
+        <label>الخط</label>
+        <select id="iconFont">
+          <option value="system-ui">افتراضي</option>
+          <option value="Cairo">Cairo (عربي احترافي)</option>
+          <option value="Tajawal">Tajawal (عربي عصري)</option>
+          <option value="Poppins">Poppins (إنجليزي عصري)</option>
+        </select>
       </div>
       <div id="glyphControls" class="hidden">
         <div class="glyph-grid" id="glyphGrid"></div>
+      </div>
+      <div id="libraryControls" class="hidden">
+        <input type="text" id="librarySearch" placeholder="ابحث بالإنجليزي: home, rocket, camera...">
+        <div class="glyph-grid" id="libraryGrid" style="grid-template-columns:repeat(6,1fr)"></div>
+        <div class="note" style="margin-top:6px">مكتبة Material Symbols من Google — آلاف الأيقونات الاحترافية. اكتب اسم الأيقونة بالإنجليزي.</div>
+      </div>
+      <div id="aiControls" class="hidden">
+        <input type="text" id="aiPrompt" placeholder="وصف اللوجو: مثلاً bold rocket logo, minimal">
+        <button type="button" id="aiGenBtn" class="secondary" style="margin-bottom:8px">✨ ولّد لوجو بالذكاء الاصطناعي</button>
+        <div class="note" id="aiStatus" style="margin-top:0"></div>
       </div>
       <div id="uploadControls" class="hidden">
         <input type="file" id="iconfile" accept="image/png,image/jpeg">
@@ -112,6 +165,14 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
     <option value="circle">دائرة</option>
     <option value="squircle">سكويركل (Squircle عصري)</option>
     <option value="square">مربع حاد</option>
+  </select>
+
+  <label>نمط الخلفية</label>
+  <select id="iconPattern">
+    <option value="none">بدون نمط</option>
+    <option value="dots">نقاط</option>
+    <option value="stripes">خطوط مائلة</option>
+    <option value="grid">شبكة</option>
   </select>
 
   <label>ألوان الخلفية</label>
@@ -133,7 +194,7 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
     <label><input type="checkbox" id="fxBorder"> إطار خارجي</label>
   </div>
   <div class="note">
-    الأيقونة بتتحدّث تلقائيًا وإنت بتصمم. الأداة بتولّد نسختين: نسخة كلاسيكية لكل الأجهزة، ونسخة "تكيّفية" (Adaptive Icon) للأندرويد الحديث بتتحرك وتتكيف مع شكل الأيقونات في هاتفك تلقائيًا.
+    الأداة بتولّد نسختين: كلاسيكية لكل الأجهزة، وتكيّفية (Adaptive Icon) للأندرويد الحديث. لون الخلفية الأول بيُستخدم كمان كشاشة بداية (Splash) للتطبيق.
   </div>
 </div>
 
@@ -147,23 +208,27 @@ ol{font-size:.85rem;color:var(--muted);padding-right:18px;line-height:1.9}
 
 <script>
 const TEMPLATE_FILES = 
-{"build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    defaultConfig {\n        applicationId \"{{PKG}}\"\n        minSdk 21\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher\"\n        android:usesCleartextTraffic=\"false\"\n        android:theme=\"@android:style/Theme.DeviceDefault.NoActionBar\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Message;\nimport android.view.ViewGroup;\nimport android.webkit.*;\n\nimport java.io.InputStream;\n\npublic class MainActivity extends Activity {\n\n    // لتحميل موقع بدل الملف المحلي غيّر START_URL مثل: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n\n    private WebView web;\n    private PermissionRequest pendingPerm;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        if (Build.VERSION.SDK_INT >= 23 &&\n                checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);\n        }\n        web = new WebView(this);\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        if (b == null) web.loadUrl(START_URL); else web.restoreState(b);\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // يخدم ملفات assets على عنوان https وهمي ليعمل الموقع بأصل (origin) سليم\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    if (Build.VERSION.SDK_INT >= 23 &&\n                            checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {\n                        pendingPerm = req;\n                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 2);\n                    } else {\n                        req.grant(req.getResources());\n                    }\n                });\n            }\n\n            // نافذة منبثقة (مثل تسجيل الدخول)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        if (code == 2 && pendingPerm != null) {\n            if (r.length > 0 && r[0] == PackageManager.PERMISSION_GRANTED) pendingPerm.grant(pendingPerm.getResources());\n            else pendingPerm.deny();\n            pendingPerm = null;\n        }\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">{{APP_NAME}}</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\n  push:\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n", "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_background\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>\n"};
+{"build.gradle": "buildscript {\n    repositories { google(); mavenCentral() }\n    dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }\n}\nallprojects { repositories { google(); mavenCentral() } }\n", "settings.gradle": "include ':app'\n", "app/build.gradle": "apply plugin: 'com.android.application'\nandroid {\n    namespace 'com.example.chatapp'\n    compileSdk 34\n    defaultConfig {\n        applicationId \"{{PKG}}\"\n        minSdk 24\n        targetSdk 33\n        versionCode 1\n        versionName \"1.0\"\n    }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n}\ndependencies {\n    implementation 'androidx.core:core:1.12.0'\n}\n", "app/src/main/AndroidManifest.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\n    <uses-permission android:name=\"android.permission.CAMERA\" />\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.VIBRATE\" />\n    <uses-permission android:name=\"android.permission.POST_NOTIFICATIONS\" />\n    <uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />\n\n    <application\n        android:label=\"@string/app_name\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher\"\n        android:usesCleartextTraffic=\"false\"\n        android:theme=\"@style/AppTheme\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:configChanges=\"orientation|screenSize|keyboardHidden|uiMode\"\n            android:windowSoftInputMode=\"adjustResize\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n\n        <provider\n            android:name=\"androidx.core.content.FileProvider\"\n            android:authorities=\"{{PKG}}.fileprovider\"\n            android:exported=\"false\"\n            android:grantUriPermissions=\"true\">\n            <meta-data\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\n                android:resource=\"@xml/file_paths\" />\n        </provider>\n    </application>\n</manifest>\n", "app/src/main/java/com/example/chatapp/MainActivity.java": "package com.example.chatapp;\n\nimport android.Manifest;\nimport android.app.Activity;\nimport android.app.Dialog;\nimport android.app.DownloadManager;\nimport android.app.Notification;\nimport android.app.NotificationChannel;\nimport android.app.NotificationManager;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.content.pm.PackageManager;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.os.Bundle;\nimport android.os.Environment;\nimport android.os.Message;\nimport android.os.Vibrator;\nimport android.os.VibrationEffect;\nimport android.provider.MediaStore;\nimport android.view.ViewGroup;\nimport android.webkit.*;\nimport android.widget.Toast;\n\nimport androidx.core.content.FileProvider;\n\nimport java.io.File;\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.text.SimpleDateFormat;\nimport java.util.ArrayList;\nimport java.util.Date;\nimport java.util.List;\nimport java.util.Locale;\n\npublic class MainActivity extends Activity {\n\n    // لتحميل موقع بدل الملف المحلي غيّر START_URL مثل: \"https://example.com\"\n    private static final String START_URL = \"https://appassets.local/index.html\";\n    private static final String LOCAL_HOST = \"appassets.local\";\n    private static final String CHANNEL_ID = \"default_channel\";\n    private static final int PERMS_REQUEST_CODE = 100;\n    private static final int MIC_VIDEO_REQUEST_CODE = 2;\n    private static final int FILE_CHOOSER_RESULT_CODE = 10001;\n\n    private WebView web;\n    private PermissionRequest pendingWebPermission;\n    private Dialog popup;\n    private WebView popupWeb;\n\n    private ValueCallback<Uri[]> filePathCallback;\n    private String cameraPhotoPath;\n\n    @Override\n    protected void onCreate(Bundle b) {\n        super.onCreate(b);\n        createNotificationChannel();\n        requestNeededPermissions();\n\n        web = new WebView(this);\n        setContentView(web);\n        setup(web);\n        web.setWebViewClient(client());\n        web.setWebChromeClient(chrome());\n        web.setDownloadListener(downloadListener());\n        web.addJavascriptInterface(new WebAppInterface(), \"Android\");\n        if (b == null) web.loadUrl(START_URL); else web.restoreState(b);\n    }\n\n    private void requestNeededPermissions() {\n        List<String> need = new ArrayList<>();\n        String[] wanted = {\n                Manifest.permission.RECORD_AUDIO,\n                Manifest.permission.CAMERA,\n                Manifest.permission.ACCESS_FINE_LOCATION\n        };\n        for (String p : wanted) {\n            if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) need.add(p);\n        }\n        if (Build.VERSION.SDK_INT >= 33 &&\n                checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {\n            need.add(Manifest.permission.POST_NOTIFICATIONS);\n        }\n        if (!need.isEmpty()) {\n            requestPermissions(need.toArray(new String[0]), PERMS_REQUEST_CODE);\n        }\n    }\n\n    private void createNotificationChannel() {\n        if (Build.VERSION.SDK_INT >= 26) {\n            NotificationChannel channel = new NotificationChannel(\n                    CHANNEL_ID, \"الإشعارات\", NotificationManager.IMPORTANCE_DEFAULT);\n            NotificationManager mgr = getSystemService(NotificationManager.class);\n            if (mgr != null) mgr.createNotificationChannel(channel);\n        }\n    }\n\n    private void setup(WebView w) {\n        WebSettings s = w.getSettings();\n        s.setJavaScriptEnabled(true);\n        s.setDomStorageEnabled(true);\n        s.setDatabaseEnabled(true);\n        s.setMediaPlaybackRequiresUserGesture(false);\n        s.setJavaScriptCanOpenWindowsAutomatically(true);\n        s.setSupportMultipleWindows(true);\n        s.setAllowFileAccess(false);\n        s.setGeolocationEnabled(true);\n        CookieManager.getInstance().setAcceptCookie(true);\n        CookieManager.getInstance().setAcceptThirdPartyCookies(w, true);\n    }\n\n    // يخدم ملفات assets على عنوان https وهمي ليعمل الموقع بأصل (origin) سليم\n    private WebViewClient client() {\n        return new WebViewClient() {\n            @Override\n            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {\n                Uri u = r.getUrl();\n                if (LOCAL_HOST.equals(u.getHost())) {\n                    try {\n                        String path = u.getPath();\n                        if (path == null || path.equals(\"/\")) path = \"/index.html\";\n                        InputStream in = getAssets().open(path.substring(1));\n                        return new WebResourceResponse(mime(path), \"UTF-8\", in);\n                    } catch (Exception e) {\n                        return new WebResourceResponse(\"text/plain\", \"UTF-8\", 404, \"Not Found\", null, null);\n                    }\n                }\n                return null;\n            }\n\n            @Override\n            public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {\n                String scheme = r.getUrl().getScheme();\n                if (\"http\".equals(scheme) || \"https\".equals(scheme)) return false;\n                try { startActivity(new Intent(Intent.ACTION_VIEW, r.getUrl())); } catch (Exception ignored) {}\n                return true;\n            }\n        };\n    }\n\n    private String mime(String p) {\n        p = p.toLowerCase();\n        if (p.endsWith(\".html\")) return \"text/html\";\n        if (p.endsWith(\".js\")) return \"application/javascript\";\n        if (p.endsWith(\".css\")) return \"text/css\";\n        if (p.endsWith(\".json\")) return \"application/json\";\n        if (p.endsWith(\".svg\")) return \"image/svg+xml\";\n        if (p.endsWith(\".png\")) return \"image/png\";\n        if (p.endsWith(\".jpg\") || p.endsWith(\".jpeg\")) return \"image/jpeg\";\n        if (p.endsWith(\".webp\")) return \"image/webp\";\n        return \"application/octet-stream\";\n    }\n\n    private WebChromeClient chrome() {\n        return new WebChromeClient() {\n\n            // ميكروفون / كاميرا مطلوبة من داخل الصفحة (getUserMedia)\n            @Override\n            public void onPermissionRequest(final PermissionRequest req) {\n                runOnUiThread(() -> {\n                    boolean micOk = checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;\n                    boolean camOk = checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;\n                    if (micOk && camOk) {\n                        req.grant(req.getResources());\n                    } else {\n                        pendingWebPermission = req;\n                        List<String> need = new ArrayList<>();\n                        if (!micOk) need.add(Manifest.permission.RECORD_AUDIO);\n                        if (!camOk) need.add(Manifest.permission.CAMERA);\n                        requestPermissions(need.toArray(new String[0]), MIC_VIDEO_REQUEST_CODE);\n                    }\n                });\n            }\n\n            // إحداثيات GPS مطلوبة من الصفحة (navigator.geolocation)\n            @Override\n            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {\n                boolean granted = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;\n                callback.invoke(origin, granted, false);\n            }\n\n            // اختيار/تصوير ملف من داخل الصفحة (input type=file)\n            @Override\n            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> callback, FileChooserParams params) {\n                if (filePathCallback != null) filePathCallback.onReceiveValue(null);\n                filePathCallback = callback;\n\n                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);\n                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {\n                    File photoFile = null;\n                    try { photoFile = createImageFile(); } catch (IOException ex) { photoFile = null; }\n                    if (photoFile != null) {\n                        cameraPhotoPath = photoFile.getAbsolutePath();\n                        Uri photoUri = FileProvider.getUriForFile(\n                                MainActivity.this, getPackageName() + \".fileprovider\", photoFile);\n                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);\n                        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);\n                    } else {\n                        takePictureIntent = null;\n                    }\n                }\n\n                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);\n                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);\n                contentSelectionIntent.setType(\"*/*\");\n\n                Intent[] intentArray = takePictureIntent != null ? new Intent[]{takePictureIntent} : new Intent[0];\n\n                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);\n                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);\n                chooserIntent.putExtra(Intent.EXTRA_TITLE, \"اختر ملف\");\n                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);\n\n                startActivityForResult(chooserIntent, FILE_CHOOSER_RESULT_CODE);\n                return true;\n            }\n\n            // نافذة منبثقة (مثل تسجيل الدخول)\n            @Override\n            public boolean onCreateWindow(WebView v, boolean dialog, boolean gesture, Message msg) {\n                popupWeb = new WebView(MainActivity.this);\n                setup(popupWeb);\n                popupWeb.setWebViewClient(new WebViewClient());\n                popupWeb.setWebChromeClient(new WebChromeClient() {\n                    @Override public void onCloseWindow(WebView w) { closePopup(); }\n                });\n                popup = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar);\n                popup.setContentView(popupWeb, new ViewGroup.LayoutParams(-1, -1));\n                popup.setOnDismissListener(d -> closePopup());\n                popup.show();\n                ((WebView.WebViewTransport) msg.obj).setWebView(popupWeb);\n                msg.sendToTarget();\n                return true;\n            }\n\n            @Override\n            public void onCloseWindow(WebView w) { closePopup(); }\n        };\n    }\n\n    private File createImageFile() throws IOException {\n        String timeStamp = new SimpleDateFormat(\"yyyyMMdd_HHmmss\", Locale.US).format(new Date());\n        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);\n        return File.createTempFile(\"IMG_\" + timeStamp, \".jpg\", storageDir);\n    }\n\n    // تنزيل الملفات التي تطلبها الصفحة (روابط تحميل عادية) إلى مجلد التنزيلات\n    private DownloadListener downloadListener() {\n        return (url, userAgent, contentDisposition, mimetype, contentLength) -> {\n            try {\n                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));\n                request.setMimeType(mimetype);\n                String cookies = CookieManager.getInstance().getCookie(url);\n                request.addRequestHeader(\"cookie\", cookies);\n                request.addRequestHeader(\"User-Agent\", userAgent);\n                String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);\n                request.setTitle(fileName);\n                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);\n                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);\n                DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);\n                if (dm != null) dm.enqueue(request);\n                Toast.makeText(getApplicationContext(), \"جاري تنزيل الملف...\", Toast.LENGTH_LONG).show();\n            } catch (Exception e) {\n                Toast.makeText(getApplicationContext(), \"تعذّر بدء التنزيل\", Toast.LENGTH_SHORT).show();\n            }\n        };\n    }\n\n    // جسر جافاسكريبت: الصفحة تقدر تنادي مميزات أندرويد حقيقية عبر Android.xxx()\n    private class WebAppInterface {\n        @JavascriptInterface\n        public void vibrate(long ms) {\n            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);\n            if (v == null) return;\n            if (Build.VERSION.SDK_INT >= 26) {\n                v.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));\n            } else {\n                v.vibrate(ms);\n            }\n        }\n\n        @JavascriptInterface\n        public void notify(String title, String message) {\n            runOnUiThread(() -> {\n                Notification.Builder builder = Build.VERSION.SDK_INT >= 26\n                        ? new Notification.Builder(MainActivity.this, CHANNEL_ID)\n                        : new Notification.Builder(MainActivity.this);\n                builder.setContentTitle(title)\n                        .setContentText(message)\n                        .setSmallIcon(R.mipmap.ic_launcher)\n                        .setAutoCancel(true);\n                NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\n                if (mgr != null) mgr.notify((int) System.currentTimeMillis(), builder.build());\n            });\n        }\n\n        @JavascriptInterface\n        public void share(String text) {\n            runOnUiThread(() -> {\n                Intent send = new Intent(Intent.ACTION_SEND);\n                send.setType(\"text/plain\");\n                send.putExtra(Intent.EXTRA_TEXT, text);\n                startActivity(Intent.createChooser(send, \"مشاركة\"));\n            });\n        }\n    }\n\n    private void closePopup() {\n        if (popupWeb != null) { popupWeb.destroy(); popupWeb = null; }\n        if (popup != null) { Dialog d = popup; popup = null; if (d.isShowing()) d.dismiss(); }\n    }\n\n    @Override\n    public void onRequestPermissionsResult(int code, String[] p, int[] r) {\n        if (code == MIC_VIDEO_REQUEST_CODE && pendingWebPermission != null) {\n            boolean allGranted = true;\n            for (int res : r) if (res != PackageManager.PERMISSION_GRANTED) allGranted = false;\n            if (allGranted) pendingWebPermission.grant(pendingWebPermission.getResources());\n            else pendingWebPermission.deny();\n            pendingWebPermission = null;\n        }\n        // PERMS_REQUEST_CODE (الصلاحيات العامة عند فتح التطبيق) لا يحتاج رد فعل إضافي هنا\n    }\n\n    @Override\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\n        if (requestCode != FILE_CHOOSER_RESULT_CODE || filePathCallback == null) {\n            super.onActivityResult(requestCode, resultCode, data);\n            return;\n        }\n        Uri[] results = null;\n        if (resultCode == Activity.RESULT_OK) {\n            if (data == null || data.getData() == null) {\n                if (cameraPhotoPath != null) {\n                    results = new Uri[]{Uri.fromFile(new File(cameraPhotoPath))};\n                }\n            } else {\n                String dataString = data.getDataString();\n                if (dataString != null) results = new Uri[]{Uri.parse(dataString)};\n            }\n        }\n        filePathCallback.onReceiveValue(results);\n        filePathCallback = null;\n    }\n\n    @Override\n    public void onBackPressed() {\n        if (popup != null) closePopup();\n        else if (web.canGoBack()) web.goBack();\n        else super.onBackPressed();\n    }\n\n    @Override\n    protected void onSaveInstanceState(Bundle o) { super.onSaveInstanceState(o); web.saveState(o); }\n}\n", "app/src/main/res/values/strings.xml": "<resources>\n    <string name=\"app_name\">{{APP_NAME}}</string>\n</resources>\n", ".github/workflows/build.yml": "name: Build APK\non:\n  workflow_dispatch:\n  push:\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-java@v4\n        with:\n          distribution: temurin\n          java-version: '17'\n      - uses: gradle/actions/setup-gradle@v4\n      - name: Build APK\n        run: gradle assembleDebug\n      - uses: actions/upload-artifact@v4\n        with:\n          name: app-debug\n          path: app/build/outputs/apk/debug/app-debug.apk\n", "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_background\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>\n", "app/src/main/res/values/colors.xml": "<resources>\n    <color name=\"splash_bg\">{{SPLASH_COLOR}}</color>\n</resources>\n", "app/src/main/res/values/styles.xml": "<resources>\n    <style name=\"AppTheme\" parent=\"android:Theme.DeviceDefault.NoActionBar\">\n        <item name=\"android:windowBackground\">@color/splash_bg</item>\n    </style>\n</resources>\n", "app/src/main/res/xml/file_paths.xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<paths>\n    <external-files-path name=\"my_images\" path=\"Pictures\" />\n    <cache-path name=\"my_cache\" path=\".\" />\n</paths>\n"};
 
 const $ = id => document.getElementById(id);
 const logEl = $('log'), statusEl = $('status'), dlArea = $('dlArea'), btn = $('buildBtn');
 const fileEl = $('htmlfile'), fileok = $('fileok');
-const previewCanvas = $('iconPreview'), previewCtx = previewCanvas.getContext('2d');
+const previewCanvas = $('iconPreview'), previewCtx = previewCanvas.getContext('2d'), previewLabel = $('previewLabel');
 const iconTextEl = $('iconText'), color1El = $('color1'), color2El = $('color2'), gradDirEl = $('gradDir');
-const iconFileEl = $('iconfile'), appnameEl = $('appname'), shapeEl = $('iconShape');
+const iconFileEl = $('iconfile'), appnameEl = $('appname'), shapeEl = $('iconShape'), patternEl = $('iconPattern');
+const fontEl = $('iconFont');
 const fxShineEl = $('fxShine'), fxShadowEl = $('fxShadow'), fxBorderEl = $('fxBorder');
-const tabText = $('tabText'), tabGlyph = $('tabGlyph'), tabUpload = $('tabUpload');
-const textControls = $('textControls'), glyphControls = $('glyphControls'), uploadControls = $('uploadControls');
+const tabText = $('tabText'), tabGlyph = $('tabGlyph'), tabLibrary = $('tabLibrary'), tabAI = $('tabAI'), tabUpload = $('tabUpload');
+const textControls = $('textControls'), glyphControls = $('glyphControls'), libraryControls = $('libraryControls'), aiControls = $('aiControls'), uploadControls = $('uploadControls');
 const glyphGrid = $('glyphGrid');
+const librarySearchEl = $('librarySearch'), libraryGrid = $('libraryGrid');
+const aiPromptEl = $('aiPrompt'), aiGenBtn = $('aiGenBtn'), aiStatusEl = $('aiStatus');
 
 let htmlContent = null;
-let uploadedIconImage = null;
-let contentMode = 'text'; // text | glyph | upload
+let uploadedIconImage = null; // also used for AI-generated logo once it's fetched (same rendering path)
+let contentMode = 'text';
 let selectedGlyph = 'star';
+let selectedMaterialIcon = 'rocket_launch';
 
 fileEl.addEventListener('change', () => {
   const f = fileEl.files[0];
@@ -179,15 +244,19 @@ fileEl.addEventListener('change', () => {
 
 function setTab(mode){
   contentMode = mode;
-  [tabText, tabGlyph, tabUpload].forEach(t => t.classList.remove('active'));
-  [textControls, glyphControls, uploadControls].forEach(c => c.classList.add('hidden'));
+  [tabText, tabGlyph, tabLibrary, tabAI, tabUpload].forEach(t => t.classList.remove('active'));
+  [textControls, glyphControls, libraryControls, aiControls, uploadControls].forEach(c => c.classList.add('hidden'));
   if(mode === 'text'){ tabText.classList.add('active'); textControls.classList.remove('hidden'); }
   if(mode === 'glyph'){ tabGlyph.classList.add('active'); glyphControls.classList.remove('hidden'); }
+  if(mode === 'library'){ tabLibrary.classList.add('active'); libraryControls.classList.remove('hidden'); }
+  if(mode === 'ai'){ tabAI.classList.add('active'); aiControls.classList.remove('hidden'); }
   if(mode === 'upload'){ tabUpload.classList.add('active'); uploadControls.classList.remove('hidden'); }
   drawPreview();
 }
 tabText.addEventListener('click', () => setTab('text'));
 tabGlyph.addEventListener('click', () => setTab('glyph'));
+tabLibrary.addEventListener('click', () => setTab('library'));
+tabAI.addEventListener('click', () => setTab('ai'));
 tabUpload.addEventListener('click', () => setTab('upload'));
 
 iconFileEl.addEventListener('change', () => {
@@ -198,10 +267,19 @@ iconFileEl.addEventListener('change', () => {
   img.src = URL.createObjectURL(f);
 });
 
-[iconTextEl, color1El, color2El, gradDirEl, appnameEl, shapeEl, fxShineEl, fxShadowEl, fxBorderEl]
+appnameEl.addEventListener('input', () => {
+  previewLabel.textContent = appnameEl.value.trim() || 'تطبيقي';
+  drawPreview();
+});
+
+[iconTextEl, color1El, color2El, gradDirEl, shapeEl, patternEl, fontEl, fxShineEl, fxShadowEl, fxBorderEl]
   .forEach(el => el.addEventListener('input', drawPreview));
 
-// ---------- glyph library: hand-drawn vector icons, crisp at any size ----------
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(drawPreview).catch(() => {});
+}
+
+// ---------- glyph library: 18 hand-drawn vector icons, crisp at any size ----------
 const GLYPHS = {
   star: (ctx, s) => {
     ctx.beginPath();
@@ -324,6 +402,57 @@ const GLYPHS = {
     ctx.lineTo(s*0.4, s*0.28); ctx.lineTo(-s*0.4, s*0.28);
     ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.arc(0, s*0.4, s*0.09, 0, Math.PI*2); ctx.fill();
+  },
+  home: (ctx, s) => {
+    ctx.beginPath();
+    ctx.moveTo(0, -s*0.48); ctx.lineTo(s*0.45, -s*0.05); ctx.lineTo(s*0.32, -s*0.05);
+    ctx.lineTo(s*0.32, s*0.42); ctx.lineTo(-s*0.32, s*0.42); ctx.lineTo(-s*0.32, -s*0.05);
+    ctx.lineTo(-s*0.45, -s*0.05); ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillRect(-s*0.1, s*0.1, s*0.2, s*0.32);
+    ctx.globalCompositeOperation = 'source-over';
+  },
+  mail: (ctx, s) => {
+    const w=s*0.85,h=s*0.6,r=s*0.06;
+    ctx.beginPath();
+    ctx.moveTo(-w/2+r,-h/2); ctx.arcTo(w/2,-h/2,w/2,h/2,r); ctx.arcTo(w/2,h/2,-w/2,h/2,r);
+    ctx.arcTo(-w/2,h/2,-w/2,-h/2,r); ctx.arcTo(-w/2,-h/2,w/2,-h/2,r);
+    ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.lineWidth = s*0.07; ctx.lineJoin='round'; ctx.strokeStyle='#000';
+    ctx.beginPath(); ctx.moveTo(-w/2+s*0.05,-h/2+s*0.05); ctx.lineTo(0,s*0.05); ctx.lineTo(w/2-s*0.05,-h/2+s*0.05); ctx.stroke();
+    ctx.globalCompositeOperation = 'source-over';
+  },
+  clock: (ctx, s) => {
+    ctx.beginPath(); ctx.arc(0,0,s*0.46,0,Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath(); ctx.arc(0,0,s*0.36,0,Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.lineWidth = s*0.08; ctx.lineCap='round'; ctx.strokeStyle = ctx.fillStyle;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-s*0.26); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(s*0.18,s*0.06); ctx.stroke();
+  },
+  globe: (ctx, s) => {
+    ctx.lineWidth = s*0.06; ctx.strokeStyle = ctx.fillStyle;
+    ctx.beginPath(); ctx.arc(0,0,s*0.46,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0,0,s*0.2,s*0.46,0,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-s*0.46,0); ctx.lineTo(s*0.46,0); ctx.stroke();
+  },
+  check: (ctx, s) => {
+    ctx.beginPath(); ctx.arc(0,0,s*0.48,0,Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.lineWidth = s*0.11; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle = '#000';
+    ctx.beginPath(); ctx.moveTo(-s*0.2,0); ctx.lineTo(-s*0.05,s*0.18); ctx.lineTo(s*0.25,-s*0.18); ctx.stroke();
+    ctx.globalCompositeOperation = 'source-over';
+  },
+  pin: (ctx, s) => {
+    ctx.beginPath();
+    ctx.arc(0, -s*0.1, s*0.32, Math.PI*0.15, Math.PI*0.85, false);
+    ctx.lineTo(0, s*0.48);
+    ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath(); ctx.arc(0, -s*0.1, s*0.13, 0, Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
   }
 };
 const GLYPH_NAMES = Object.keys(GLYPHS);
@@ -331,25 +460,120 @@ const GLYPH_NAMES = Object.keys(GLYPHS);
 function buildGlyphGrid(){
   glyphGrid.innerHTML = '';
   GLYPH_NAMES.forEach(name => {
-    const btn = document.createElement('div');
-    btn.className = 'glyph-btn' + (name === selectedGlyph ? ' active' : '');
-    btn.dataset.name = name;
+    const btnEl = document.createElement('div');
+    btnEl.className = 'glyph-btn' + (name === selectedGlyph ? ' active' : '');
     const c = document.createElement('canvas');
     c.width = 40; c.height = 40;
     const cx = c.getContext('2d');
     cx.fillStyle = '#2f6fdb';
     cx.save(); cx.translate(20, 20); GLYPHS[name](cx, 30); cx.restore();
-    btn.appendChild(c);
-    btn.addEventListener('click', () => {
+    btnEl.appendChild(c);
+    btnEl.addEventListener('click', () => {
       selectedGlyph = name;
       document.querySelectorAll('.glyph-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      btnEl.classList.add('active');
       drawPreview();
     });
-    glyphGrid.appendChild(btn);
+    glyphGrid.appendChild(btnEl);
   });
 }
 buildGlyphGrid();
+
+// ---------- real external icon library: Google Material Symbols (thousands of icons) ----------
+// The font is loaded in <head>. Typing any valid Material Symbol name (see fonts.google.com/icons)
+// renders that icon via CSS/canvas ligatures — this curated list is just a convenient starting point.
+const MATERIAL_ICONS = ['home','rocket_launch','favorite','star','bolt','chat_bubble','music_note',
+  'settings','shopping_cart','menu_book','photo_camera','notifications','mail','schedule','public',
+  'check_circle','location_on','shield','diamond','celebration','sports_esports','palette','flight',
+  'restaurant','fitness_center','pets','school','medical_services','directions_car','wifi','language',
+  'brush','currency_exchange','fingerprint','code','cloud','eco','theater_comedy','local_fire_department'];
+
+function buildLibraryGrid(filter){
+  const f = (filter || '').trim().toLowerCase();
+  const list = MATERIAL_ICONS.filter(n => !f || n.includes(f));
+  libraryGrid.innerHTML = '';
+  list.forEach(name => {
+    const b = document.createElement('div');
+    b.className = 'glyph-btn' + (name === selectedMaterialIcon ? ' active' : '');
+    b.style.fontFamily = "'Material Symbols Outlined'";
+    b.style.fontSize = '20px';
+    b.style.color = '#2f6fdb';
+    b.textContent = name;
+    b.title = name;
+    b.addEventListener('click', () => {
+      selectedMaterialIcon = name;
+      document.querySelectorAll('#libraryGrid .glyph-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      drawPreview();
+    });
+    libraryGrid.appendChild(b);
+  });
+}
+buildLibraryGrid('');
+librarySearchEl.addEventListener('input', () => buildLibraryGrid(librarySearchEl.value));
+librarySearchEl.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter' && librarySearchEl.value.trim()){
+    selectedMaterialIcon = librarySearchEl.value.trim();
+    buildLibraryGrid(librarySearchEl.value);
+    drawPreview();
+  }
+});
+
+// ---------- real AI logo generation (Pollinations.ai — free public service, no API key needed) ----------
+aiGenBtn.addEventListener('click', async () => {
+  const prompt = aiPromptEl.value.trim();
+  if(!prompt){ aiStatusEl.textContent = 'اكتب وصف للوجو أولًا.'; return; }
+  aiGenBtn.disabled = true;
+  aiStatusEl.textContent = '⏳ جاري توليد اللوجو... (خدمة خارجية مجانية، قد تأخذ لحظات)';
+  try{
+    const seed = Math.floor(Math.random() * 100000);
+    const url = 'https://image.pollinations.ai/prompt/' +
+      encodeURIComponent(prompt + ', simple app icon logo, centered, flat design, vector style') +
+      '?width=512&height=512&nologo=true&seed=' + seed;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('تعذّر توليد الصورة'));
+      img.src = url;
+    });
+    uploadedIconImage = img;
+    contentMode = 'ai';
+    aiStatusEl.textContent = '✓ تم توليد اللوجو، وهيُستخدم كأيقونة التطبيق.';
+    drawPreview();
+  } catch(e){
+    aiStatusEl.textContent = '⚠️ فشل التوليد (الخدمة الخارجية قد تكون مشغولة). جرّب صياغة مختلفة أو استخدم تبويب تاني.';
+  } finally {
+    aiGenBtn.disabled = false;
+  }
+});
+
+// ---------- background pattern overlays ----------
+function drawPattern(ctx, size, pattern){
+  if(pattern === 'none') return;
+  ctx.save();
+  ctx.globalAlpha = 0.14;
+  if(pattern === 'dots'){
+    ctx.fillStyle = '#ffffff';
+    const gap = size/8;
+    for(let y = gap/2; y < size; y += gap){
+      for(let x = gap/2; x < size; x += gap){
+        ctx.beginPath(); ctx.arc(x, y, size*0.02, 0, Math.PI*2); ctx.fill();
+      }
+    }
+  } else if(pattern === 'stripes'){
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = size*0.03;
+    for(let x = -size; x < size*2; x += size/6){
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x+size, size); ctx.stroke();
+    }
+  } else if(pattern === 'grid'){
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = size*0.008;
+    const gap = size/6;
+    for(let x = 0; x <= size; x += gap){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,size); ctx.stroke(); }
+    for(let y = 0; y <= size; y += gap){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(size,y); ctx.stroke(); }
+  }
+  ctx.restore();
+}
 
 // ---------- shape clip path ----------
 function clipShape(ctx, size, shape){
@@ -359,20 +583,13 @@ function clipShape(ctx, size, shape){
   } else if(shape === 'square'){
     ctx.rect(0, 0, size, size);
   } else if(shape === 'squircle'){
-    // superellipse approximation (n=4)
     const n = 4, cx = size/2, cy = size/2, r = size/2;
-    for(let i = 0; i <= 90; i++){
-      const t = i/90 * Math.PI/2;
-      const x = cx + r*Math.pow(Math.abs(Math.cos(t)), 2/n) * Math.sign(Math.cos(t));
-      const y = cy + r*Math.pow(Math.abs(Math.sin(t)), 2/n) * Math.sign(Math.sin(t));
-      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    }
-    for(let q = 1; q < 4; q++){
+    for(let q = 0; q < 4; q++){
       for(let i = 0; i <= 90; i++){
         const t = q*Math.PI/2 + i/90 * Math.PI/2;
         const x = cx + r*Math.pow(Math.abs(Math.cos(t)), 2/n) * Math.sign(Math.cos(t));
         const y = cy + r*Math.pow(Math.abs(Math.sin(t)), 2/n) * Math.sign(Math.sin(t));
-        ctx.lineTo(x,y);
+        (q === 0 && i === 0) ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       }
     }
   } else {
@@ -414,6 +631,12 @@ function drawGlyphOrText(ctx, size, contentScale, color){
   if(contentMode === 'glyph'){
     ctx.fillStyle = color;
     GLYPHS[selectedGlyph](ctx, size * contentScale);
+  } else if(contentMode === 'library'){
+    ctx.fillStyle = color;
+    ctx.font = Math.round(size * contentScale * 1.15) + 'px "Material Symbols Outlined"';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(selectedMaterialIcon, 0, size*0.015);
   } else {
     let text = (iconTextEl.value || '').trim();
     if(!text){
@@ -422,7 +645,8 @@ function drawGlyphOrText(ctx, size, contentScale, color){
     }
     text = [...text].slice(0, 2).join('');
     ctx.fillStyle = color;
-    ctx.font = 'bold ' + Math.round(size * contentScale) + 'px system-ui, sans-serif';
+    const family = fontEl.value || 'system-ui';
+    ctx.font = 'bold ' + Math.round(size * contentScale) + 'px "' + family + '", system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, 0, size*0.015);
@@ -430,14 +654,13 @@ function drawGlyphOrText(ctx, size, contentScale, color){
   ctx.restore();
 }
 
-// legacy icon: full bleed, clipped to selected shape (used on all Android versions as fallback)
 function paintLegacy(ctx, size){
   ctx.clearRect(0, 0, size, size);
   ctx.save();
   clipShape(ctx, size, shapeEl.value);
   ctx.clip();
 
-  if(contentMode === 'upload' && uploadedIconImage){
+  if((contentMode === 'upload' || contentMode === 'ai') && uploadedIconImage){
     const img = uploadedIconImage;
     const s = Math.min(img.width, img.height);
     const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
@@ -445,7 +668,7 @@ function paintLegacy(ctx, size){
   } else {
     ctx.fillStyle = makeBackgroundFill(ctx, size);
     ctx.fillRect(0, 0, size, size);
-    if(fxShine.checked !== undefined){} // no-op guard
+    drawPattern(ctx, size, patternEl.value);
     if(fxShineEl.checked){
       const shine = ctx.createLinearGradient(0, 0, 0, size);
       shine.addColorStop(0, 'rgba(255,255,255,0.22)');
@@ -467,15 +690,15 @@ function paintLegacy(ctx, size){
   }
 }
 
-// adaptive background: full-bleed square, no shape clip (system masks it)
 function paintAdaptiveBackground(ctx, size){
   ctx.clearRect(0, 0, size, size);
-  if(contentMode === 'upload' && uploadedIconImage){
+  if((contentMode === 'upload' || contentMode === 'ai') && uploadedIconImage){
     ctx.fillStyle = color1El.value;
     ctx.fillRect(0, 0, size, size);
   } else {
     ctx.fillStyle = makeBackgroundFill(ctx, size);
     ctx.fillRect(0, 0, size, size);
+    drawPattern(ctx, size, patternEl.value);
     if(fxShineEl.checked){
       const shine = ctx.createLinearGradient(0, 0, 0, size);
       shine.addColorStop(0, 'rgba(255,255,255,0.22)');
@@ -486,10 +709,9 @@ function paintAdaptiveBackground(ctx, size){
   }
 }
 
-// adaptive foreground: transparent background, content scaled into the safe zone (~62%)
 function paintAdaptiveForeground(ctx, size){
   ctx.clearRect(0, 0, size, size);
-  if(contentMode === 'upload' && uploadedIconImage){
+  if((contentMode === 'upload' || contentMode === 'ai') && uploadedIconImage){
     const img = uploadedIconImage;
     const s = Math.min(img.width, img.height);
     const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
@@ -528,6 +750,25 @@ function b64encodeUnicode(str){
   return btoa(bin);
 }
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+// Injected automatically into every built app — no manual editing of the user's HTML needed.
+// Currently: gives every button/link a subtle vibration on tap (works only inside the built app,
+// harmless everywhere else since it checks for the Android bridge first).
+const AUTO_SNIPPET = `
+<script>
+(function(){
+  if (typeof Android === "undefined") return;
+  document.addEventListener("click", function(e){
+    var el = e.target.closest('button, a, [role="button"], input[type="submit"], input[type="button"]');
+    if (el && Android.vibrate) { try { Android.vibrate(15); } catch(err) {} }
+  }, true);
+})();
+<\/script>
+`;
+function injectAutoFeatures(html){
+  if(/<\/body>/i.test(html)) return html.replace(/<\/body>/i, AUTO_SNIPPET + '</body>');
+  return html + AUTO_SNIPPET;
+}
 
 async function gh(path, token, opts = {}){
   const res = await fetch('https://api.github.com' + path, {
@@ -580,13 +821,16 @@ async function run(){
 
   try{
     const pkg = 'com.appfactory.' + (repo.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().slice(0, 40) || 'app');
+    const splashColor = color1El.value;
 
     const textFiles = {};
     for(const [path, content] of Object.entries(TEMPLATE_FILES)){
-      textFiles[path] = content.replace('{{PKG}}', pkg).replace('{{APP_NAME}}', appname);
+      textFiles[path] = content
+        .replace(/\{\{PKG\}\}/g, pkg)
+        .replace(/\{\{APP_NAME\}\}/g, appname)
+        .replace(/\{\{SPLASH_COLOR\}\}/g, splashColor);
     }
-    textFiles['app/src/main/assets/index.html'] = htmlContent;
-    // duplicate adaptive xml for the round variant name too
+    textFiles['app/src/main/assets/index.html'] = injectAutoFeatures(htmlContent);
     textFiles['app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml'] =
       textFiles['app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml'];
 
@@ -692,7 +936,7 @@ async function run(){
     const blob = await dlRes.blob();
     const url = URL.createObjectURL(blob);
 
-    setStatus('✅ تم! التطبيق جاهز بأيقونته الكاملة (داخل ملف zip يحتوي APK)', 'ok');
+    setStatus('✅ تم! التطبيق جاهز بأيقونته ومميزاته الحقيقية (داخل ملف zip يحتوي APK)', 'ok');
     const a = document.createElement('a');
     a.href = url;
     a.download = repo + '.zip';
