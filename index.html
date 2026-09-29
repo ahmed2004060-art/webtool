@@ -268,9 +268,11 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
 
 <div class="card">
   <label>🌐 لغة التطبيق</label>
-  <label>لغة التطبيق الافتراضية</label>
+  <label>اللغة عند أول فتح للتطبيق</label>
   <select id="langDef"><option value="system">لغة جهاز المستخدم (تلقائي)</option><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="de">Deutsch</option><option value="tr">Türkçe</option><option value="ur">اردو</option></select>
-  <div class="note" style="margin:0 0 10px;color:var(--text)">التطبيق بيمشي تلقائيًا على لغة جهاز المستخدم. لو لغته مش من (العربية، English، Français، Español، Deutsch، Türkçe، اردو) رسائل النظام بتظهر بالإنجليزي.</div>
+  <div class="note" style="margin:0 0 10px;color:var(--text)">التطبيق بيبدأ باللغة المختارة فوق، والمستخدم يقدر يغيّرها بنفسه من جوه التطبيق (تلقائي أو أي لغة) عن طريق خيار اللغة في الإعدادات. لو لغة الجهاز مش من (العربية، English، Français، Español، Deutsch، Türkçe، اردو) رسائل النظام بتظهر بالإنجليزي.</div>
+  <div class="toggles" style="margin:0 0 8px"><label><input type="checkbox" id="langUI" checked> إضافة خيار «اللغة» داخل التطبيق (إعداد عادي: تلقائي أو أي لغة — بدون أيقونة عائمة)</label></div>
+  <div class="note" style="margin:0 0 10px">بيظهر كقايمة عادية في آخر صفحة التطبيق. لو عايزه في مكان معين حط في صفحتك عنصر <code>&lt;div id="app-language-setting"&gt;&lt;/div&gt;</code> وهيظهر جواه.</div>
   <div class="toggles" style="margin:0"><label><input type="checkbox" id="langDir"> ضبط اتجاه الصفحة (RTL/LTR) حسب اللغة</label></div>
   <div class="note">نصوص صفحتك نفسها لازم تتغير حسب اللغة بإيدك، من خلال navigator.language أو Android.getLanguage().</div>
 </div>
@@ -292,7 +294,7 @@ navigator.geolocation.getCurrentPosition(pos =&gt; ...);
 </div>
 
 <div class="card" id="updCard">
-  <details>
+  <details open>
     <summary>🔄 تحديث الأداة نفسها (من غير ما تفتح GitHub)</summary>
     <label style="margin-top:10px">اسم مستودع الأداة</label>
     <input type="text" id="updRepo" value="webtool">
@@ -955,7 +957,7 @@ async function overlayOpts(appname){
   }
   return { splash: $('spOn').checked, img, title: escHtml(appname), stops, anim: $('spAnim').value, fx: $('spFx').value, int: $('spInt').checked, skip: $('spSkip').checked, idle: $('spIdle').checked, size: +$('spSize').value, rad: $('spShape').value,
     dur: Math.max(0.5, Math.min(8, parseFloat($('spDur').value) || 2)) * 1000,
-    langDir: $('langDir').checked, lang: $('langDef').value === 'system' ? (navigator.language || 'ar').slice(0, 2) : $('langDef').value,
+    langDir: $('langDir').checked, langUI: $('langUI').checked, lang: $('langDef').value === 'system' ? (navigator.language || 'ar').slice(0, 2) : $('langDef').value,
     bgOn: $('bgOn').checked, bg: $('bgColor').value, glowOn: $('glowOn').checked, glow: $('glowColor').value };
 }
 
@@ -963,11 +965,29 @@ function langRuntime(cfg){
   var L = (navigator.language || 'en').slice(0, 2).toLowerCase();
   if(cfg.dir){ document.documentElement.lang = L; document.documentElement.dir = ['ar','ur','fa','he'].indexOf(L) > -1 ? 'rtl' : 'ltr'; }
 }
+function langUIRuntime(){
+  if(typeof Android === 'undefined' || !Android.setLanguage) return;
+  var N = { ar:'العربية', en:'English', fr:'Français', es:'Español', de:'Deutsch', tr:'Türkçe', ur:'اردو' };
+  var A = { ar:'تلقائي (لغة الجهاز)', en:'Automatic (device language)', fr:'Automatique (langue de l’appareil)', es:'Automático (idioma del dispositivo)', de:'Automatisch (Gerätesprache)', tr:'Otomatik (cihaz dili)', ur:'خودکار (ڈیوائس کی زبان)' };
+  var cur = 'en', mode = 'system';
+  try{ cur = (Android.getLanguage() || 'en').slice(0, 2); }catch(e){}
+  try{ if(Android.getLanguageMode) mode = Android.getLanguageMode() || 'system'; }catch(e){}
+  if(!A[cur]) cur = 'en';
+  var host = document.getElementById('app-language-setting');
+  if(!host){ host = document.createElement('div'); host.style.cssText = 'margin:24px 16px;padding:12px 0;border-top:1px solid rgba(128,128,128,.35)'; document.body.appendChild(host); }
+  var lab = document.createElement('label'); lab.style.cssText = 'display:block;margin-bottom:6px;font:inherit;opacity:.8'; lab.textContent = '🌐 ' + ({ar:'اللغة',en:'Language',fr:'Langue',es:'Idioma',de:'Sprache',tr:'Dil',ur:'زبان'}[cur]);
+  var sel = document.createElement('select'); sel.style.cssText = 'width:100%;padding:10px;font:inherit;border-radius:8px';
+  var o = document.createElement('option'); o.value = 'system'; o.textContent = A[cur]; sel.appendChild(o);
+  Object.keys(N).forEach(function(k){ var x = document.createElement('option'); x.value = k; x.textContent = N[k]; sel.appendChild(x); });
+  sel.value = mode;
+  sel.onchange = function(){ Android.setLanguage(sel.value); };
+  host.appendChild(lab); host.appendChild(sel);
+}
 const LOCALE_PATCH_SRC = "try{['toLocaleString','toLocaleDateString','toLocaleTimeString'].forEach(function(m){var o=Date.prototype[m];Date.prototype[m]=function(a,b){return o.call(this,a===undefined?l:a,b)}});var nl=Number.prototype.toLocaleString;Number.prototype.toLocaleString=function(a,b){return nl.call(this,a===undefined?l:a,b)};['DateTimeFormat','NumberFormat','Collator','PluralRules','RelativeTimeFormat','ListFormat'].forEach(function(k){var O=Intl[k];if(!O)return;var W=function(a,b){return new O(a===undefined?l:a,b)};W.prototype=O.prototype;W.supportedLocalesOf=O.supportedLocalesOf;Intl[k]=W})}catch(e){}";
 function previewShim(lang){
   Object.defineProperty(navigator, 'language', { get: function(){ return lang; } });
   Object.defineProperty(navigator, 'languages', { get: function(){ return [lang]; } });
-  window.Android = { vibrate: function(){}, notify: function(){}, share: function(){}, saveFile: function(){}, getLanguage: function(){ return lang; },
+  window.Android = { vibrate: function(){}, notify: function(){}, share: function(){}, saveFile: function(){}, getLanguage: function(){ return lang; }, getLanguageMode: function(){ return lang; },
     setLanguage: function(c){ parent.postMessage({ appLang: c }, '*'); } };
 }
 function splashRuntime(c){
@@ -1015,7 +1035,7 @@ function injectAll(html, o){
   const js = '<script>(function(){' +
     (o.splash && !o.hold ? 'var sp=document.getElementById("__sp");if(sp)setTimeout(function(){sp.style.opacity=0;setTimeout(function(){sp.remove()},550)},' + o.dur + ');' : '') +
     (o.glowOn ? 'document.addEventListener("pointerdown",function(e){var d=document.createElement("div");d.style.cssText="position:fixed;pointer-events:none;z-index:2147483646;width:90px;height:90px;margin:-45px;border-radius:50%;left:"+e.clientX+"px;top:"+e.clientY+"px;background:radial-gradient(circle,' + o.glow + '99,transparent 70%);transition:transform .5s,opacity .5s;transform:scale(.3);opacity:1";document.body.appendChild(d);requestAnimationFrame(function(){d.style.transform="scale(1.6)";d.style.opacity=0});setTimeout(function(){d.remove()},600)},true);' : '') +
-    '})();' + (o.splash ? '(' + splashRuntime.toString() + ')(' + JSON.stringify({ fx: o.fx, int: o.int }) + ');' : '') + '(' + langRuntime.toString() + ')(' + JSON.stringify({ dir: o.langDir }) + ');<\/script>';
+    '})();' + (o.splash ? '(' + splashRuntime.toString() + ')(' + JSON.stringify({ fx: o.fx, int: o.int }) + ');' : '') + '(' + langRuntime.toString() + ')(' + JSON.stringify({ dir: o.langDir }) + ');' + (o.langUI ? '(' + langUIRuntime.toString() + ')();' : '') + '<\/script>';
   if(o.preview){ const shim = '<script>(function(){var l=' + JSON.stringify(o.lang) + ';' + LOCALE_PATCH_SRC + '})();(' + previewShim.toString() + ')(' + JSON.stringify(o.lang) + ');<\/script>'; html = /<head(\s[^>]*)?>/i.test(html) ? html.replace(/<head(\s[^>]*)?>/i, m => m + shim) : shim + html; }
   return insBeforeLastBody(html, js);
 }
@@ -1058,7 +1078,7 @@ pvLang.addEventListener('change', () => openPreview(pvLang.value));
   if(!el || (el.closest && el.closest('#pvCard')) || ['user', 'token', 'repo', 'remember', 'updRepo', 'updFile', 'updAuto'].includes(el.id) || (el.closest && el.closest('#updCard'))) return;
   schedulePreview();
 }));
-addEventListener('message', e => { if(e.source === pvFrame.contentWindow && e.data && e.data.appLang) openPreview(e.data.appLang); });
+addEventListener('message', e => { if(e.source === pvFrame.contentWindow && e.data && e.data.appLang) openPreview(e.data.appLang === 'system' ? (navigator.language || 'en').slice(0, 2) : e.data.appLang); });
 async function gh(path, token, opts = {}){
   const res = await fetch('https://api.github.com' + path, {
     ...opts,
