@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المجسم - نسخة 25</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#111;color:#eee;padding:0;overflow:hidden}
+#top{position:fixed;inset:0;z-index:1}
+#cv{width:100vw;height:100vh;height:100dvh;display:block;background:#1a1a1a;touch-action:none;outline:none}
+#msg{color:#fbbf24;min-height:1.4em;font-size:14px;margin:6px 0}
+button{padding:8px 14px;border:0;border-radius:8px;background:#444;color:#fff;font-size:15px}
+details{background:#1b1b1b;border-radius:8px;margin:6px 0;padding:6px 10px}
+summary{font-size:16px;padding:6px 0}
+.r label{display:block;margin:10px 0 2px;font-size:14px}
+.r input{width:100%}
+.p{display:flex;justify-content:space-between;font-size:12px;color:#999}
+#tabs{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px}
+.tb{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;min-width:66px;padding:6px 8px;border-radius:12px;background:#222;color:#bbb;font-size:11px}
+.tb b{font-size:21px;font-weight:400;line-height:1.2}
+.tb.on{background:#7c3aed;color:#fff}
+#srch{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:0;background:#222;color:#fff;margin:6px 0;font-size:14px}
+.tp{display:none}.tp.on,.srch .tp{display:block}
+.vb{float:left;color:#fbbf24;font-size:12px}
+.r input[type=range]{height:30px;touch-action:pan-y}
+.r>div{border-bottom:1px solid #262626;padding-bottom:4px}
+summary{font-weight:600}
+#pop{position:fixed;left:0;top:0;width:280px;height:340px;display:flex;flex-direction:column;background:rgba(20,20,26,.97);border:1px solid #2f2f3a;border-radius:14px;box-shadow:0 8px 30px #000a;z-index:10;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;overflow:hidden}
+#pop.on{opacity:1;pointer-events:auto}
+#ph{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid #2a2a33;font-size:13px;font-weight:600}
+#px,#pk{background:transparent;border:0;color:#cbd5e1;padding:2px;display:flex}
+#px svg,#pk svg{width:18px;height:18px}
+#pop.home #pk{visibility:hidden}
+#pbody{flex:1;overflow-y:auto;padding:6px 8px;-webkit-overflow-scrolling:touch}
+#pop.home #pbody{display:none}
+#tabs{border-top:1px solid #2a2a33;padding:4px 6px;gap:2px;flex:none}
+#pop:not(.home) #tabs{display:none}
+#pop.home #tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;flex:1;overflow-y:auto;align-content:start;border-top:0}
+.tb{background:transparent;border:1px solid #2f2f3a;border-radius:12px;color:#94a3b8;min-width:0;padding:10px 4px;font-size:11px;gap:4px;position:relative}
+.tb b{display:flex;width:26px;height:26px}
+#pop.home .tb.on,.tb.on{background:transparent;color:#94a3b8}
+.dot{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px 2px #ef4444;animation:gl 1.2s infinite;display:none}
+@keyframes gl{50%{box-shadow:0 0 14px 5px #ef4444aa}}
+.grp{display:none}.grp.cur{display:block}
+.grp>summary{display:none}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px}
+.chip{flex:none;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:14px;background:transparent;border:1px solid #3a3a46;color:#cbd5e1;font-size:12px}
+.chip svg{width:16px;height:16px}
+.chip.on{border-color:#a78bfa;color:#c4b5fd;background:#2a2340}
+.sub{font-size:12px;color:#a78bfa;margin:12px 0 2px}
+.seg{display:flex;gap:6px;margin-top:8px}
+.seg button,#pz{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid #3a3a46;color:#cbd5e1;padding:7px 10px;border-radius:10px;font-size:12px}
+.seg button{flex:1}.seg button svg,#pz svg{width:16px;height:16px}
+.seg button.on{border-color:#a78bfa;color:#c4b5fd;background:#2a2340}
+#pz{margin:6px 0}
+#ph{touch-action:none;cursor:grab}
+.gr{display:flex;color:#64748b}.gr svg{width:16px;height:16px}
+details>summary svg{vertical-align:middle;margin-inline-end:4px}
+.sec{font-size:12px;color:#94a3b8;margin:12px 0 4px}
+#dg>summary{display:none}
+#dg{background:transparent;padding:0}
+.lk{padding:0!important;border-bottom:0!important;margin:6px 0}
+.lkh{width:100%;display:flex;justify-content:space-between;align-items:center;background:#242430;border:1px solid #2f2f3a;border-radius:10px;padding:10px 12px;font-size:14px;color:#e5e7eb}
+.lkh i{font-style:normal;transition:transform .15s}
+.lk.op .lkh i{transform:rotate(180deg)}
+.lkb{display:none;padding:6px 2px 4px}.lk.op .lkb,.srch .lk .lkb{display:block}
+.lk .lkb>div{border-bottom:0}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:220px;overflow-y:auto;padding:2px}
+.tile{padding:12px 4px;font-size:12px;line-height:1.3;border-radius:10px;background:transparent;border:1px solid #3a3a46;color:#cbd5e1;word-break:break-word;min-height:44px}
+.tile.on{border-color:#a78bfa;color:#c4b5fd;background:#2a2340}
+.cp{direction:ltr;margin-top:10px}.cp .sub{direction:rtl;text-align:right}
+.sw{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:6px 0}
+.sw button{height:30px;padding:0;border-radius:8px;border:2px solid #3a3a46}
+.sw button.on{border-color:#a78bfa;box-shadow:0 0 0 2px #a78bfa66}
+.cpv{display:flex;align-items:center;gap:8px;margin:6px 0}
+.cpp{width:36px;height:26px;border-radius:7px;border:1px solid #555}
+.cph{font-size:12px;color:#94a3b8;font-family:monospace}
+.cpl{direction:rtl;text-align:right;font-size:12px;color:#94a3b8;margin:6px 0 2px}
+.cp input[type=range]{-webkit-appearance:none!important;appearance:none!important;direction:ltr!important;height:16px!important;border-radius:8px;outline:none;margin:2px 0}
+.cp input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #7c3aed;box-shadow:0 1px 4px #000a}
+.cp input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid #7c3aed}
+</style>
+</head>
+<body>
+<div id="top"><canvas id="cv"></canvas><div id="msg">نسخة 37 - جاري تحميل المكتبة...</div><div id="fl" style="display:none;background:#7f1d1d;color:#fff;padding:8px;border-radius:8px;font-size:13px;margin:4px 0"></div><button id="rs">إعادة ضبط</button> <button id="rl" style="background:#7f1d1d">مسح وإعادة التحميل</button><div id="tabs"></div></div><input id="srch" placeholder="ابحث عن تحكم (مثال: أنف، شفاه، خصر)">
+<details id="dg" open><summary>أدوات التحميل والتشخيص</summary><div class="r">
+<label>عدد الملفات المحمّلة معاً: <b id="valc">6</b></label><input type="range" id="cc" min="1" max="12" step="1" value="6">
+<label>عدد مرات إعادة المحاولة: <b id="valr">3</b></label><input type="range" id="rr" min="0" max="10" step="1" value="3">
+<div style="margin:8px 0"><button id="ft">فحص الاتصال</button> <button id="fp" style="background:#7c3aed">فحص الحزم الرسمية</button> <button id="rf">إعادة محاولة الفاشل</button> <button id="rg" style="background:#92400e">إعادة البحث عن غير الموجود</button> <button id="cp">نسخ السجل</button></div>
+<div id="st" style="font-size:13px;color:#fbbf24"></div>
+<div style="font-size:13px;margin-top:6px">الملفات الفاشلة:</div><textarea id="fx" readonly rows="9" style="width:100%;box-sizing:border-box;font-size:12px;direction:ltr;text-align:left;background:#2a0a0a;color:#eee;border:0;border-radius:6px;padding:6px"></textarea>
+<button id="cf" style="margin-top:6px;background:#166534">نسخ قائمة الفاشل</button>
+<pre id="lg" style="white-space:pre-wrap;font-size:11px;max-height:220px;overflow:auto;direction:ltr;text-align:left;background:#000;padding:6px;border-radius:6px"></pre>
+</div></details>
+<div id="sl"></div>
+<script>
+/* تحميل المكتبة وملف الإضاءة من تخزين الهاتف (نفس قاعدة mujassam_store) وإلا من الإنترنت ثم حفظهما */
+(function(){
+  const DBN="mujassam_store",ST="f";
+  function idb(){return new Promise((ok,no)=>{const q=indexedDB.open(DBN,1);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains(ST))q.result.createObjectStore(ST);};q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error);q.onblocked=()=>no(new Error("blocked"));});}
+  async function gt(k){const d=await idb();try{return await new Promise((ok,no)=>{const r=d.transaction(ST,"readonly").objectStore(ST).get(k);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error);});}finally{d.close();}}
+  async function pt(k,v){const d=await idb();try{await new Promise((ok,no)=>{const t=d.transaction(ST,"readwrite");t.objectStore(ST).put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error);t.onabort=()=>no(t.error);});}finally{d.close();}}
+  async function lib(k,url,type){
+    let rec=null;try{rec=await gt(k);}catch(e){}
+    if(rec&&rec.b)return rec.b;
+    const r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status);
+    const b=await r.arrayBuffer();
+    if(b.byteLength<1000)throw new Error("ملف غير صالح");
+    try{await pt(k,{b:b,t:type});}catch(e){}
+    return b;
+  }
+  function inject(src){return new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>no(new Error("script"));document.head.appendChild(s);});}
+  window.__libP=(async()=>{
+    const pe=lib("lib/environmentSpecular.env","https://assets.babylonjs.com/environments/environmentSpecular.env","application/octet-stream")
+      .then(b=>{window.__envUrl=URL.createObjectURL(new Blob([b]));}).catch(()=>{});
+    try{
+      const b=await lib("lib/babylon.js","https://cdn.babylonjs.com/babylon.js","text/javascript");
+      await inject(URL.createObjectURL(new Blob([b],{type:"text/javascript"})));
+    }catch(e){
+      try{await inject("https://cdn.babylonjs.com/babylon.js");}catch(e2){}
+    }
+    await pe;
+  })();
+})();
+</script>
+<script>
+/* ===== حفظ المحمَّل على الهاتف: نظام مستقل يلتف حول الجلب ولا يغيّر منطق الصفحة ===== */
+(function(){
+  const orig=window.fetch.bind(window);
+  const DBN="mujassam_store",ST="f";
+  let dbp=null,cnt=0,hits=0,wrote=0,fast=0;
+  function req(r){return new Promise((ok,no)=>{r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error);});}
+  function db(){
+    if(dbp)return dbp;
+    dbp=new Promise((ok,no)=>{
+      try{
+        const q=indexedDB.open(DBN,1);
+        q.onupgradeneeded=()=>{q.result.createObjectStore(ST);};
+        q.onsuccess=()=>{const d=q.result;d.onversionchange=()=>{try{d.close();}catch(e){}dbp=null;};ok(d);};
+        q.onerror=()=>no(q.error);
+        q.onblocked=()=>no(new Error("blocked"));
+      }catch(e){no(e);}
+    });
+    dbp.catch(()=>{dbp=null;});
+    return dbp;
+  }
+  async function get(k){const d=await db();return req(d.transaction(ST,"readonly").objectStore(ST).get(k));}
+  async function put(k,v){const d=await db();return new Promise((ok,no)=>{const t=d.transaction(ST,"readwrite");t.objectStore(ST).put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error);t.onabort=()=>no(t.error);});}
+  async function refresh(){try{const d=await db();cnt=await req(d.transaction(ST,"readonly").objectStore(ST).count());}catch(e){}return cnt;}
+  function key(u){
+    u=u.split(/[?#]/)[0];let m;
+    if((m=u.match(/^https:\/\/raw\.githubusercontent\.com\/makehumancommunity\/makehuman\/master\/makehuman\/data\/(.+)$/)))return "mh/"+m[1];
+    if((m=u.match(/^https:\/\/cdn\.jsdelivr\.net\/gh\/makehumancommunity\/makehuman@master\/makehuman\/data\/(.+)$/)))return "mh/"+m[1];
+    if((m=u.match(/^https:\/\/(?:raw\.githubusercontent\.com|media\.githubusercontent\.com\/media)\/makehumancommunity\/makehuman-assets\/master\/(.+)$/)))return "as/"+m[1];
+    if((m=u.match(/^https:\/\/cdn\.jsdelivr\.net\/gh\/makehumancommunity\/makehuman-assets@master\/(.+)$/)))return "as/"+m[1];
+    return null;
+  }
+  function isLfs(b){if(b.byteLength>=300)return false;try{return new TextDecoder().decode(new Uint8Array(b)).startsWith("version https://git-lfs");}catch(e){return false;}}
+  const LOCAL=new Map();
+  let KEYS=null;
+  async function keyset(){if(KEYS)return KEYS;try{const d=await db();KEYS=new Set(await req(d.transaction(ST,"readonly").objectStore(ST).getAllKeys()));}catch(e){KEYS=null;}return KEYS;}
+  window.fetch=async function(input,init){
+    if(typeof input==="string"&&LOCAL.has(input)){
+      /* ملف حزمة مختار من الهاتف: يُخدَم بالأجزاء بدون أي إنترنت */
+      const f=LOCAL.get(input),meth=String((init&&init.method)||"GET").toUpperCase();
+      if(meth==="HEAD")return new Response(null,{status:200,headers:{"content-length":String(f.size)}});
+      const hd=init&&init.headers,rg=hd&&(hd.Range||hd.range),mm=rg&&String(rg).match(/bytes=(\d+)-(\d*)/);
+      if(mm){const a=+mm[1],b=mm[2]===""?f.size-1:Math.min(+mm[2],f.size-1);return new Response(f.slice(a,b+1),{status:206,headers:{"content-range":"bytes "+a+"-"+b+"/"+f.size}});}
+      return new Response(f,{status:200});
+    }
+    let k=null;
+    try{
+      const meth=String((init&&init.method)||"GET").toUpperCase();
+      const h=init&&init.headers;
+      const rg=h&&(h.Range||h.range||(typeof h.get==="function"&&h.get("Range")));
+      const ns=init&&init.cache==="no-store";
+      if(typeof input==="string"&&meth==="GET"&&!rg&&!ns)k=key(input);
+    }catch(e){k=null;}
+    if(k){
+      try{
+        const ks=await keyset();
+        const rec=(ks&&!ks.has(k))?null:await get(k);
+        if(rec&&rec.b){hits++;return new Response(rec.b,{status:200,headers:{"content-type":rec.t||"application/octet-stream"}});}
+      }catch(e){}
+    }
+    let r=null;
+    if(k){
+      /* يحاول أولاً من ذاكرة المتصفح القديمة (ما حُمِّل في الإصدارات السابقة)، وإن لم يجد يحمّل من الإنترنت */
+      const t0=performance.now();
+      try{
+        const c=await orig(input,Object.assign({},init,{cache:"force-cache"}));
+        if(c.ok){r=c;if(performance.now()-t0<40)fast++;}
+        else if(c.status===404)r=c;
+      }catch(e){}
+    }
+    if(!r)r=await orig(input,init);
+    if(k&&r.status===200){
+      try{
+        r.clone().arrayBuffer().then(async b=>{
+          if(isLfs(b))return;
+          await put(k,{b:b,t:r.headers.get("content-type")||""});
+          if(KEYS)KEYS.add(k);
+          wrote++;cnt++;
+        }).catch(()=>{});
+      }catch(e){}
+    }
+    return r;
+  };
+  const CT=(function(){const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let j=0;j<8;j++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  function crc(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CT[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+  async function exportZip(say){
+    const d=await db();
+    const keys=await req(d.transaction(ST,"readonly").objectStore(ST).getAllKeys());
+    if(!keys.length)throw new Error("لا يوجد شيء محفوظ بعد");
+    if(keys.length>65535)throw new Error("عدد الملفات أكبر من حد صيغة الأرشيف");
+    const te=new TextEncoder(),blobs=[],cd=[];let cur=[],curSz=0,off=0;
+    const push=u8=>{cur.push(u8);curSz+=u8.length;off+=u8.length;if(curSz>64*1048576){blobs.push(new Blob(cur));cur=[];curSz=0;}};
+    for(let i=0;i<keys.length;i++){
+      const k=keys[i],rec=await get(k);if(!rec||!rec.b)continue;
+      const data=new Uint8Array(rec.b),nm=te.encode(k),c=crc(data);
+      const lh=new DataView(new ArrayBuffer(30));
+      lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(10,0,true);lh.setUint16(12,0x21,true);
+      lh.setUint32(14,c,true);lh.setUint32(18,data.length,true);lh.setUint32(22,data.length,true);lh.setUint16(26,nm.length,true);lh.setUint16(28,0,true);
+      const start=off;
+      push(new Uint8Array(lh.buffer));push(nm);push(data);
+      cd.push({nm:nm,c:c,sz:data.length,start:start});
+      if(off>0xFFFFFF00)throw new Error("الحجم أكبر من حد صيغة الأرشيف");
+      if(i%25==0){if(say)say(i+" من "+keys.length);await new Promise(r=>setTimeout(r,0));}
+    }
+    const cdStart=off;
+    for(const e of cd){
+      const h=new DataView(new ArrayBuffer(46));
+      h.setUint32(0,0x02014b50,true);h.setUint16(4,20,true);h.setUint16(6,20,true);h.setUint16(8,0x0800,true);h.setUint16(10,0,true);h.setUint16(12,0,true);h.setUint16(14,0x21,true);
+      h.setUint32(16,e.c,true);h.setUint32(20,e.sz,true);h.setUint32(24,e.sz,true);h.setUint16(28,e.nm.length,true);
+      h.setUint32(42,e.start,true);
+      push(new Uint8Array(h.buffer));push(e.nm);
+    }
+    const cdSize=off-cdStart;
+    const eo=new DataView(new ArrayBuffer(22));
+    eo.setUint32(0,0x06054b50,true);eo.setUint16(8,cd.length,true);eo.setUint16(10,cd.length,true);eo.setUint32(12,cdSize,true);eo.setUint32(16,cdStart,true);
+    push(new Uint8Array(eo.buffer));
+    if(cur.length)blobs.push(new Blob(cur));
+    return {blob:new Blob(blobs,{type:"application/zip"}),n:cd.length,size:off};
+  }
+  async function putMany(list){const d=await db();return new Promise((ok,no)=>{const t=d.transaction(ST,"readwrite"),o=t.objectStore(ST);for(const [k,v] of list){o.put(v,k);if(KEYS)KEYS.add(k);}t.oncomplete=ok;t.onerror=()=>no(t.error);t.onabort=()=>no(t.error);});}
+  async function inflate(u8){const ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();w.write(u8);w.close();return new Uint8Array(await new Response(ds.readable).arrayBuffer());}
+  async function importZip(file,say){
+    const sz=file.size,tail=new Uint8Array(await file.slice(Math.max(0,sz-65600),sz).arrayBuffer());
+    let e=-1;for(let i=tail.length-22;i>=0;i--){if(tail[i]==0x50&&tail[i+1]==0x4b&&tail[i+2]==5&&tail[i+3]==6){e=i;break;}}
+    if(e<0)throw new Error("الملف ليس أرشيف zip صالحاً");
+    const dv=new DataView(tail.buffer,tail.byteOffset,tail.byteLength);
+    const n=dv.getUint16(e+10,true),cdSize=dv.getUint32(e+12,true),cdOff=dv.getUint32(e+16,true);
+    if(cdOff===0xFFFFFFFF||n===0xFFFF)throw new Error("الأرشيف أكبر من الحد المدعوم");
+    const cd=new Uint8Array(await file.slice(cdOff,cdOff+cdSize).arrayBuffer()),cv=new DataView(cd.buffer),td=new TextDecoder();
+    const ents=[];let p=0,skipped=0;
+    for(let i=0;i<n;i++){
+      if(cv.getUint32(p,true)!==0x02014b50)break;
+      const meth=cv.getUint16(p+10,true),csz=cv.getUint32(p+20,true),nl=cv.getUint16(p+28,true),xl=cv.getUint16(p+30,true),cl=cv.getUint16(p+32,true),lo=cv.getUint32(p+42,true);
+      const raw=td.decode(cd.subarray(p+46,p+46+nl));p+=46+nl+xl+cl;
+      const mm=raw.match(/(?:^|\/)((?:mh|as|meta|lib)\/.+)$/),name=mm&&!raw.endsWith("/")?mm[1]:null;
+      if(!name||(meth!==0&&meth!==8)){skipped++;continue;}
+      ents.push({name,meth,csz,lo});
+    }
+    ents.sort((a,b)=>a.lo-b.lo);
+    /* نقرأ الأرشيف كتلاً كبيرة متصلة بدل قراءة كل ملف على حدة (أسرع بكثير)، ثم نكتب دفعات كبيرة */
+    const ends=ents.map((x,i)=>i+1<ents.length?ents[i+1].lo:cdOff);
+    let i=0,done=0,batch=[],bsz=0,pend=[];
+    const flush=async()=>{if(pend.length){await Promise.all(pend);pend=[];}if(batch.length){await putMany(batch);batch=[];bsz=0;}};
+    while(i<ents.length){
+      let j=i,base=ents[i].lo,last=ends[i];
+      while(j+1<ents.length&&ends[j+1]-base<=48*1048576)j++;
+      last=ends[j];
+      const buf=new Uint8Array(await file.slice(base,last).arrayBuffer()),bv=new DataView(buf.buffer);
+      for(let k=i;k<=j;k++){
+        const x=ents[k],o=x.lo-base;
+        if(bv.getUint32(o,true)!==0x04034b50){skipped++;continue;}
+        const ds=o+30+bv.getUint16(o+26,true)+bv.getUint16(o+28,true),raw=buf.subarray(ds,ds+x.csz);
+        if(x.meth===0){
+          const c=raw.slice();batch.push([x.name,{b:c.buffer,t:""}]);bsz+=c.length;done++;
+        }else{
+          pend.push(inflate(raw).then(d=>{batch.push([x.name,{b:d.buffer.slice(d.byteOffset,d.byteOffset+d.byteLength),t:""}]);bsz+=d.length;done++;}));
+          if(pend.length>=16)await Promise.all(pend.splice(0));
+        }
+        if(batch.length>=400||bsz>48*1048576)await flush();
+      }
+      if(say)say(Math.min(j+1,ents.length)+" من "+ents.length);
+      await new Promise(r=>setTimeout(r,0));
+      i=j+1;
+    }
+    await flush();
+    await refresh();
+    return {n:done,skipped:skipped};
+  }
+  window.__SV={importZip:importZip,metaGet:async k=>{const r=await get(k);return r&&r.b?r.b:null;},metaPut:(k,b)=>put(k,{b:b,t:"application/json"}),addLocal:(u,f)=>LOCAL.set(u,f),refresh:refresh,exportZip:exportZip,stats:()=>({cnt:cnt,hits:hits,wrote:wrote,fast:fast}),key:key};
+})();
+</script>
+<script>
+let FRESH=false;try{FRESH=sessionStorage.getItem("fresh")==="1";sessionStorage.removeItem("fresh");}catch(e){}
+const FQ=FRESH?"?v="+Date.now():"";
+if(FRESH){const _f=window.fetch.bind(window);window.fetch=(u,o)=>_f(u,Object.assign({cache:"reload"},o||{}));}
+const $=i=>document.getElementById(i);
+const say=t=>{$("msg").textContent=t;};
+const GR={head:"الرأس",eyes:"العينان",eyebrows:"الحاجبان",nose:"الأنف",mouth:"الفم",ears:"الأذنان",chin:"الذقن",
+cheek:"الخدان",forehead:"الجبهة",neck:"الرقبة",torso:"الجذع",hip:"الورك",buttocks:"الأرداف",breast:"الصدر",
+stomach:"البطن",pelvis:"الحوض",armslegs:"الذراعان والساقان",measure:"القياسات",asym:"عدم التماثل",genitals:"أخرى"};
+const T={scale:"الحجم",vert:"الطول",horiz:"العرض",depth:"العمق",size:"الحجم",
+width:"العرض",height:"الارتفاع",age:"العمر",trans:"الإزاحة",move:"الحركة",angle:"الزاوية",shape:"الشكل",
+bones:"العظام",curve:"الانحناء",round:"الاستدارة",pointed:"الحدة",muscle:"العضلات",weight:"الوزن",
+upperarm:"أعلى الذراع",lowerarm:"الساعد",upperleg:"الفخذ",lowerleg:"الساق",head:"الرأس",
+eye:"العين",nose:"الأنف",mouth:"الفم",lip:"الشفة",lips:"الشفاه",ear:"الأذن",cheek:"الخد",chin:"الذقن",
+forehead:"الجبهة",neck:"الرقبة",torso:"الجذع",hip:"الورك",foot:"القدم",hand:"اليد",finger:"الإصبع",
+eyebrow:"الحاجب",nostril:"فتحة الأنف",bridge:"جسر الأنف",tip:"الطرف",jaw:"الفك",volume:"الحجم",fat:"الدهون",
+position:"الموضع",dist:"المسافة",inner:"الداخلي",outer:"الخارجي",upper:"العلوي",lower:"السفلي",center:"الوسط",
+opening:"الفتح",slant:"الميلان",bag:"الانتفاخ",fold:"الطية",crease:"الثنية",circ:"المحيط",length:"الطول",
+bust:"الصدر",waist:"الخصر",hips:"الأرداف",thigh:"الفخذ",calf:"الربلة",knee:"الركبة",ankle:"الكاحل",
+wrist:"المعصم",shoulder:"الكتف",frontchest:"أمام الصدر",underbust:"تحت الصدر",napetowaist:"من الرقبة للخصر",
+waisttohip:"من الخصر للورك"};
+const P={decr:"أقل",incr:"أكثر",up:"أعلى",down:"أسفل",in:"للداخل",out:"للخارج",forward:"للأمام",
+backward:"للخلف",compress:"ضغط",uncompress:"فرد",square:"مربع",round:"مستدير",concave:"مقعر",
+convex:"محدب",pointed:"مدبب",wide:"عريض",narrow:"ضيق",flat:"مسطح",small:"صغير",big:"كبير",
+left:"يسار",right:"يمين",max:"أقصى",min:"أدنى"};
+const XW={brow:"الحاجب",brows:"الحاجبان",smile:"ابتسامة",jaw:"الفك",mouth:"الفم",lip:"الشفة",lips:"الشفاه",eye:"العين",eyes:"العينان",
+cheek:"الخد",nose:"الأنف",chin:"الذقن",neck:"الرقبة",l:"يسار",r:"يمين",left:"يسار",right:"يمين",up:"أعلى",down:"أسفل",in:"للداخل",out:"للخارج",
+open:"فتح",close:"إغلاق",raise:"رفع",lower:"خفض",wide:"عريض",narrow:"ضيق",small:"صغير",big:"كبير",arm:"الذراع",leg:"الساق",
+hand:"اليد",foot:"القدم",head:"الرأس",torso:"الجذع",hip:"الورك",waist:"الخصر",chest:"الصدر",belly:"البطن",stomach:"البطن",
+back:"الظهر",shoulder:"الكتف",thigh:"الفخذ",calf:"الربلة",muscle:"عضلات",fat:"دهون",thin:"نحيف",age:"العمر",old:"مسن",young:"شاب",
+male:"ذكر",female:"أنثى",decr:"أقل",incr:"أكثر",min:"أدنى",max:"أقصى",square:"مربع",round:"مستدير",pointed:"مدبب",flat:"مسطح"};
+function labx(t){
+  return t.split(/[-_]/).filter(Boolean).map(w=>{const k=w.toLowerCase();return XW[k]||T[k]||P[k]||w;}).join(" ");
+}
+function lab(t){
+  let p=t.replace(/^[a-z]+-/,"").replace(/^[lr]-/,""),pair="";
+  const m=t.match(/-([a-z]+\|[a-z]+)$/i);
+  if(m){pair=m[1];p=t.slice(0,m.index);}
+  const side=/^l-/.test(t)?"اليسار ":/^r-/.test(t)?"اليمين ":"";
+  const w=t.slice(0,m?m.index:undefined).toLowerCase().split("-").map(x=>T[x]||"").filter(Boolean);
+  const u=[];w.forEach(x=>{if(u[u.length-1]!==x)u.push(x);});
+  let pp="";
+  if(pair){const a=pair.split("|");if(P[a[0]]&&P[a[1]])pp=[P[a[0]],P[a[1]]];}
+  return {t:(side+u.join(" ")).trim()||"تفصيل",pp};
+}
+const RAW="https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/";
+const CDN="https://cdn.jsdelivr.net/gh/makehumancommunity/makehuman@master/makehuman/data/";
+let okN=0,failN=0;
+const wait=ms=>new Promise(s=>setTimeout(s,ms));
+const CFG={conc:6,retry:3},LOG=[],FAILED=[],WQ=[];let active=0;
+let PAUSED=false;
+async function slot(){while(PAUSED||active>=CFG.conc)await new Promise(r=>WQ.push(r));active++;}
+function free(){active--;const n=WQ.shift();if(n)n();}
+const PRE={total:0,done:0};
+const GONE=[],GONESET=new Set();
+const RC={nf:0,rate:0,to:0,net:0,other:0};
+function logE(rel,b,why,n){
+  if(why.indexOf("404")>=0)RC.nf++;else if(why.indexOf("429")>=0||why.indexOf("403")>=0)RC.rate++;
+  else if(why.indexOf("المهلة")>=0)RC.to++;else if(why.indexOf("الشبكة")>=0)RC.net++;else RC.other++;
+  const h=b.split("/")[2]||b;
+  LOG.push(new Date().toLocaleTimeString("en-GB")+" | "+rel+" | "+h+" | "+why+" | try "+(n+1));
+  if(LOG.length>500)LOG.shift();
+}
+async function fetchTxt(bases,rel){
+  if(GONESET.has(rel)){GONE.push(rel);throw new Error(rel);}
+  let gone=false;
+  for(let n=0;n<=CFG.retry;n++){
+    let nf=0,f0=false;
+    for(const b of bases){
+      await slot();
+      try{
+        const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),20000);
+        const r=await fetch(b+rel,{signal:ctl.signal});clearTimeout(to);
+        if(r.ok){const x=await r.text();free();okN++;return x;}
+        free();
+        if(r.status==404){nf++;if(b===bases[0])f0=true;}
+        logE(rel,b,"HTTP "+r.status+(r.status==404?" الملف غير موجود":(r.status==403||r.status==429)?" حظر أو كثرة طلبات":""),n);
+      }catch(e){
+        free();
+        logE(rel,b,e.name=="AbortError"?"انتهت المهلة 20 ثانية":"الشبكة أو الحجب: "+e.message,n);
+      }
+    }
+    if(nf==bases.length||(f0&&rel.indexOf("targets/")===0)){gone=true;break;}
+    if(n<CFG.retry)await wait(1000*Math.pow(2,n));
+  }
+  if(gone){GONE.push(rel);throw new Error(rel);}
+  failN++;FAILED.push(rel);throw new Error(rel);
+}
+async function getText(path){return fetchTxt([RAW,CDN],path);}
+function parseObj(txt){
+  const v=[],f=[];let skip=false;
+  for(const line of txt.split("\n")){
+    if(line.startsWith("v ")){const p=line.trim().split(/\s+/);v.push(+p[1],+p[2],+p[3]);}
+    else if(line.startsWith("g ")){skip=/^(helper-(tights|skirt|hair|genital|.*eye)|joint)/.test(line.slice(2).trim().toLowerCase());}
+    else if(line.startsWith("f ")&&!skip){
+      const ix=line.trim().split(/\s+/).slice(1).map(s=>parseInt(s.split("/")[0])-1);
+      for(let i=1;i<ix.length-1;i++)f.push(ix[0],ix[i],ix[i+1]);
+    }
+  }
+  return {v:new Float32Array(v),f:f};
+}
+function parseTarget(t){
+  const I=[],D=[];
+  for(const l of t.split("\n")){
+    if(!l||l[0]==="#")continue;
+    const p=l.trim().split(/\s+/);
+    if(p.length<4)continue;
+    I.push(+p[0]);D.push(+p[1],+p[2],+p[3]);
+  }
+  return {i:Int32Array.from(I),d:Float32Array.from(D)};
+}
+const cache={};let miss=0;
+function getT(p){
+  if(!cache[p])cache[p]=getText("targets/"+p+".target").then(parseTarget).catch(()=>null);
+  return cache[p];
+}
+const ROOT={mh:["https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/","https://cdn.jsdelivr.net/gh/makehumancommunity/makehuman@master/makehuman/data/"],
+as:["https://raw.githubusercontent.com/makehumancommunity/makehuman-assets/master/","https://cdn.jsdelivr.net/gh/makehumancommunity/makehuman-assets@master/"]};
+async function getR(root,rel){return fetchTxt(ROOT[root],rel);}
+function parseBody(txt){
+  const v=[],vt=[],f=[],map={},src=[],uv=[],idx=[],gf=[],bodyV=new Set(),gset=new Set();let skip=false,gen=false,bod=false;
+  for(const line of txt.split("\n")){
+    if(line.startsWith("v ")){const p=line.trim().split(/\s+/);v.push(+p[1],+p[2],+p[3]);}
+    else if(line.startsWith("vt ")){const p=line.trim().split(/\s+/);vt.push(+p[1],+p[2]);}
+    else if(line.startsWith("g ")){const n=line.slice(2).trim().toLowerCase();skip=/^(helper-(tights|skirt|hair|genital|.*eye)|joint)/.test(n);gen=false;bod=n==="body";}
+    else if(line.startsWith("f ")&&!skip){
+      const ix=line.trim().split(/\s+/).slice(1).map(s=>{
+        const q=s.split("/"),a=parseInt(q[0])-1,u=q[1]?parseInt(q[1])-1:-1,k=a+"/"+u;
+        if(map[k]===undefined){map[k]=src.length;src.push(a);uv.push(u>=0?vt[u*2]:0,u>=0?vt[u*2+1]:0);}
+        if(gen)gset.add(a);if(bod)bodyV.add(a);
+        return [a,map[k]];
+      });
+      for(let i=1;i<ix.length-1;i++){f.push(ix[0][0],ix[i][0],ix[i+1][0]);idx.push(ix[0][1],ix[i][1],ix[i+1][1]);if(gen)gf.push(ix[0][0],ix[i][0],ix[i+1][0]);}
+    }
+  }
+  /* العضو في base.obj جزء من نفس الجسم لكنه جزيرة مفتوحة لا تشترك معه بأي نقطة. حافته المفتوحة هي نقاط الربط بالجسم */
+  let G=null;
+  if(gf.length){
+    const K=100003,ec=new Map();
+    for(let q=0;q<gf.length;q+=3)for(let k=0;k<3;k++){const x=gf[q+k],y=gf[q+(k+1)%3],key=x<y?x*K+y:y*K+x;ec.set(key,(ec.get(key)||0)+1);}
+    const rs=new Set();ec.forEach((c,key)=>{if(c===1){rs.add(Math.floor(key/K));rs.add(key%K);}});
+    const ring=[...rs],all=[...gset],inner=all.filter(i=>!rs.has(i)),bl=[...bodyV];
+    const d2=(i,j)=>{const dx=v[i*3]-v[j*3],dy=v[i*3+1]-v[j*3+1],dz=v[i*3+2]-v[j*3+2];return dx*dx+dy*dy+dz*dz;};
+    const near=new Map(),buv={};
+    for(let s=0;s<src.length;s++){const p=src[s];if(bodyV.has(p)&&!buv[p])buv[p]=[uv[s*2],uv[s*2+1]];}
+    for(const r of ring){let bd=1e30,bj=-1;for(const j of bl){const d=d2(r,j);if(d<bd){bd=d;bj=j;}}near.set(r,bj);}
+    /* الصورة: نقطة العضو تأخذ إحداثيات صورة جلد الجسم عند أقرب نقطة حافة، فيصير لونه من نفس الجلد */
+    for(let s=0;s<src.length;s++){
+      const p=src[s];if(!gset.has(p))continue;
+      let bd=1e30,br=-1;for(const r of ring){const d=d2(p,r);if(d<bd){bd=d;br=r;}}
+      const u=br>=0&&buv[near.get(br)];if(u){uv[s*2]=u[0];uv[s*2+1]=u[1];}
+    }
+    /* صفوف العضو من الحافة: الحافة صف 0 ثم 1 و2 و3، لنطوي قاعدة العضو للداخل */
+    const adj=new Map();
+    for(let q=0;q<gf.length;q+=3)for(let k=0;k<3;k++){const x=gf[q+k],y=gf[q+(k+1)%3];
+      if(!adj.has(x))adj.set(x,[]);if(!adj.has(y))adj.set(y,[]);adj.get(x).push(y);adj.get(y).push(x);}
+    const row=new Map();let fr=ring.slice();fr.forEach(r=>row.set(r,0));
+    for(let k=1;k<=3;k++){const nx2=[];for(const u of fr)for(const w of (adj.get(u)||[]))if(!row.has(w)){row.set(w,k);nx2.push(w);}fr=nx2;}
+    G={ring,all,inner,near,tri:gf,rowL:[...row.entries()],rowM:row};
+  }
+  return {v:new Float32Array(v),f:f,src:Int32Array.from(src),uv:new Float32Array(uv),idx:idx,gen:G};
+}
+const AREPO="https://{H}/makehumancommunity/makehuman-assets";
+function C(path){
+  return ["https://media.githubusercontent.com/media/makehumancommunity/makehuman-assets/master/"+path,
+          "https://raw.githubusercontent.com/makehumancommunity/makehuman-assets/master/"+path,
+          "https://cdn.jsdelivr.net/gh/makehumancommunity/makehuman-assets@master/"+path];
+}
+function mkTex(c,scene,done){
+  let i=0;
+  const tx=new BABYLON.Texture(c[0]+FQ,scene,false,true,undefined,()=>{if(done)done(true);},()=>{
+    i++;
+    if(i<c.length)tx.updateURL(c[i]+FQ);
+    else{const nm=c[0].split("master/")[1]||c[0];logE("صورة",nm,"فشلت كل المصادر الثلاثة",0);failN++;FAILED.push(nm);if(done)done(false);}
+  });
+  return tx;
+}
+async function findSkins(){
+  let paths=[];
+  try{
+    const r=await fetch("https://data.jsdelivr.com/v1/package/gh/makehumancommunity/makehuman-assets@master/flat");
+    if(r.ok)paths=(await r.json()).files.map(x=>x.name.slice(1));
+    else logE("قائمة البشرات","jsdelivr","HTTP "+r.status,0);
+  }catch(e){logE("قائمة البشرات","jsdelivr",e.message,0);}
+  if(!paths.length){
+    try{
+      const r=await fetch("https://api.github.com/repos/makehumancommunity/makehuman-assets/git/trees/master?recursive=1");
+      if(r.ok)paths=(await r.json()).tree.map(x=>x.path);
+      else logE("قائمة البشرات","api.github","HTTP "+r.status,0);
+    }catch(e){logE("قائمة البشرات","api.github",e.message,0);}
+  }
+  return paths.filter(p=>/^base\/skins\/.*\.png$/i.test(p)&&!/thumb|spec|normal|bump|_ao|ao_|litsphere|transmission/i.test(p));
+}
+async function findSkinsOld(){
+  const out=[];
+  for(const repo of ["makehuman-assets","makehuman"]){
+    let paths=[];
+    try{
+      const r=await fetch("https://api.github.com/repos/makehumancommunity/"+repo+"/git/trees/master?recursive=1");
+      if(r.ok)paths=(await r.json()).tree.map(x=>x.path);
+    }catch(e){}
+    if(!paths.length){
+      try{
+        const r=await fetch("https://data.jsdelivr.com/v1/package/gh/makehumancommunity/"+repo+"@master/flat");
+        if(r.ok)paths=(await r.json()).files.map(x=>x.name.slice(1));
+      }catch(e){}
+    }
+    for(const p of paths)if(/(^|\/)skins\/.*\.png$/i.test(p)&&!/thumb|spec|normal|bump|_ao|ao_|litsphere|transmission/i.test(p))out.push("https://raw.githubusercontent.com/makehumancommunity/"+repo+"/master/"+p);
+    if(out.length)break;
+  }
+  return out;
+}
+function parseMhclo(t){
+  const o={sc:{},verts:[],obj:""};let inV=false;
+  for(let l of t.split("\n")){
+    l=l.trim();if(!l||l[0]==="#")continue;
+    if(inV&&/^[-\d.]/.test(l)){o.verts.push(l.split(/\s+/).map(Number));continue;}
+    const p=l.split(/\s+/);
+    if(p[0]==="verts"){inV=true;continue;}
+    inV=false;
+    if(p[0]==="obj_file")o.obj=p[1];
+    else if(p[0]==="material")o.mat=p[1];
+    else if(/^[xyz]_scale$/.test(p[0]))o.sc[p[0][0]]=[+p[1],+p[2],+p[3]];
+  }
+  return o;
+}
+function parseProxyObj(t){
+  const vt=[],map={},src=[],uv=[],idx=[],L=t.split("\n");
+  for(const l of L)if(l.startsWith("vt ")){const p=l.trim().split(/\s+/);vt.push(+p[1],+p[2]);}
+  for(const l of L){
+    if(!l.startsWith("f "))continue;
+    const ix=l.trim().split(/\s+/).slice(1).map(s=>{
+      const q=s.split("/"),v=parseInt(q[0])-1,u=q[1]?parseInt(q[1])-1:-1,k=v+"/"+u;
+      if(map[k]===undefined){map[k]=src.length;src.push(v);uv.push(u>=0?vt[u*2]:0,u>=0?vt[u*2+1]:0);}
+      return map[k];
+    });
+    for(let i=1;i<ix.length-1;i++)idx.push(ix[0],ix[i],ix[i+1]);
+  }
+  return {src:Int32Array.from(src),uv:new Float32Array(uv),idx};
+}
+const SL={
+  hair:{root:"as",dir:n=>"base/hair/"+n+"/",tex:n=>"base/hair/"+n+"/"+n+"_diffuse.png",alpha:1},
+  eyebrows:{root:"as",dir:n=>"base/eyebrows/"+n+"/",tex:n=>"base/eyebrows/"+n+"/"+n+"_diffuse.png",alpha:1},
+  clothes:{root:"as",dir:n=>"base/clothes/"+n+"/",tex:n=>"base/clothes/"+n+"/"+n+"_diffuse.png",alpha:1},
+  eyes:{root:"mh",dir:()=>"eyes/high-poly/",file:"high-poly.mhclo",tex:n=>"base/eyes/materials/"+n+".png",alpha:0}
+};
+const OPT={
+  eyes:[["blue","أزرق"],["bluegreen","أزرق مخضر"],["brown","بني"],["brownlight","بني فاتح"],["deepblue","أزرق غامق"],["green","أخضر"],["grey","رمادي"],["ice","جليدي"],["lightblue","أزرق فاتح"]],
+  hair:[["","بدون"],["afro01","أفرو"],["bob01","بوب ١"],["bob02","بوب ٢"],["braid01","ضفيرة"],["long01","طويل"],["ponytail01","ذيل حصان"]],
+  eyebrows:[["","بدون"],["eyebrow001","حاجبان"]],
+  clothes:[["","بدون"],["female_elegantsuit01","بدلة أنيقة نسائية"],["female_sportsuit01","بدلة رياضية نسائية"],["male_elegantsuit01","بدلة أنيقة رجالية"],["male_casualsuit01","كاجوال رجالي ١"],["male_casualsuit02","كاجوال رجالي ٢"],["male_casualsuit03","كاجوال رجالي ٣"],["male_casualsuit04","كاجوال رجالي ٤"],["male_casualsuit05","كاجوال رجالي ٥"],["male_casualsuit06","كاجوال رجالي ٦"]]
+};
+const S={g:.5,a:.5,mu:.5,we:.5,h:.5,p:.5,bs:.5,bf:.5,r:{african:1/3,asian:1/3,caucasian:1/3}};
+const S0=JSON.stringify(S);
+function tri(v){const mn=Math.max(0,(.5-v)*2),mx=Math.max(0,(v-.5)*2);return{min:mn,average:1-mn-mx,max:mx};}
+let BRSET=null;
+let REPOF=null;
+async function loadRepoList(){
+  if(REPOF!==null)return REPOF;
+  try{
+    const r=await fetch("https://data.jsdelivr.com/v1/package/gh/makehumancommunity/makehuman@master/flat");
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    REPOF=(await r.json()).files.map(x=>x.name);
+    LOG.push("قائمة ملفات المستودع: "+REPOF.length+" ملف");
+    try{if(window.__SV)await window.__SV.metaPut("meta/repolist.json",new TextEncoder().encode(JSON.stringify(REPOF)).buffer);}catch(e2){}
+  }catch(e){
+    REPOF=false;
+    try{const b=window.__SV&&await window.__SV.metaGet("meta/repolist.json");if(b){REPOF=JSON.parse(new TextDecoder().decode(b));LOG.push("قائمة ملفات المستودع من المحفوظ على الهاتف: "+REPOF.length+" ملف");}}catch(e3){}
+    if(!REPOF)LOG.push("تعذر جلب قائمة ملفات المستودع: "+e.message+" (لن تظهر السلايدرات الإضافية)");
+  }
+  return REPOF;
+}
+async function loadBreastList(){
+  const L=await loadRepoList();
+  if(!L){BRSET=false;return;}
+  const pre="/makehuman/data/targets/breast/";
+  BRSET=new Set(L.filter(n=>n.startsWith(pre)&&n.endsWith(".target")).map(n=>n.slice(pre.length,-7)));
+  LOG.push("ملفات الصدر الماكرو الموجودة: "+[...BRSET].filter(n=>n.startsWith("female-")).length);
+}
+function macroW(){
+  const W={},G={female:1-S.g,male:S.g},a=S.a;let A;
+  if(a<.5){const baby=Math.max(0,1-a/.1875),young=Math.max(0,(a-.1875)/.3125);A={baby,child:Math.max(0,1-baby-young),young,old:0};}
+  else{const old=(a-.5)*2;A={baby:0,child:0,young:1-old,old};}
+  const M=tri(S.mu),Wt=tri(S.we),H=tri(S.h),BS=tri(S.bs),BF=tri(S.bf),Pr={uncommon:Math.max(0,(.5-S.p)*2),ideal:Math.max(0,(S.p-.5)*2)};
+  for(const gn in G)for(const ag in A){
+    const ga=G[gn]*A[ag];if(ga<1e-4)continue;
+    for(const r in S.r)W["macrodetails/"+r+"-"+gn+"-"+ag]=ga*S.r[r];
+    for(const mu in M)for(const we in Wt){
+      const w=ga*M[mu]*Wt[we];if(w<1e-4)continue;
+      const k=gn+"-"+ag+"-"+mu+"muscle-"+we+"weight";
+      W["macrodetails/universal-"+k]=w;
+      const k2=gn+"-"+ag+"-"+mu+"muscle-"+we+"weight";
+      for(const h of ["min","max"])if(H[h]>1e-4)W["macrodetails/height/"+k2+"-"+h+"height"]=w*H[h];
+      for(const pr in Pr)if(Pr[pr]>1e-4)W["macrodetails/proportions/"+k2+"-"+pr+"proportions"]=w*Pr[pr];
+      if(gn==="female"&&BRSET!==null)for(const c in BS)for(const fm in BF){
+        const bw=w*BS[c]*BF[fm];if(bw<1e-4)continue;
+        const bn=gn+"-"+ag+"-"+mu+"muscle-"+we+"weight-"+c+"cup-"+fm+"firmness";
+        if(BRSET&&!BRSET.has(bn))continue;
+        W["breast/"+bn]=(W["breast/"+bn]||0)+bw;
+      }
+    }
+  }
+  return W;
+}
+function mk(group,t,mn,mx){
+  if(!t.includes("|")){
+    if(mn&&mx)t=t+"-"+mn+"|"+mx;
+    else if(mx)t=t+"-"+mx;
+  }
+  const name=group+"/"+t;
+  if(t.includes("|")){
+    const [a,b]=t.split("|");
+    return{name,group,t,pair:true,L:group+"/"+a,R:group+"/"+a.slice(0,a.lastIndexOf("-"))+"-"+b,v:0};
+  }
+  return{name,group,t,pair:false,R:group+"/"+t,v:0};
+}
+async function loadMods(){
+  const out=[],L=await loadRepoList(),files=["modeling_modifiers","measurement_modifiers"];
+  if(L){const pre="/makehuman/data/modifiers/";L.forEach(n=>{
+    if(!n.startsWith(pre)||!n.endsWith("_modifiers.json"))return;
+    const f=n.slice(pre.length,-5);
+    if(f.indexOf("/")<0&&!files.includes(f)){files.push(f);LOG.push("ملف تعديلات إضافي: "+f);}
+  });}
+  for(const f of files){
+    try{
+      const j=JSON.parse(await getText("modifiers/"+f+".json"));
+      for(const g of j)for(const m of (g.modifiers||[]))if(m.target){out.push(mk(g.group,m.target,m.min,m.max));if(out.length==1)LOG.push("نموذج من "+f+": "+JSON.stringify(m));}
+    }catch(e){}
+  }
+  if(L){
+    const have=new Set();out.forEach(m=>{have.add(m.R);if(m.pair)have.add(m.L);});
+    const pre="/makehuman/data/targets/";let n0=0;
+    L.forEach(n=>{
+      if(!n.startsWith(pre)||!n.endsWith(".target"))return;
+      const p=n.slice(pre.length,-7),i=p.lastIndexOf("/");
+      if(i<0||have.has(p)||/^macrodetails\//.test(p)||/^breast\/(fe)?male-/.test(p))return;
+      out.push({name:p,group:"+ "+p.slice(0,i),t:p.slice(i+1),pair:false,R:p,v:0,extra:true});n0++;
+    });
+    LOG.push("سلايدرات إضافية من ملفات غير مربوطة: "+n0);
+    LOG.push("أسماء الإضافات: "+out.filter(m=>m.extra).map(m=>m.name).join(" , "));
+  }
+  return out;
+}
+function detW(m,W){
+  const v=m.v;if(!v)return;
+  const k=(m.pair&&v<0)?m.L:m.R;
+  W[k]=(W[k]||0)+Math.abs(v)*(m.group==="breast"?Math.min(1,Math.max(0,(1-S.g)*2)):1);
+}
+
+/* ===== قارئ الحزم الرسمية (قراءة جزئية من ملف الحزمة بدون تحميله كاملاً) ===== */
+const PACKS={},ASSETS={hair:{},clothes:{},eyes:{},eyebrows:{},skins:{}};
+const SPAGE="https://static.makehumancommunity.org/assets/assetpacks/";
+async function rng(u,a,b){
+  for(let n=0;n<=CFG.retry;n++){
+    await slot();
+    try{
+      const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),90000);
+      const r=await fetch(u,{headers:{Range:"bytes="+a+"-"+b},signal:ctl.signal});clearTimeout(to);
+      if(r.status==206){const x=new Uint8Array(await r.arrayBuffer());free();okN++;return x;}
+      free();logE("نطاق "+a+"-"+b,u,"HTTP "+r.status+(r.status==200?" الخادم لا يدعم القراءة الجزئية":""),n);
+      if(r.status==200){try{r.body&&r.body.cancel();}catch(e){}break;}
+    }catch(e){free();logE("نطاق "+a+"-"+b,u,e.name=="AbortError"?"انتهت المهلة":"الشبكة أو منع المتصفح: "+e.message,n);}
+    await wait(1000*Math.pow(2,n));
+  }
+  failN++;FAILED.push(u.split("/").pop()+" "+a);throw new Error("فشلت قراءة جزء من "+u.split("/").pop());
+}
+async function zsize(urls){
+  for(const u of urls){
+    try{const r=await fetch(u,{method:"HEAD"});const n=+r.headers.get("content-length");
+      if(r.ok&&n)return [u,n];
+      logE("حجم الحزمة",u,"HTTP "+r.status+" حجم="+n,0);
+    }catch(e){logE("حجم الحزمة",u,"الشبكة أو منع المتصفح: "+e.message,0);}
+  }
+  throw new Error("لم أصل لأي مصدر للحزمة");
+}
+async function openZip(urls){
+  const [u,size]=await zsize(urls);
+  const tn=Math.min(size,66000),tail=await rng(u,size-tn,size-1),dv=new DataView(tail.buffer,tail.byteOffset,tail.byteLength);
+  let e=-1;for(let i=tail.length-22;i>=0;i--){if(dv.getUint32(i,true)==0x06054b50){e=i;break;}}
+  if(e<0)throw new Error("نهاية الأرشيف غير موجودة");
+  const cnt=dv.getUint16(e+10,true),csz=dv.getUint32(e+12,true),cof=dv.getUint32(e+16,true),t0=size-tn;
+  const cd=cof>=t0?tail.subarray(cof-t0,cof-t0+csz):await rng(u,cof,cof+csz-1);
+  const d=new DataView(cd.buffer,cd.byteOffset,cd.byteLength),td=new TextDecoder(),ents={},low={},base={};
+  let p=0;
+  for(let i=0;i<cnt;i++){
+    if(p+46>cd.length||d.getUint32(p,true)!=0x02014b50)break;
+    const nl=d.getUint16(p+28,true),xl=d.getUint16(p+30,true),cl=d.getUint16(p+32,true);
+    const nm=td.decode(cd.subarray(p+46,p+46+nl));
+    if(!nm.endsWith("/")){
+      ents[nm]={m:d.getUint16(p+10,true),c:d.getUint32(p+20,true),u:d.getUint32(p+24,true),o:d.getUint32(p+42,true),nb:nl};
+      low[nm.toLowerCase()]=nm;const b=nm.split("/").pop().toLowerCase();(base[b]=base[b]||[]).push(nm);
+    }
+    p+=46+nl+xl+cl;
+  }
+  return {u,size,ents,low,base,z:new Map()};
+}
+async function inflate(u8){
+  const ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();
+  w.write(u8);w.close();
+  return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+}
+function zget(pk,path){
+  if(pk.repo)return rzget(pk,path);
+  if(pk.z.has(path))return pk.z.get(path);
+  const pr=(async()=>{
+    const e=pk.ents[path];if(!e)throw new Error("غير موجود في الحزمة: "+path);
+    let extra=4096,buf,dv,st;
+    for(let k=0;k<3;k++){
+      buf=await rng(pk.u,e.o,Math.min(pk.size-1,e.o+29+e.nb+extra+e.c));
+      dv=new DataView(buf.buffer,buf.byteOffset,buf.byteLength);
+      st=30+dv.getUint16(26,true)+dv.getUint16(28,true);
+      if(buf.length>=st+e.c)break;extra*=8;
+    }
+    const raw=buf.subarray(st,st+e.c);
+    return e.m==0?raw:e.m==8?await inflate(raw):(()=>{throw new Error("طريقة ضغط غير مدعومة "+e.m);})();
+  })();
+  pk.z.set(path,pr);pr.catch(()=>pk.z.delete(path));return pr;
+}
+const txt=u=>new TextDecoder().decode(u);
+const dirOf=p=>p.slice(0,p.lastIndexOf("/")+1);
+function norm(p){const o=[];for(const x of p.split("/")){if(x==="..")o.pop();else if(x&&x!==".")o.push(x);}return o.join("/");}
+function findEnt(pk,dir,rel){
+  if(pk.repo)return norm(dir+rel.replace(/\\/g,"/"));
+  const q=norm(dir+rel.replace(/\\/g,"/")).toLowerCase();
+  if(pk.low[q])return pk.low[q];
+  const b=pk.base[rel.replace(/\\/g,"/").split("/").pop().toLowerCase()];
+  return b&&b.length?b[0]:null;
+}
+function parseMat(t){
+  const o={};
+  for(const l of t.split("\n")){
+    const p=l.trim().split(/\s+/),v=p.slice(1).join(" ");
+    if(p[0]==="diffuseTexture")o.d=v;else if(p[0]==="normalmapTexture")o.n=v;
+  }
+  return o;
+}
+async function matOf(A,hint){
+  const pk=A.pk;let mp=null;
+  if(hint)mp=findEnt(pk,A.dir||"",hint);
+  if(!mp||!/\.mhmat$/i.test(mp))mp=A.mats[0];
+  if(!mp)return {};
+  const o=parseMat(txt(await zget(pk,mp))),dir=dirOf(mp);
+  let d=o.d?findEnt(pk,dir,o.d):null;
+  if(!d){const c=Object.keys(pk.ents||{}).filter(x=>x.startsWith(dir)&&/\.(png|jpg|jpeg)$/i.test(x)&&!/thumb|normal|spec|bump|_ao|litsphere|transmission/i.test(x));if(c.length)d=c[0];}
+  return {d,n:o.n?findEnt(pk,dir,o.n):null};
+}
+function indexPack(pk){
+  const add=(cat,name,o)=>{ASSETS[cat][name]=Object.assign({pk,name,mats:[]},o);};
+  for(const p of Object.keys(pk.ents)){
+    let m=p.match(/(?:^|\/)(hair|clothes|eyebrows)\/([^\/]+)\/[^\/]+\.mhclo$/i);
+    if(m){add(m[1].toLowerCase(),m[2],{mhclo:p,dir:dirOf(p)});continue;}
+    m=p.match(/(?:^|\/)eyes\/materials\/([^\/]+)\.mhmat$/i);
+    if(m){add("eyes",m[1],{mats:[p],dir:dirOf(p)});continue;}
+    m=p.match(/(?:^|\/)skins\/([^\/]+)\/[^\/]+\.mhmat$/i);
+    if(m){if(ASSETS.skins[m[1]]&&ASSETS.skins[m[1]].pk===pk)ASSETS.skins[m[1]].mats.push(p);else add("skins",m[1],{mats:[p],dir:dirOf(p)});}
+  }
+  for(const c of ["hair","clothes","eyebrows"])for(const n in ASSETS[c]){
+    const A=ASSETS[c][n];if(A.pk!==pk)continue;
+    A.mats=Object.keys(pk.ents).filter(x=>x.startsWith(A.dir)&&/\.mhmat$/i.test(x)&&x.indexOf("/",A.dir.length)<0);
+  }
+}
+async function packUrls(name){
+  const urls=[],pg=SPAGE+name+".html";
+  try{
+    const r=await fetch(pg);
+    if(r.ok){const t=await r.text();for(const m of t.matchAll(/href="([^"]+\.zip)"/g)){const l=new URL(m[1],pg).href;if(!urls.includes(l))urls.push(l);}}
+    else logE("صفحة الحزمة",pg,"HTTP "+r.status,0);
+  }catch(e){logE("صفحة الحزمة",pg,"الشبكة أو منع المتصفح: "+e.message,0);}
+  for(const h of ["files","files2"]){const g="https://"+h+".makehumancommunity.org/asset_packs/"+name+"/"+name+"_cc0.zip";if(!urls.includes(g))urls.push(g);}
+  return urls;
+}
+function openPack(name){
+  if(PACKS[name])return PACKS[name];
+  const pr=(async()=>{
+    const urls=await packUrls(name),pk=await openZip(urls);
+    indexPack(pk);
+    LOG.push("فُتحت الحزمة "+name+" | الملفات: "+Object.keys(pk.ents).length+" | من: "+pk.u);
+    return pk;
+  })();
+  PACKS[name]=pr;pr.catch(()=>{delete PACKS[name];});
+  return pr;
+}
+async function packList(){
+  try{
+    const r=await fetch(SPAGE+"index.html");
+    if(r.ok){
+      const t=await r.text(),L=[];
+      for(const m of t.matchAll(/assetpacks\/([A-Za-z0-9_]+)\.html/g)){const n=m[1];if(n==="index"||n==="faq"||n.startsWith("release")||L.includes(n))continue;L.push(n);}
+      if(L.length)return L;
+    }
+  }catch(e){logE("قائمة الحزم",SPAGE,e.message,0);}
+  return ["makehuman_system_assets","animal01","animal02","animal03","animal04","arms01","bodyparts01","bodyparts02","bodyparts03","bodyparts04","bodyparts05","bodyparts06","cartoon01","cheek01","dress01","dress02","dress03","ears01","equipment01","equipment02","equipment03","eyebrows01","eyelashes01","faceunits01","glasses01","glasses02","gloves01","hair01","hair02","hair03","hands01","hats01","hats02","hats03","hats04","masks01","masks02","nose01","pants01","pants02","pants03","poses01","poses02","shirts01","shirts02","shirts03","shoes01","shoes02","shoes03","skins01","skins02","skins03","skirts01","skirts02","suits01","suits02","suits03","system_clothes_materials01","system_eye_materials01","system_eye_materials02","system_hair_materials01","system_hair_materials02","underwear01","underwear02","underwear03","underwear04","visemes01","visemes02"];
+}
+
+/* ===== مستودع جيت هاب الرسمي للأصول (بديل إذا منع المتصفح قراءة ملفات الحزم) ===== */
+const MEDIA="https://media.githubusercontent.com/media/makehumancommunity/makehuman-assets/master/",RAWA="https://raw.githubusercontent.com/makehumancommunity/makehuman-assets/master/";
+const REPO={repo:true,z:new Map(),ents:{}};
+function rzget(pk,path){
+  if(pk.z.has(path))return pk.z.get(path);
+  const bin=/\.(png|jpe?g)$/i.test(path),urls=(bin?[MEDIA,RAWA]:[RAWA]).map(b=>b+"base/"+path);
+  const pr=(async()=>{
+    for(let n=0;n<=CFG.retry;n++){
+      let nf=0;
+      for(const u of urls){
+        await slot();
+        try{
+          const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),90000);
+          const r=await fetch(u,{signal:ctl.signal});clearTimeout(to);
+          if(r.ok){
+            const x=new Uint8Array(await r.arrayBuffer());free();
+            if(x.length<300&&txt(x).startsWith("version https://git-lfs")){logE(path,u,"مؤشر LFS وليس الصورة",n);nf++;continue;}
+            okN++;return x;
+          }
+          free();if(r.status==404)nf++;logE(path,u,"HTTP "+r.status+(r.status==404?" الملف غير موجود":""),n);
+        }catch(e){free();logE(path,u,e.name=="AbortError"?"انتهت المهلة":"الشبكة أو الحجب: "+e.message,n);}
+      }
+      if(nf==urls.length)break;
+      await wait(1000*Math.pow(2,n));
+    }
+    failN++;FAILED.push(path);throw new Error("فشل تحميل "+path);
+  })();
+  pk.z.set(path,pr);pr.catch(()=>pk.z.delete(path));return pr;
+}
+async function openRepo(){
+  const L={
+    hair:["afro01","bob01","bob02","braid01","long01","ponytail01","short01","short02","short03","short04"],
+    eyebrows:["eyebrow001","eyebrow002","eyebrow003","eyebrow004","eyebrow005","eyebrow006","eyebrow007","eyebrow008","eyebrow009","eyebrow010","eyebrow011","eyebrow012"],
+    clothes:["fedora01","fedora_cocked","female_casualsuit01","female_casualsuit02","female_elegantsuit01","female_sportsuit01","male_casualsuit01","male_casualsuit02","male_casualsuit03","male_casualsuit04","male_casualsuit05","male_casualsuit06","male_elegantsuit01","male_worksuit01","shoes01","shoes02","shoes03","shoes04","shoes05","shoes06"]
+  };
+  for(const c in L)for(const n of L[c])ASSETS[c][n]={pk:REPO,name:n,mhclo:c+"/"+n+"/"+n+".mhclo",dir:c+"/"+n+"/",mats:[]};
+  for(const n of ["blue","bluegreen","brown","brownlight","deepblue","green","grey","ice","lightblue"])ASSETS.eyes[n]={pk:REPO,name:n,dir:"eyes/materials/",mats:["eyes/materials/"+n+".mhmat"]};
+  const sk=[];
+  for(const a of ["young","middleage","old"])for(const r of ["african","asian","caucasian"])for(const g of ["female","male"])sk.push(a+"_"+r+"_"+g);
+  sk.push("young_caucasian_female2","young_caucasian_male2","toon01");
+  for(const n of sk)ASSETS.skins[n]={pk:REPO,name:n,dir:"skins/"+n+"/",mats:["skins/"+n+"/"+n+".mhmat"]};
+  const all=[];
+  for(const c in ASSETS)for(const n in ASSETS[c]){const A=ASSETS[c][n];if(A.pk===REPO)all.push([c,n,A.mhclo||A.mats[0]]);}
+  await Promise.all(all.map(async([c,n,p])=>{
+    await slot();
+    try{const r=await fetch(RAWA+"base/"+p,{method:"HEAD"});free();if(r.status==404)delete ASSETS[c][n];}catch(e){free();}
+  }));
+  LOG.push("مستودع جيت هاب: الشعر "+Object.keys(ASSETS.hair).length+" | الملابس "+Object.keys(ASSETS.clothes).length+" | البشرات "+Object.keys(ASSETS.skins).length+" | العيون "+Object.keys(ASSETS.eyes).length+" | الحاجبان "+Object.keys(ASSETS.eyebrows).length);
+}
+async function main(){
+  if(!window.BABYLON){say("تعذر تحميل المكتبة. تأكد من الإنترنت وأعد فتح الصفحة.");return;}
+  try{const gb=window.__SV&&await window.__SV.metaGet("meta/gone.json");if(gb)JSON.parse(new TextDecoder().decode(gb)).forEach(x=>GONESET.add(x));}catch(e){}
+  say("جاري تحميل الجسم الأساسي...");
+  const obj=parseBody(await getText("3dobjs/base.obj"));
+  const base=obj.v,idx=obj.f;
+  if(!base.length||!idx.length){say("الجسم الأساسي وصل لكن بدون بيانات.");return;}
+  say("جاري تحميل قائمة التحكمات...");
+  const mods=await loadMods(),by={};
+  mods.forEach(m=>by[m.name]=m);
+  const pos=new Float32Array(base),nor=new Float32Array(base.length);
+  const canvas=$("cv"),DPR=Math.min(window.devicePixelRatio||1,2);
+  const engine=new BABYLON.Engine(canvas,true,{antialias:true,stencil:false,powerPreference:"high-performance",preserveDrawingBuffer:false},false);
+  engine.setHardwareScalingLevel(1/DPR);
+  const scene=new BABYLON.Scene(engine);
+  scene.skipPointerMovePicking=true;
+  scene.clearColor=new BABYLON.Color4(.1,.1,.1,1);
+  const cam=new BABYLON.ArcRotateCamera("c",-Math.PI/2,Math.PI/2,30,BABYLON.Vector3.Zero(),scene);
+  cam.attachControl(canvas,true);cam.wheelPrecision=20;cam.minZ=.1;
+  const hemi=new BABYLON.HemisphericLight("h",new BABYLON.Vector3(0,1,.3),scene);hemi.intensity=.9;
+  const dirL=new BABYLON.DirectionalLight("d",new BABYLON.Vector3(-.3,-.5,1),scene);dirL.intensity=.7;
+  const rimL=new BABYLON.DirectionalLight("rim",new BABYLON.Vector3(.4,-.2,-1),scene);rimL.intensity=0;
+  const mesh=new BABYLON.Mesh("body",scene),vd=new BABYLON.VertexData();
+  let SUBD=null,SUBLV=0,KS=[0,0],MS=1;
+  const exP=new Float32Array(obj.src.length*3),exN=new Float32Array(obj.src.length*3);
+  function expand(){if(SUBLV>0&&SUBD){subExpand();return;}for(let s=0;s<obj.src.length;s++){const o=obj.src[s]*3;for(let k=0;k<3;k++){exP[s*3+k]=pos[o+k];exN[s*3+k]=nor[o+k];}}}
+  BABYLON.VertexData.ComputeNormals(pos,idx,nor);expand();
+  vd.positions=exP;vd.indices=obj.idx;vd.uvs=obj.uv;vd.normals=exN;vd.applyToMesh(mesh,true);
+
+  function lvlBuild(T,wid,uv,W,rep){
+    const E=uv.length/2,F=T.length/3,nb=new Array(W),bn=new Array(W),ed=new Map();
+    for(let i=0;i<W;i++){nb[i]=new Set();bn[i]=[];}
+    const ek=(u,v)=>u<v?u*W+v:v*W+u;
+    for(let q=0;q<F;q++){const tr=[wid[T[q*3]],wid[T[q*3+1]],wid[T[q*3+2]]];
+      for(let k=0;k<3;k++){const u=tr[k],v=tr[(k+1)%3],w=tr[(k+2)%3],key=ek(u,v);
+        let e=ed.get(key);if(!e){e={u,v,o:[],id:ed.size};ed.set(key,e);}
+        e.o.push(w);nb[u].add(v);nb[v].add(u);}}
+    ed.forEach(e=>{if(e.o.length==1){bn[e.u].push(e.v);bn[e.v].push(e.u);}});
+    const off=[0],wi=[],ww=[],nuv=[],nwid=[],sIdx=[],nrep=[],LA=[],LB=[];
+    const add=(pts,wd,la,lb)=>{LA.push(la);LB.push(lb);for(const [i,w] of pts){wi.push(rep[i]);ww.push(w);}off.push(wi.length);if(nrep[wd]===undefined)nrep[wd]=off.length-2;};
+    for(let e=0;e<E;e++){
+      const v=wid[e];let pts;
+      if(bn[v].length>=2)pts=[[v,.75],[bn[v][0],.125],[bn[v][1],.125]];
+      else{const n=nb[v].size,b=n==3?3/16:3/(8*n);pts=[[v,1-n*b]];nb[v].forEach(x=>pts.push([x,b]));}
+      add(pts,v,rep[v],rep[v]);nuv.push(uv[e*2],uv[e*2+1]);nwid.push(v);
+    }
+    const em=new Map();let nv=E;
+    const mid=(a,b)=>{
+      const k=a<b?a*E+b:b*E+a;let m=em.get(k);
+      if(m===undefined){
+        m=nv++;em.set(k,m);
+        const u=wid[a],v=wid[b],e=ed.get(ek(u,v));let pts;
+        if(e&&e.o.length==2)pts=[[u,.375],[v,.375],[e.o[0],.125],[e.o[1],.125]];else pts=[[u,.5],[v,.5]];
+        const wd=W+(e?e.id:0);add(pts,wd,rep[u],rep[v]);nuv.push((uv[a*2]+uv[b*2])/2,(uv[a*2+1]+uv[b*2+1])/2);nwid.push(wd);
+      }
+      return m;
+    };
+    for(let q=0;q<T.length;q+=3){const a=T[q],b=T[q+1],c=T[q+2],ab=mid(a,b),bc=mid(b,c),ca=mid(c,a);sIdx.push(a,ab,ca,ab,b,bc,ca,bc,c,ab,bc,ca);}
+    return{n:nv,off:Int32Array.from(off),wi:Int32Array.from(wi),ww:Float32Array.from(ww),uv:Float32Array.from(nuv),wid:Int32Array.from(nwid),idx:Uint32Array.from(sIdx),W:W+ed.size,rep:Int32Array.from(nrep),LA:Int32Array.from(LA),LB:Int32Array.from(LB),P:new Float32Array(nv*3),N:new Float32Array(nv*3)};
+  }
+  let SUBST=null;
+  function buildSub(upTo){
+    if(!SUBD){SUBD=[];const W0=base.length/3;SUBST={T:obj.idx,wid:obj.src,uv:obj.uv,W:W0,rep:Int32Array.from({length:W0},(_,i)=>i)};}
+    while(SUBD.length<upTo){const s=lvlBuild(SUBST.T,SUBST.wid,SUBST.uv,SUBST.W,SUBST.rep);SUBD.push(s);SUBST.T=s.idx;SUBST.wid=s.wid;SUBST.uv=s.uv;SUBST.W=s.W;SUBST.rep=s.rep;}
+    return SUBD;
+  }
+  function subExpand(){
+    let prev=pos;
+    for(let l=0;l<SUBLV;l++){
+      const S=SUBD[l],P=S.P,k=(KS[l]||0)*MS;
+      for(let j=0;j<S.n;j++){
+        let x=0,y=0,z=0;
+        for(let p=S.off[j];p<S.off[j+1];p++){const w=S.ww[p],o=S.wi[p]*3;x+=w*prev[o];y+=w*prev[o+1];z+=w*prev[o+2];}
+        const a=S.LA[j]*3,b=S.LB[j]*3,lx=(prev[a]+prev[b])*.5,ly=(prev[a+1]+prev[b+1])*.5,lz=(prev[a+2]+prev[b+2])*.5;
+        P[j*3]=lx+k*(x-lx);P[j*3+1]=ly+k*(y-ly);P[j*3+2]=lz+k*(z-lz);
+      }
+      prev=P;
+    }
+    const S=SUBD[SUBLV-1],P=S.P,N=S.N,I=S.idx;
+    const acc=S.acc||(S.acc=new Float32Array(S.W*3));acc.fill(0);
+    for(let q=0;q<I.length;q+=3){
+      const a=I[q]*3,b=I[q+1]*3,c=I[q+2]*3;
+      const ux=P[b]-P[a],uy=P[b+1]-P[a+1],uz=P[b+2]-P[a+2],vx=P[c]-P[a],vy=P[c+1]-P[a+1],vz=P[c+2]-P[a+2];
+      const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
+      let w=S.wid[I[q]]*3;acc[w]+=nx;acc[w+1]+=ny;acc[w+2]+=nz;
+      w=S.wid[I[q+1]]*3;acc[w]+=nx;acc[w+1]+=ny;acc[w+2]+=nz;
+      w=S.wid[I[q+2]]*3;acc[w]+=nx;acc[w+1]+=ny;acc[w+2]+=nz;
+    }
+    for(let j=0;j<S.n;j++){const w=S.wid[j]*3,l=Math.hypot(acc[w],acc[w+1],acc[w+2])||1;N[j*3]=acc[w]/l;N[j*3+1]=acc[w+1]/l;N[j*3+2]=acc[w+2]/l;}
+  }
+  function pushMesh(){
+    if(SUBLV>0&&SUBD){const S=SUBD[SUBLV-1];mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind,S.P,false,false);mesh.updateVerticesData(BABYLON.VertexBuffer.NormalKind,S.N,false,false);}
+    else{mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind,exP,false,false);mesh.updateVerticesData(BABYLON.VertexBuffer.NormalKind,exN,false,false);}
+  }
+  function applySub(){const lv=MS>0?(KS[1]>0?2:KS[0]>0?1:0):0;if(lv!==SUBLV)setSub(lv);else if(SUBLV>0)dirty=true;}
+  function setSub(lv){
+    lv=Math.round(lv);
+    if(lv===SUBLV)return;
+    try{
+      const K=BABYLON.VertexBuffer;
+      if(lv>0&&(!SUBD||SUBD.length<lv)){say("جاري بناء الشبكة الأدق...");buildSub(lv);}
+      SUBLV=lv;
+      if(lv>0){const S=SUBD[lv-1];subExpand();mesh.setVerticesData(K.PositionKind,S.P,true);mesh.setVerticesData(K.NormalKind,S.N,true);mesh.setVerticesData(K.UVKind,S.uv,true);mesh.setIndices(S.idx);say("تم رفع دقة الشبكة إلى المستوى "+lv+": "+S.n+" نقطة");}
+      else{mesh.setVerticesData(K.PositionKind,exP,true);mesh.setVerticesData(K.NormalKind,exN,true);mesh.setVerticesData(K.UVKind,obj.uv,true);mesh.setIndices(obj.idx);say("عادت الشبكة للدقة العادية");}
+      dirty=true;
+    }catch(e){SUBLV=0;LOG.push("تعذر رفع دقة الشبكة: "+e.message);say("تعذر رفع دقة الشبكة، راجع السجل");}
+  }
+  const mat=new BABYLON.PBRMaterial("m",scene);
+  {
+    const al=(n,g,s)=>Object.defineProperty(mat,n,{get:g,set:s,configurable:true});
+    al("diffuseColor",()=>mat.albedoColor,v=>{mat.albedoColor=v.toLinearSpace();});
+    al("diffuseTexture",()=>mat.albedoTexture,v=>{mat.albedoTexture=v;});
+    al("specularColor",()=>mat._sc||new BABYLON.Color3(.1,.1,.1),v=>{mat._sc=v;mat.metallicF0Factor=Math.min(1,.2+v.r*.2);mat.environmentIntensity=.5+v.r*.5;});
+    al("specularPower",()=>mat._sp||32,v=>{mat._sp=v;mat.roughness=Math.min(.95,Math.max(.2,1.05-Math.log2(Math.max(2,v))/8));});
+  }
+  mat.albedoColor=new BABYLON.Color3(.85,.67,.55).toLinearSpace();mat.metallic=0;mat.roughness=.55;
+  mat.backFaceCulling=false;mesh.material=mat;
+  /* العضو جزء من شبكة الجسم نفسها (نفس المادة والإضاءة والنورمال)، ونحرك نقاطه هنا فقط حسب الجنس */
+  const GEN=obj.gen,GSINK=.12,gCN=new Float32Array(base.length);
+  function updGen(){
+    if(!GEN)return;
+    const t=Math.min(1,Math.max(0,(S.g-.5)*2)),w=t*t*(3-2*t),R=GEN.ring,A=GEN.all,I=GEN.inner;
+    /* الحافة المفتوحة تغوص قليلاً تحت سطح الجسم فلا يظهر لها طرف */
+    for(const r of R){
+      const o=r*3,j=GEN.near.get(r)*3;
+      const d=(pos[o]-pos[j])*nor[j]+(pos[o+1]-pos[j+1])*nor[j+1]+(pos[o+2]-pos[j+2])*nor[j+2],m=d+GSINK;
+      if(m>0){pos[o]-=nor[j]*m;pos[o+1]-=nor[j+1]*m;pos[o+2]-=nor[j+2]*m;}
+    }
+    let bx=0,by=0,bz=0,ix=0,iy=0,iz=0;
+    for(const i of R){bx+=pos[i*3];by+=pos[i*3+1];bz+=pos[i*3+2];}
+    for(const i of I){ix+=pos[i*3];iy+=pos[i*3+1];iz+=pos[i*3+2];}
+    bx/=R.length;by/=R.length;bz/=R.length;ix/=I.length;iy/=I.length;iz/=I.length;
+    let nx=ix-bx,ny=iy-by,nz=iz-bz;const L=Math.hypot(nx,ny,nz);
+    if(L<1e-5){nx=0;ny=0;nz=1;}else{nx/=L;ny/=L;nz/=L;}
+    /* طي قاعدة العضو للداخل: الحافة أكثر انطواءً نحو مركز القاعدة، ويقل الطي تدريجياً في ثلاثة صفوف */
+    if(t>.0005){
+      const KT=window.__tuck==null?1:window.__tuck,TK=.7*KT,TB=.3*KT;
+      for(const e of GEN.rowL){
+        const i=e[0],g=1-e[1]/4,f=TK*g,o=i*3;
+        let dx=bx-pos[o],dy=by-pos[o+1],dz=bz-pos[o+2];
+        const c=dx*nx+dy*ny+dz*nz;dx-=c*nx;dy-=c*ny;dz-=c*nz;
+        pos[o]+=dx*f-nx*TB*g;pos[o+1]+=dy*f-ny*TB*g;pos[o+2]+=dz*f-nz*TB*g;
+      }
+    }
+    /* إزاحة العضو كله عن الجسم أو إليه حسب السلايدر، والحافة ثابتة والإزاحة تزيد تدريجياً في أول ثلاثة صفوف */
+    const PO=window.__gpos||0;
+    if(PO!==0&&t>.0005){
+      let ox=0,oy=0,oz=0;
+      for(const r of R){const j=GEN.near.get(r)*3;ox+=nor[j];oy+=nor[j+1];oz+=nor[j+2];}
+      const ol=Math.hypot(ox,oy,oz)||1;ox/=ol;oy/=ol;oz/=ol;
+      for(const i of A){const k=GEN.rowM.get(i),w=k===undefined?1:Math.min(1,k/3),o=i*3;pos[o]+=ox*PO*w;pos[o+1]+=oy*PO*w;pos[o+2]+=oz*PO*w;}
+    }
+    if(t<=.0005){
+      /* أنثى: العضو كله يدخل داخل الجسم فلا يُرى */
+      const off=Math.max(1.2,L*1.5);
+      for(const i of A){const o=i*3;pos[o]-=nx*off;pos[o+1]-=ny*off;pos[o+2]-=nz*off;}
+    }else if(w<.9999){
+      for(const i of I){
+        const o=i*3,px=pos[o],py=pos[o+1],pz=pos[o+2];let sx=0,sy=0,sz=0,sw=0;
+        for(const j of R){const q=j*3,dx=px-pos[q],dy=py-pos[q+1],dz=pz-pos[q+2],k=1/(dx*dx+dy*dy+dz*dz+1e-8);sx+=pos[q]*k;sy+=pos[q+1]*k;sz+=pos[q+2]*k;sw+=k;}
+        sx/=sw;sy/=sw;sz/=sw;
+        const f=(1-w)*((px-sx)*nx+(py-sy)*ny+(pz-sz)*nz);
+        pos[o]=px-f*nx;pos[o+1]=py-f*ny;pos[o+2]=pz-f*nz;
+      }
+    }
+    /* نورمال العضو من شكله، وحافته تأخذ نورمال الجسم القريب فلا يظهر خط فاصل */
+    BABYLON.VertexData.ComputeNormals(pos,GEN.tri,gCN);
+    for(const i of A){const o=i*3;nor[o]=gCN[o];nor[o+1]=gCN[o+1];nor[o+2]=gCN[o+2];}
+    for(const r of R){const o=r*3,j=GEN.near.get(r)*3;nor[o]=nor[j];nor[o+1]=nor[j+1];nor[o+2]=nor[j+2];}
+  }
+  try{
+    mat.subSurface.isTranslucencyEnabled=true;mat.subSurface.translucencyIntensity=.25;
+    mat.subSurface.tintColor=new BABYLON.Color3(.85,.35,.3);
+    mat.subSurface.minimumThickness=.1;mat.subSurface.maximumThickness=1.5;
+  }catch(e){LOG.push("تعذر تفعيل تشتت الضوء تحت الجلد: "+e.message);}
+  try{mat.sheen.isEnabled=true;mat.sheen.intensity=.1;}catch(e){}
+  try{
+    const env=BABYLON.CubeTexture.CreateFromPrefilteredData(window.__envUrl||"https://assets.babylonjs.com/environments/environmentSpecular.env",scene,".env");
+    scene.environmentTexture=env;scene.environmentIntensity=.35;
+  }catch(e){LOG.push("تعذر تحميل الإضاءة المحيطة: "+e.message);}
+  try{
+    const ipc0=scene.imageProcessingConfiguration;
+    ipc0.toneMappingEnabled=true;ipc0.toneMappingType=BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
+  }catch(e){}
+  const items={},tints={};
+  window.__eyeDz=-0.07;window.__eyeSc=0.94;
+  let VIS=null;
+  function visList(){if(!VIS){const m=new Uint8Array(base.length/3);for(let i=0;i<idx.length;i++)m[idx[i]]=1;VIS=[];for(let i=0;i<m.length;i++)if(m[i])VIS.push(i);}return VIS;}
+  function fit(it){
+    const c=it.cl,ax="xyz",S3=ax.split("").map(a=>{const d=c.sc[a];return d?Math.abs(pos[d[0]*3+ax.indexOf(a)]-pos[d[1]*3+ax.indexOf(a)])/d[2]:1;});
+    c.verts.forEach((r,i)=>{
+      for(let k=0;k<3;k++)it.Q[i*3+k]=r.length>=9?r[3]*pos[r[0]*3+k]+r[4]*pos[r[1]*3+k]+r[5]*pos[r[2]*3+k]+r[6+k]*S3[k]:pos[r[0]*3+k];
+    });
+    const src=it.po.src;
+    for(let s=0;s<src.length;s++)for(let k=0;k<3;k++)it.P[s*3+k]=it.Q[src[s]*3+k];
+    if(it.mesh.name==="eyes"){
+      {const tx=it.mat&&(it.mat.emissiveTexture||it.mat.diffuseTexture);
+        if(tx){const sh=window.__eyeTexShift!==false,hf=window.__eyeTexFlip===true;
+          tx.wrapU=BABYLON.Texture.WRAP_ADDRESSMODE;tx.wrapV=BABYLON.Texture.WRAP_ADDRESSMODE;
+          tx.uScale=hf?-1:1;tx.uOffset=(hf?1:0)+(sh?0.5:0);}}
+      const fl=window.__eyeFlip===true,sc=window.__eyeSc||1,ud=window.__eyeDz||0,yaw=window.__eyeYaw||0,auto=window.__eyeAuto!==false;
+      const G=[[0,0,0,0],[0,0,0,0]],gi=new Uint8Array(src.length);
+      for(let s=0;s<src.length;s++){const g=it.P[s*3]<0?0:1;gi[s]=g;const c=G[g];c[0]+=it.P[s*3];c[1]+=it.P[s*3+1];c[2]+=it.P[s*3+2];c[3]++;}
+      const Z=[-1e9,-1e9],Y0=[1e9,1e9],Y1=[-1e9,-1e9];
+      for(let s=0;s<src.length;s++){
+        const g=gi[s],c=G[g];if(!c[3])continue;
+        const cx=c[0]/c[3],cy=c[1]/c[3],cz=c[2]/c[3];
+        let x=it.P[s*3]-cx,y=it.P[s*3+1]-cy,z=it.P[s*3+2]-cz;
+        if(fl){x=-x;z=-z;}
+        const X=cx+x*sc,Yv=cy+y*sc,Zv=cz+z*sc;
+        it.P[s*3]=X;it.P[s*3+1]=Yv;it.P[s*3+2]=Zv;
+        if(Zv>Z[g])Z[g]=Zv;if(Yv<Y0[g])Y0[g]=Yv;if(Yv>Y1[g])Y1[g]=Yv;
+      }
+      {
+        const uvs=it.po.uv,rep=[];
+        for(let g=0;g<2;g++){
+          const c=G[g];if(!c[3])continue;
+          const cx=c[0]/c[3],cy=c[1]/c[3],cz=c[2]/c[3];
+          let ax=0,ay=0,az=0,n=0,ph=0,th=0;
+          if(auto)for(let s=0;s<src.length;s++){
+            if(gi[s]!==g)continue;const du=uvs[s*2]-.5,dv=uvs[s*2+1]-.5;if(du*du+dv*dv>.0144)continue;
+            ax+=it.P[s*3]-cx;ay+=it.P[s*3+1]-cy;az+=it.P[s*3+2]-cz;n++;
+          }
+          if(n>=6){const L=Math.hypot(ax,ay,az);
+            if(L>1e-6&&az/L>.5){ph=Math.atan2(ax,az);th=Math.atan2(ay,Math.hypot(ax,az));if(Math.abs(ph)>.6||Math.abs(th)>.6){ph=0;th=0;}}}
+          rep.push((g?"يمين":"يسار")+" "+(ph*57.3).toFixed(1)+"° / "+(th*57.3).toFixed(1)+"° ("+n+")");
+          const ag=-ph+yaw*(g?1:-1),ca=Math.cos(ag),sa=Math.sin(ag),cp=Math.cos(th),sp=Math.sin(th);
+          if(ag||th)for(let s=0;s<src.length;s++){
+            if(gi[s]!==g)continue;
+            const x=it.P[s*3]-cx,y=it.P[s*3+1]-cy,z=it.P[s*3+2]-cz;
+            const x2=x*ca+z*sa,z2=-x*sa+z*ca;
+            it.P[s*3]=cx+x2;it.P[s*3+1]=cy+y*cp-z2*sp;it.P[s*3+2]=cz+y*sp+z2*cp;
+          }
+        }
+        const k2=rep.join(" | ")+"|"+yaw+"|"+auto;
+        if(it.lastGaze!==k2){it.lastGaze=k2;LOG.push("اتجاه النظر المقاس (أفقي/رأسي) قبل التصحيح: "+rep.join(" ، ")+" | تعديلك "+yaw+" | تلقائي "+(auto?"نعم":"لا"));}
+      }
+      /* ضبط تلقائي للعمق: ندفع الكرة للأمام حتى تلامس أقرب نقاط الجفن دون أن تخرج من الجلد */
+      const dzg=[0,0],info=[],VL=visList();
+      for(let g=0;g<2;g++){
+        const c=G[g];if(!c[3])continue;
+        const cx=c[0]/c[3],cy=c[1]/c[3],R=Math.max(.05,(Y1[g]-Y0[g])/2),zc=Z[g]-R,B=[];
+        for(let q=0;q<VL.length;q++){
+          const v=VL[q]*3,dx=pos[v]-cx,dy=pos[v+1]-cy,r2=dx*dx+dy*dy;
+          if(r2>0.0196)continue;
+          const zv=pos[v+2];if(zv<zc+0.03)continue;
+          B.push(zv+R-Math.sqrt(Math.max(0,R*R-r2))-0.008);
+        }
+        let d=-0.12;
+        if(B.length>=4){B.sort((a,b)=>a-b);d=Math.max(-0.25,Math.min(0.03,B[Math.floor(B.length*0.05)]-Z[g]));}
+        dzg[g]=d;info.push(d.toFixed(3)+" ("+B.length+" نقطة جلد)");
+      }
+      if(info.length===2){const dm=(dzg[0]+dzg[1])/2;dzg[0]=dzg[1]=dm;}
+      for(let s=0;s<src.length;s++)it.P[s*3+2]+=dzg[gi[s]]+ud;
+      const key=info.join("|")+"|"+ud;
+      if(it.lastKey!==key){it.lastKey=key;LOG.push("ضبط العين تلقائياً: إزاحة العمق لكل عين: "+info.join(" ، ")+" | تعديلك اليدوي "+ud);}
+    }
+    BABYLON.VertexData.ComputeNormals(it.P,it.po.idx,it.N);
+    it.mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind,it.P,true,false);
+    it.mesh.updateVerticesData(BABYLON.VertexBuffer.NormalKind,it.N,false,false);
+  }
+  function refitAll(){Object.values(items).forEach(fit);}
+  function tint(slot,v){tints[slot]=v;if(items[slot])items[slot].mat.diffuseColor=BABYLON.Color3.FromHexString(v);}
+  async function zipTex(pk,path){
+    const u8=await zget(pk,path);
+    const url=await new Promise((ok,no)=>{const f=new FileReader();f.onload=()=>ok(f.result);f.onerror=()=>no(new Error("قراءة الصورة"));f.readAsDataURL(new Blob([u8],{type:/\.jpe?g$/i.test(path)?"image/jpeg":"image/png"}));});
+    const tx=new BABYLON.Texture(url,scene,false,true);tx.anisotropicFilteringLevel=window.__aniso||16;return tx;
+  }
+  const itemSeq={};
+  async function waitTex(t){if(!t||t.isReady())return;await new Promise(ok=>{const to=setTimeout(ok,20000);t.onLoadObservable.addOnce(()=>{clearTimeout(to);ok();});});}
+  async function setItem(slot,name){busyN++;try{return await setItem0(slot,name);}finally{busyN--;}}
+  async function setItem0(slot,name){
+    const my=itemSeq[slot]=(itemSeq[slot]||0)+1;
+    if(!name){if(items[slot]){items[slot].mesh.dispose();delete items[slot];}return;}
+    const A=ASSETS[slot]&&ASSETS[slot][name];
+    if(!A){say("هذه القطعة غير موجودة في الحزم المفتوحة");return;}
+    say("جاري تحميل القطعة من الحزمة...");
+    try{
+      let cl,po,srcN="الحزمة";
+      if(slot==="eyes"){
+        srcN="جيت هاب";
+        cl=parseMhclo(await getR("mh","eyes/high-poly/high-poly.mhclo"));
+        po=parseProxyObj(await getR("mh","eyes/high-poly/"+cl.obj));
+      }else{
+        cl=parseMhclo(txt(await zget(A.pk,A.mhclo)));
+        const op=findEnt(A.pk,A.dir,cl.obj);if(!op)throw new Error("ملف الشكل "+cl.obj+" غير موجود");
+        po=parseProxyObj(txt(await zget(A.pk,op)));
+      }
+      const mi=await matOf(A,cl.mat&&slot!=="eyes"?cl.mat:null);
+      const tex=mi.d?await zipTex(A.pk,mi.d):null;
+      await waitTex(tex);
+      if(my!==itemSeq[slot])return;
+      if(items[slot]){items[slot].mesh.dispose();delete items[slot];}
+      const mesh=new BABYLON.Mesh(slot,scene),vd=new BABYLON.VertexData();
+      const P=new Float32Array(po.src.length*3),N=new Float32Array(P.length);
+      vd.positions=P;vd.indices=po.idx;vd.uvs=po.uv;vd.normals=N;vd.applyToMesh(mesh,true);
+      mesh.alwaysSelectAsActiveMesh=true;
+      const m=new BABYLON.StandardMaterial(slot,scene);
+      if(tex){m.diffuseTexture=tex;if(SL[slot].alpha){tex.hasAlpha=true;m.transparencyMode=BABYLON.Material.MATERIAL_ALPHATEST;m.alphaCutOff=.4;}}
+      else say("لا توجد صورة لهذه القطعة، ستظهر بلون واحد");
+      m.specularColor=new BABYLON.Color3(.05,.05,.05);m.backFaceCulling=false;
+      if(slot==="eyes"){m.diffuseColor=new BABYLON.Color3(1,1,1);if(tex){m.emissiveTexture=tex;m.emissiveColor=new BABYLON.Color3(.55,.55,.55);}else m.emissiveColor=new BABYLON.Color3(.85,.85,.85);}
+      if(tints[slot])m.diffuseColor=BABYLON.Color3.FromHexString(tints[slot]);
+      mesh.material=m;
+      const it={cl,po,mesh,P,N,Q:new Float32Array(cl.verts.length*3),mat:m};
+      items[slot]=it;fit(it);say("تم");
+      try{
+        let mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];
+        for(let i=0;i<P.length;i+=3)for(let k=0;k<3;k++){const v=P[i+k];if(v<mn[k])mn[k]=v;if(v>mx[k])mx[k]=v;}
+        LOG.push("قطعة "+slot+"/"+name+" | المصدر: "+srcN+" | نقاط الشكل: "+po.src.length+" | مثلثات: "+(po.idx.length/3)+" | الصورة: "+(mi.d||"لا يوجد")+" | الموضع من ["+mn.map(v=>v.toFixed(2))+"] إلى ["+mx.map(v=>v.toFixed(2))+"]");
+      }catch(e1){}
+    }catch(e){say("تعذر تحميل هذه القطعة: "+e.message);LOG.push("قطعة "+slot+"/"+name+": "+e.message);}
+  }
+  const DIAGK=new Set();
+  let seq=0,dirty=false;
+  window.__retry=()=>{
+    FAILED.forEach(p=>{if(p.indexOf("targets/")==0)delete cache[p.slice(8,-7)];});
+    const had=FAILED.length;FAILED.length=0;failN=0;miss=0;dirty=true;
+    LOG.push("--- إعادة محاولة "+had+" ملف. القطع غير الأساسية (شعر، ملابس) أعد اختيارها من القائمة ---");
+  };
+  const CEN=new Set(),CNB=new Map();
+  for(let i=0;i<base.length/3;i++)if(Math.abs(base[i*3])<1e-5)CEN.add(i);
+  for(let q=0;q<idx.length;q+=3)for(let k=0;k<3;k++){
+    const a=idx[q+k],b=idx[q+(k+1)%3];
+    if(CEN.has(a)&&CEN.has(b)){
+      if(!CNB.has(a))CNB.set(a,[]);if(!CNB.has(b))CNB.set(b,[]);
+      if(!CNB.get(a).includes(b))CNB.get(a).push(b);if(!CNB.get(b).includes(a))CNB.get(b).push(a);
+    }
+  }
+  const PF={t:0,a:{},s(){this.t=performance.now();},k(n){const x=performance.now(),d=x-this.t;this.t=x;const o=this.a[n]||(this.a[n]={n:0,s:0,m:0});o.n++;o.s+=d;if(d>o.m)o.m=d;}};
+  let busyN=0;window.__busy=()=>busyN>0||dirty;
+  async function update(){busyN++;try{await update0();}finally{busyN--;}}
+  async function update0(){
+    PF.s();const my=++seq,W=macroW();
+    mods.forEach(m=>detW(m,W));
+    const ks=Object.keys(W).filter(k=>W[k]>1e-4);
+    if(ks.some(k=>!cache[k]))say("جاري تحميل ملفات التغيير...");
+    const ts=await Promise.all(ks.map(getT));
+    if(my!==seq)return;
+    PF.k("تحميل الأهداف");
+    pos.set(base);
+    const CLS=new Set();
+    ks.forEach((k,i)=>{
+      if(!k.startsWith("macrodetails/")&&!DIAGK.has(k)){DIAGK.add(k);const tt=ts[i];LOG.push("أثر "+k+" | وزن "+W[k].toFixed(2)+" | "+(tt?tt.i.length+" نقطة":"الملف غير محمّل (فشل أو غير موجود)"));}
+      const t=ts[i];if(!t)return;const w=W[k];
+      const isB=k.startsWith("buttocks/");
+      for(let q=0;q<t.i.length;q++){const j=t.i[q]*3,e=q*3;pos[j]+=t.d[e]*w;pos[j+1]+=t.d[e+1]*w;pos[j+2]+=t.d[e+2]*w;if(isB&&CEN.has(t.i[q]))CLS.add(t.i[q]);}
+    });
+    /* الخط الفاصل بين الأرداف: نثبّت نقاط منتصفه على المحور ثم ننعّمه، حتى لا يتعرج عند تكبير الأرداف */
+    if(CLS.size){
+      const cl=[...CLS];
+      for(const i of cl)pos[i*3]=0;
+      for(let it=0;it<3;it++){
+        const ny=new Map(),nz=new Map();
+        for(const i of cl){
+          const nb=(CNB.get(i)||[]).filter(x=>CLS.has(x));if(nb.length<2)continue;
+          let ay=0,az=0;for(const x of nb){ay+=pos[x*3+1];az+=pos[x*3+2];}
+          ny.set(i,pos[i*3+1]*.5+ay/nb.length*.5);nz.set(i,pos[i*3+2]*.5+az/nb.length*.5);
+        }
+        ny.forEach((v,i)=>{pos[i*3+1]=v;});nz.forEach((v,i)=>{pos[i*3+2]=v;});
+      }
+    }
+    PF.k("حساب المورفات");
+    BABYLON.VertexData.ComputeNormals(pos,idx,nor);PF.k("النورمال");
+    updGen();
+    expand();
+    pushMesh();PF.k("التقسيم والرفع");
+    refitAll();PF.k("الشعر والملابس والعين");
+    say("تم. ملفات نجحت: "+okN+" | ملفات فشلت: "+failN);
+  }
+  scene.registerBeforeRender(()=>{if(dirty){dirty=false;update();}});
+  const box=$("sl"),ctl=[],LR=[],tintIn={};
+  function row(r,title,lo,hi,min,max,val,on,pre){
+    const w=document.createElement("div");
+    w.innerHTML="<label>"+title+"</label><input type='range' min='"+min+"' max='"+max+"' step='0.01' value='"+val+"'>"+
+      (lo?"<div class='p'><span>"+lo+"</span><span>"+hi+"</span></div>":"");
+    const i=w.querySelector("input");
+    i.oninput=()=>{on(+i.value);dirty=true;};
+    if(pre)i.onpointerdown=pre;
+    r.appendChild(w);ctl.push(i);return i;
+  }
+  const d0=document.createElement("details");d0.open=true;
+  d0.innerHTML="<summary>الأساسيات</summary><div class='r'></div>";
+  const r0=d0.querySelector(".r"),mc={};
+  [["g","الجنس","أنثى","ذكر"],["a","العمر","رضيع","مسن"],["mu","العضلات","نحيل","عضلي"],
+   ["we","الوزن","خفيف","ثقيل"],["h","الطول","قصير","طويل"],["p","النسب","غير معتادة","مثالية"]]
+   .forEach(([k,t,lo,hi])=>{mc[k]=row(r0,t,lo,hi,0,1,S[k],v=>{S[k]=v;});});
+  const rc={};
+  [["african","الملامح الأفريقية"],["asian","الملامح الآسيوية"],["caucasian","الملامح الأوروبية"]].forEach(([k,t])=>{
+    rc[k]=row(r0,t,"","",0,1,S.r[k],v=>{
+      const o=Object.keys(S.r).filter(x=>x!==k),rest=o.reduce((s,x)=>s+S.r[x],0);
+      S.r[k]=v;o.forEach(x=>{S.r[x]=rest>1e-6?S.r[x]/rest*(1-v):(1-v)/o.length;rc[x].value=S.r[x];});
+    });
+  });
+  box.appendChild(d0);
+  const d1=document.createElement("details");d1.open=true;
+  d1.innerHTML="<summary>المظهر</summary><div class='r'></div>";
+  const r1=d1.querySelector(".r");
+  let cur=r1;
+  function sub(title){
+    const w=document.createElement("div");w.className="lk";
+    w.innerHTML="<label style='display:none'>"+title+"</label><button type='button' class='lkh'><span>"+title+"</span><i>▾</i></button><div class='lkb'></div>";
+    w.querySelector(".lkh").onclick=()=>w.classList.toggle("op");
+    r1.appendChild(w);cur=w.querySelector(".lkb");
+  }
+  const PAL={
+    skin:["#ffffff","#f8e0d0","#f1c9ad","#e8b998","#d9ab8c","#c68642","#a0673c","#8d5524","#6b4226","#4a2c17","#3a2012","#2a170d"],
+    hair:["#ffffff","#0a0a0a","#2b1b12","#4a2f1b","#6b4423","#8d5a2b","#b8860b","#d9b36c","#e6cea0","#a9a9a9","#d3d3d3","#8b1a1a","#c0392b","#7c3aed","#2563eb","#16a34a"],
+    cloth:["#ffffff","#000000","#6b7280","#d1d5db","#dc2626","#f97316","#facc15","#16a34a","#0d9488","#2563eb","#1e3a8a","#7c3aed","#db2777","#78350f","#f5f5dc","#0f172a"]
+  };
+  function h2r(h){return [1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);}
+  function hex2hsl(h){
+    const [r,g,b]=h2r(h),mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;let hh=0,ss=0;
+    if(d>1e-6){ss=d/(1-Math.abs(2*l-1));
+      if(mx===r)hh=((g-b)/d)%6;else if(mx===g)hh=(b-r)/d+2;else hh=(r-g)/d+4;hh*=60;if(hh<0)hh+=360;}
+    return [hh,ss*100,l*100];
+  }
+  function hsl2hex(h,s,l){
+    s/=100;l/=100;const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;
+    let r=0,g=0,b=0;
+    if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}
+    return "#"+[r,g,b].map(v=>Math.round((v+m)*255).toString(16).padStart(2,"0")).join("");
+  }
+  function colorRow(t,val,fn,pal){
+    const w=document.createElement("div");w.className="cp";
+    w.innerHTML="<div class='sub'>"+t+"</div><div class='sw'></div>"+
+      "<div class='cpv'><span class='cpp'></span><span class='cph'></span></div>"+
+      "<div class='cpl'>درجة اللون</div><input type='range' min='0' max='360' step='1' data-k='h'>"+
+      "<div class='cpl'>التشبع</div><input type='range' min='0' max='100' step='1' data-k='s'>"+
+      "<div class='cpl'>الإضاءة</div><input type='range' min='0' max='100' step='1' data-k='l'>";
+    const sw=w.querySelector(".sw"),pp=w.querySelector(".cpp"),ph=w.querySelector(".cph");
+    const R={h:w.querySelector("[data-k=h]"),s:w.querySelector("[data-k=s]"),l:w.querySelector("[data-k=l]")};
+    let hex=val;
+    const paint=()=>{
+      const [h,s,l]=hex2hsl(hex);
+      R.h.value=h;R.s.value=s;R.l.value=l;
+      pp.style.background=hex;ph.textContent=hex.toUpperCase();
+      R.h.style.background="linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)";
+      R.s.style.background="linear-gradient(to right,"+hsl2hex(h,0,l)+","+hsl2hex(h,100,l)+")";
+      R.l.style.background="linear-gradient(to right,#000,"+hsl2hex(h,s,50)+",#fff)";
+      sw.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===hex.toLowerCase()));
+    };
+    (pal||PAL.cloth).forEach(c=>{
+      const b=document.createElement("button");b.type="button";b.dataset.c=c;b.style.background=c;
+      b.onclick=()=>{hex=c;paint();fn(hex);};sw.appendChild(b);
+    });
+    const fromSl=()=>{hex=hsl2hex(+R.h.value,+R.s.value,+R.l.value);paint2();fn(hex);};
+    const paint2=()=>{pp.style.background=hex;ph.textContent=hex.toUpperCase();
+      const h=+R.h.value,s=+R.s.value,l=+R.l.value;
+      R.s.style.background="linear-gradient(to right,"+hsl2hex(h,0,l)+","+hsl2hex(h,100,l)+")";
+      R.l.style.background="linear-gradient(to right,#000,"+hsl2hex(h,s,50)+",#fff)";
+      sw.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.c===hex.toLowerCase()));};
+    ["h","s","l"].forEach(k=>R[k].addEventListener("input",fromSl));
+    paint();cur.appendChild(w);
+    return {get value(){return hex;},set value(v){hex=String(v).toLowerCase();paint();}};
+  }
+  function selRow(t,o,fn,def,lg){
+    const w=document.createElement("div");w.className="tg";
+    if(lg){const lb=document.createElement("label");lb.textContent=lg;lb.style.display="none";w.appendChild(lb);}
+    const sel=document.createElement("select");sel.style.display="none";
+    sel.onchange=e=>fn(e.target.value);
+    sel.innerHTML=o.map(x=>"<option value='"+x[0]+"'"+(x[0]===def?" selected":"")+">"+x[1]+"</option>").join("");
+    const grid=document.createElement("div");grid.className="tiles";
+    const refresh=()=>{
+      grid.innerHTML="";
+      [...sel.options].forEach(op=>{
+        const b=document.createElement("button");b.type="button";b.className="tile"+(op.value===sel.value?" on":"");
+        b.textContent=op.textContent;
+        b.onclick=()=>{sel.value=op.value;fn(op.value);};
+        grid.appendChild(b);
+      });
+    };
+    const vd=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,"value");
+    Object.defineProperty(sel,"value",{get(){return vd.get.call(this);},set(v){vd.set.call(this,v);refresh();},configurable:true});
+    new MutationObserver(refresh).observe(sel,{childList:true});
+    w.appendChild(sel);
+    const h=document.createElement("div");h.className="sub";h.textContent=t;w.appendChild(h);
+    w.appendChild(grid);cur.appendChild(w);refresh();return sel;
+  }
+  const SEL={};
+  sub("درجة لون البشرة");
+  const skinPick=colorRow("اللون",  "#d9ab8c",v=>{mat.diffuseColor=BABYLON.Color3.FromHexString(v);},PAL.skin);
+  const TEXC=new Map();
+  async function skinTex(pk,p){const k=pk+"|"+p;let x=TEXC.get(k);if(!x){x=await zipTex(pk,p);TEXC.set(k,x);while(TEXC.size>6){const o=TEXC.keys().next().value;try{TEXC.get(o).dispose();}catch(e){}TEXC.delete(o);}}return x;}
+  async function setSkin(name){busyN++;try{return await setSkin0(name);}finally{busyN--;}}
+  let skinSeq=0;
+  async function setSkin0(name){
+    const my=++skinSeq;
+    if(!name){mat.diffuseTexture=null;mat.bumpTexture=null;mat.diffuseColor=BABYLON.Color3.FromHexString("#d9ab8c");skinPick.value="#d9ab8c";return;}
+    const A=ASSETS.skins[name];if(!A){say("هذه البشرة غير موجودة في الحزم المفتوحة");return;}
+    say("جاري تحميل صورة البشرة...");
+    try{
+      const mi=await matOf(A,null);
+      if(!mi.d){say("لا توجد صورة لهذه البشرة");return;}
+      const dt=await skinTex(A.pk,mi.d),nt=mi.n?await skinTex(A.pk,mi.n):null;
+      await waitTex(dt);if(nt)await waitTex(nt);
+      if(my!==skinSeq)return;
+      mat.diffuseTexture=dt;mat.bumpTexture=nt;mat.diffuseColor=BABYLON.Color3.FromHexString("#ffffff");skinPick.value="#ffffff";
+      if(nt)nt.level=window.__bumpK==null?1:window.__bumpK;
+      say("تم تحميل صورة البشرة"+(mi.n?"، ومعها صورة النقوش":""));
+    }catch(e){say("تعذر تحميل البشرة: "+e.message);LOG.push("بشرة "+name+": "+e.message);}
+  }
+  sub("صورة البشرة");
+  const skinSel=selRow("اختر الصورة",[["","جاري فتح الحزمة الرسمية..."]],setSkin,"");
+  sub("لون العين");
+  SEL.eyes=selRow("اختر اللون",OPT.eyes,n=>setItem("eyes",n),"brown","لون العينين");
+  sub("الشعر ودرجة لون الشعر");
+  SEL.hair=selRow("ستايل الشعر",OPT.hair,n=>setItem("hair",n),"");
+  tintIn.hair=colorRow("درجة لون الشعر","#ffffff",v=>tint("hair",v),PAL.hair);
+  sub("الحواجب ودرجة لون الحواجب");
+  SEL.eyebrows=selRow("ستايل الحواجب",OPT.eyebrows,n=>setItem("eyebrows",n),"eyebrow001","الحاجبان");
+  tintIn.eyebrows=colorRow("درجة لون الحاجبين","#ffffff",v=>tint("eyebrows",v),PAL.hair);
+  sub("الملابس ودرجة لون الملابس");
+  SEL.clothes=selRow("ستايل الملابس",OPT.clothes,n=>setItem("clothes",n),"");
+  tintIn.clothes=colorRow("درجة لون الملابس","#ffffff",v=>tint("clothes",v),PAL.cloth);
+  box.appendChild(d1);
+  {
+    const dE=document.createElement("details");dE.open=true;
+    dE.innerHTML="<summary>اتجاهات العين</summary><div class='r'><div class='cpl' id='eyr'></div><div class='tiles' data-eye='1'></div></div>";
+    const g=dE.querySelector(".tiles"),ro=dE.querySelector("#eyr");
+    const show=()=>{ro.textContent="العمق "+(window.__eyeDz||0).toFixed(3)+" | الحجم "+(window.__eyeSc||1).toFixed(2)+" | النظر "+(window.__eyeYaw||0).toFixed(2)+" | تلقائي: "+(window.__eyeAuto!==false?"نعم":"لا")+" | قلب: "+(window.__eyeFlip===true?"نعم":"لا");};
+    const act=(x,f)=>{const b=document.createElement("button");b.type="button";b.className="tile";b.textContent=x;b.onclick=()=>{f();show();dirty=true;};g.appendChild(b);};
+    act("للخلف",()=>{window.__eyeDz=(window.__eyeDz||0)-.005;});
+    act("للأمام",()=>{window.__eyeDz=(window.__eyeDz||0)+.005;});
+    act("أصغر",()=>{window.__eyeSc=(window.__eyeSc||1)*.97;});
+    act("أكبر",()=>{window.__eyeSc=(window.__eyeSc||1)*1.03;});
+    act("تقريب النظر",()=>{window.__eyeYaw=(window.__eyeYaw||0)-.02;});
+    act("تبعيد النظر",()=>{window.__eyeYaw=(window.__eyeYaw||0)+.02;});
+    act("الضبط التلقائي",()=>{window.__eyeAuto=window.__eyeAuto===false;});
+    act("قلب العين",()=>{window.__eyeFlip=window.__eyeFlip!==true;});
+    act("نقل القزحية للأمام",()=>{window.__eyeTexShift=window.__eyeTexShift===false;});
+    act("عكس الصورة",()=>{window.__eyeTexFlip=window.__eyeTexFlip!==true;});
+    act("الوضع الافتراضي",()=>{window.__eyeDz=-0.07;window.__eyeSc=0.94;window.__eyeYaw=0;window.__eyeAuto=true;window.__eyeFlip=false;window.__eyeTexShift=true;window.__eyeTexFlip=false;});
+    show();box.appendChild(dE);
+  }
+  {
+    const dL=document.createElement("details");dL.open=true;
+    dL.innerHTML="<summary>الإضاءة والبشرة والجودة</summary><div class='r'></div>";
+    const rL=dL.querySelector(".r");
+    function lrow(t,min,max,val,on,step){
+      const w=document.createElement("div");
+      w.innerHTML="<label>"+t+": <b>"+val+"</b></label><input type='range' min='"+min+"' max='"+max+"' step='"+(step||0.01)+"' value='"+val+"'>";
+      const i=w.querySelector("input"),b=w.querySelector("b");
+      i.oninput=()=>{b.textContent=i.value;on(+i.value);};
+      LR.push(()=>{i.value=val;b.textContent=val;on(+val);});
+      rL.appendChild(w);on(+val);return i;
+    }
+    const ipc=scene.imageProcessingConfiguration;
+    ipc.toneMappingEnabled=true;ipc.toneMappingType=BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
+    lrow("قوة الإضاءة العامة",0,2,.25,v=>{hemi.intensity=v;});
+    lrow("قوة الضوء الأمامي",0,3,1.2,v=>{dirL.intensity=v;});
+    lrow("قوة ضوء الحافة الخلفي",0,3,.5,v=>{rimL.intensity=v;});
+    lrow("دفء الإضاءة (0 بارد، 1 دافئ)",0,1,.5,v=>{const c=new BABYLON.Color3(.8+.2*v,.9,1-.25*v);hemi.diffuse=c;dirL.diffuse=c;});
+    lrow("التعريض",.2,3,.8,v=>{ipc.exposure=v;});
+    lrow("التباين",.5,2,1.25,v=>{ipc.contrastEnabled=true;ipc.contrast=v;});
+    lrow("زاوية الضوء الأمامي (يمين ويسار)",-1.5,1.5,-.8,v=>{dirL.direction=new BABYLON.Vector3(v,dirL.direction.y,1);});
+    lrow("ارتفاع الضوء الأمامي",-1.5,.2,-.6,v=>{dirL.direction=new BABYLON.Vector3(dirL.direction.x,v,1);});
+    const sg=new BABYLON.ShadowGenerator(1024,dirL);
+    sg.useBlurExponentialShadowMap=true;sg.blurKernel=16;
+    sg.addShadowCaster(mesh);mesh.receiveShadows=true;
+    scene.onNewMeshAddedObservable.add(m=>{if(m.name!=="shadowGround"&&m.name!=="body"&&m.getTotalVertices&&m.name!=="rim")sg.addShadowCaster(m);});
+    window.__sg=sg;try{sg.getShadowMap().refreshRate=3;}catch(e){}
+    lrow("قوة الظلال (0 بدون)",0,1,.6,v=>{sg.setDarkness(1-v);scene.shadowsEnabled=v>0;});
+    lrow("نعومة الظلال",1,64,16,v=>{sg.useBlurExponentialShadowMap=true;sg.blurKernel=v;sg.bias=.00005;sg.normalBias=.01;sg.setTransparencyShadow(true);},1);
+    const sss=new BABYLON.FresnelParameters();sss.bias=.2;sss.power=3;sss.rightColor=BABYLON.Color3.Black();
+    mat.emissiveFresnelParameters=sss;
+    let sssK=0,sssR=.9,sssG=.25,sssB=.15;
+    const apply=()=>{try{mat.subSurface.isTranslucencyEnabled=sssK>0;mat.subSurface.translucencyIntensity=sssK*.25;mat.subSurface.tintColor=new BABYLON.Color3(.9,.15+sssG*.8,.1+sssB*.8);}catch(e){}};
+    lrow("تشتت الضوء تحت الجلد (تقريب) من 0 إلى 5",0,5,1,v=>{sssK=v;apply();});
+    lrow("اتساع التشتت عند الحواف",.5,6,3,v=>{sss.power=7-v;},.1);
+    lrow("احمرار التشتت",0,1,.25,v=>{sssG=v;sssB=v*.6;apply();});
+    lrow("قوة نقوش البشرة (إن وُجدت في الحزمة) من 0 إلى 5",0,5,1,v=>{window.__bumpK=v;if(mat.bumpTexture)mat.bumpTexture.level=v;});
+    lrow("قوة اللمعان من 0 إلى 5",0,5,1,v=>{mat.specularColor=new BABYLON.Color3(v,v,v);});
+    lrow("قوة التقسيم العامة (0 إلى 200، والمئة طبيعية)",0,200,100,v=>{MS=v/100;applySub();},1);
+    lrow("تقسيم المستوى 1: كل مثلث إلى 4 (0 إلى 110)",0,110,100,v=>{KS[0]=v/100;applySub();},1);
+    lrow("تقسيم المستوى 2: كل مثلث إلى 16 (0 إلى 150، الافتراضي 0 للسرعة)",0,150,0,v=>{KS[1]=v/100;applySub();},1);
+    lrow("قوة الانعكاس المحيط",0,2,.35,v=>{scene.environmentIntensity=v;});
+    lrow("حدة اللمعان",2,200,32,v=>{mat.specularPower=v;},1);
+    lrow("دقة العرض (0 إلى 50، والعشرة هي العادية)",0,50,10,v=>{const s=(.5+v*.05)*DPR;engine.setHardwareScalingLevel(1/s);engine.resize();},1);
+    lrow("وضوح صورة البشرة (تنعيم الزوايا) من 0 إلى 30",0,30,16,v=>{const a=Math.max(1,v);window.__aniso=a;if(mat.diffuseTexture)mat.diffuseTexture.anisotropicFilteringLevel=a;},1);
+    box.appendChild(dL);
+  }
+  {
+    const dD=document.createElement("details");dD.open=true;
+    dD.innerHTML="<summary>كاشف الأخطاء والفحص الشامل</summary><div class='r'><div class='seg'><button type='button' id='dgs'>تشغيل</button><button type='button' id='dgx' disabled>إيقاف</button></div><div id='dgp' style='font-size:12px;color:#fbbf24;margin:4px 0;min-height:16px'></div><div style='height:6px;background:#2a2a33;border-radius:3px;overflow:hidden;margin-bottom:6px'><div id='dgb' style='height:100%;width:0;background:#fbbf24;transition:width .15s'></div></div><label style='font-size:12px'><input type='checkbox' id='dgt'> وضع سريع: ٦ لكل قسم وقيمة واحدة (بدون تحديد = الفحص الدقيق الكامل)</label><textarea id='dgr' readonly rows='10' style='width:100%;box-sizing:border-box;font-size:11px;direction:ltr;text-align:left;background:#2a2a33;color:#ddd'></textarea><button type='button' id='dgc' style='width:100%;padding:9px;border-radius:8px'>نسخ التقرير</button></div>";
+    box.appendChild(dD);
+    const Q=s=>dD.querySelector(s),T=[],ERR=[],qa=s=>[...document.querySelectorAll(".tp")].flatMap(p=>[...p.querySelectorAll(s)]);let run=false,stp=false;
+    const op=Q("#dgp");
+    addEventListener("error",e=>{if(run)ERR.push("خطأ: "+e.message);});
+    addEventListener("unhandledrejection",e=>{if(run)ERR.push("رفض غير معالج: "+(e.reason&&e.reason.message||e.reason));});
+    const rf=()=>new Promise(r=>{let d=0;const f=()=>{if(!d){d=1;r();}};requestAnimationFrame(f);setTimeout(f,120);});
+    async function idle(mx){const t0=performance.now();await rf();while(!stp&&window.__busy()&&performance.now()-t0<mx)await rf();return performance.now()-t0;}
+    const ui=on=>{Q("#dgs").disabled=on;Q("#dgs").textContent=on?"جارٍ الفحص...":"تشغيل";Q("#dgx").disabled=!on;};
+    const ck=()=>{let s=0;for(let i=0;i<pos.length;i++)s+=pos[i]*(1+i%13);return s;};
+    const ctx=el=>{const d=el.closest("details"),l=el.closest(".lk");return ((d&&d.querySelector("summary")||{}).textContent||"")+" > "+((l&&l.querySelector(".lkh span")||{}).textContent||"");};
+    const lab=el=>(el.previousElementSibling&&el.previousElementSibling.textContent)||((el.parentElement.querySelector("label")||{}).textContent)||"?";
+    const snapC=()=>({m:mat.albedoColor.clone(),t:Object.assign({},tints),it:Object.entries(items).map(([k,v])=>[v,v.mat.diffuseColor.clone()])});
+    const restC=s=>{mat.albedoColor=s.m.clone();Object.assign(tints,s.t);s.it.forEach(([v,c])=>{v.mat.diffuseColor=c.clone();});};
+    const fire=i=>i.dispatchEvent(new Event("input",{bubbles:true}));
+    const clickT=(g,x)=>{const b=[...g.querySelectorAll(".tile")].find(y=>y.textContent===x);if(b){b.click();return true;}return false;};
+    function meas(){const VL=visList();let y0=1e9,y1=-1e9;for(const i of VL){const y=pos[i*3+1];if(y<y0)y0=y;if(y>y1)y1=y;}
+      const bw=f=>{const a=y0+(y1-y0)*(f-.015),b=y0+(y1-y0)*(f+.015);let m=1e9,M=-1e9;for(const i of VL){const y=pos[i*3+1];if(y<a||y>b)continue;const x=pos[i*3];if(x<m)m=x;if(x>M)M=x;}return M-m;};
+      return {sh:bw(.82),hp:bw(.52)};}
+    async function go(){
+      if(run)return;run=true;stp=false;T.length=0;ERR.length=0;ui(true);
+      const smp=Q("#dgt").checked,cnt={},take=e=>{if(!smp)return true;const k=ctx(e);cnt[k]=(cnt[k]||0)+1;return cnt[k]<=6;};
+      const s0=JSON.stringify(S),c0=ck(),notes=[];
+      const t0=performance.now();let dn=0,lastLive=0;
+      const est=els=>{if(!smp)return els.length;const c={};return els.filter(e=>{const k=ctx(e);c[k]=(c[k]||0)+1;return c[k]<=6;}).length;};
+      const eg0=qa(".tiles[data-eye]")[0];
+      const tot=Math.max(1,(smp?est(qa("input[type=range]")):qa("input[type=range]").reduce((a,i)=>a+Math.round((+i.max-+i.min)/(+i.step>0?+i.step:.01))+1,0))+est(qa(".sw button"))+qa(".tiles").filter(x=>!x.dataset.eye).reduce((a,g)=>a+(smp?Math.min(6,g.querySelectorAll(".tile").length):g.querySelectorAll(".tile").length),0)+(eg0?eg0.querySelectorAll(".tile").length:0)+2);
+      const prog=txt=>{const now=performance.now(),el=(now-t0)/1000,p=Math.min(99,Math.round(dn/tot*100)),eta=dn>3?Math.max(0,Math.round(el/dn*(tot-dn))):null;
+        op.textContent=txt+" · "+p+"% · "+el.toFixed(0)+"ث"+(eta!==null?" · متبقي ~"+eta+"ث":"")+" · أخطاء: "+ERR.length+(document.hidden?" ⚠ ارجع لهذه الصفحة وإلا سيتوقف الفحص":"");
+        Q("#dgb").style.width=p+"%";
+        if(now-lastLive>700){lastLive=now;Q("#dgr").value="… جارٍ الفحص ("+p+"%) | أخطاء حتى الآن: "+ERR.length+"\n"+ERR.slice(-15).join("\n");}};
+      const tmo=(ms,mx,l)=>{if(ms>=mx-60&&window.__busy())ERR.push("مهلة: لم يكتمل التحديث في "+Math.round(mx/1000)+" ثانية: "+l);};
+      prog("بدء الفحص: "+tot+" اختبار");
+      try{
+        const rg=qa("input[type=range]").filter(take);let n=0;
+        const vals=i=>{const mn=+i.min,mx=+i.max,o=+i.value;
+          if(smp){const st=(mx-mn)*.2;return [o+st>mx?o-st:o+st];}
+          const sp=+i.step>0?+i.step:.01,N=Math.round((mx-mn)/sp),a=[];for(let k=0;k<=N;k++)a.push(+(mn+k*sp).toFixed(6));return a;};
+        for(const i of rg){if(stp)break;n++;
+          const o=+i.value,vs=vals(i),c1=ck(),sc=snapC(),n0=LOG.length,L=lab(i),mv=mods.map(m=>m.v),sv=JSON.stringify(S);
+          let mxms=0,any=false,k=0;
+          for(const v of vs){if(stp)break;k++;
+            prog("سلايدر "+n+"/"+rg.length+" ("+k+"/"+vs.length+") "+L);
+            const cb=ck();i.value=v;fire(i);const ms=await idle(10000);const ca=ck();
+            if(ca!==cb)any=true;if(ms>mxms)mxms=ms;
+            if(!isFinite(ca))ERR.push(L+" عند القيمة "+v+": قيم غير صالحة في الشبكة (NaN)");
+            tmo(ms,10000,L+" عند "+v);dn++;}
+          i.value=o;fire(i);await idle(10000);restC(sc);
+          let fx=false;
+          mods.forEach((m,q)=>{if(m.v!==mv[q]){m.v=mv[q];if(m.inp)m.inp.value=m.v;fx=true;}});
+          if(JSON.stringify(S)!==sv){Object.assign(S,JSON.parse(sv));for(const q in mc)mc[q].value=S[q];for(const q in rc)rc[q].value=S.r[q];fx=true;}
+          if(fx){dirty=true;await idle(10000);}
+          if(!stp&&Math.abs(ck()-c1)>1e-3)ERR.push(L+": المجسم لم يرجع لحالته الأصلية بعد الاسترجاع");
+          LOG.slice(n0).filter(x=>/تعذر|فشل|خطأ/.test(x)).forEach(x=>ERR.push(L+": "+x));
+          T.push({l:"سلايدر "+ctx(i)+" / "+L+" ("+k+" قيمة)",ms:mxms,m:d0.contains(i),ch:any});}
+        const sw=qa(".sw button").filter(take);n=0;
+        for(const b of sw){if(stp)break;prog("ألوان "+(++n)+" / "+sw.length);const sc=snapC();b.click();const ms=await idle(10000);restC(sc);dn++;T.push({l:"لون "+ctx(b)+" "+b.dataset.c,ms});}
+        for(const g of qa(".tiles").filter(x=>!x.dataset.eye)){
+          const names=[...g.querySelectorAll(".tile")].map(x=>x.textContent),orig=(g.querySelector(".tile.on")||{}).textContent;let k=0;
+          for(const nm of names){if(stp)break;if(smp&&++k>6)break;prog(ctx(g)+" : "+nm);const n0=LOG.length;
+            if(!clickT(g,nm))continue;const ms=await idle(30000),on=(g.querySelector(".tile.on")||{}).textContent;
+            tmo(ms,30000,nm);if(on!==nm)ERR.push("التحديد لم يتغير: "+ctx(g)+" / "+nm);
+            LOG.slice(n0).filter(x=>/تعذر|فشل|خطأ/.test(x)).forEach(x=>ERR.push(nm+": "+x));
+            dn++;T.push({l:"أيقونة "+ctx(g)+" / "+nm,ms});}
+          if(orig&&!stp){clickT(g,orig);await idle(30000);}}
+        const eg=qa(".tiles[data-eye]")[0];
+        if(eg&&!stp){const v0=[window.__eyeDz,window.__eyeSc,window.__eyeYaw,window.__eyeAuto,window.__eyeFlip];
+          for(const b of [...eg.querySelectorAll(".tile")]){const e0=ck();b.click();const ms=await idle(10000);dn++;T.push({l:"عين / "+b.textContent,ms,m:true,ch:ck()!==e0});}
+          [window.__eyeDz,window.__eyeSc,window.__eyeYaw,window.__eyeAuto,window.__eyeFlip]=v0;dirty=true;await idle(10000);}
+        if(!stp){const g0=S.g,r=[];
+          for(const gv of [0,1]){S.g=gv;const W=macroW(),ks=Object.keys(W).filter(k=>W[k]>1e-4),mis=ks.filter(k=>!cache[k]);dirty=true;await idle(30000);const m=meas();r.push("جنس="+gv+": كتف "+m.sh.toFixed(3)+" | ورك "+m.hp.toFixed(3)+" | نسبة "+(m.sh/m.hp).toFixed(3)+" | أهداف ناقصة "+mis.length+" من "+ks.length+(mis.length?" ("+mis.slice(0,3).join(" ، ")+")":""));}
+          S.g=g0;dirty=true;await idle(30000);notes.push("-- قياس الجنس (الأنثى يجب أن تكون نسبة الكتف للورك أقل):",...r);}
+      }catch(e){ERR.push("توقف الفحص: "+e.message);}
+      const wasStop=stp;stp=false;prog("استرجاع الحالة");await idle(6000);
+      const drift=(JSON.stringify(S)!==s0?"تغيّرت قيم الأساسيات ":"")+(Math.abs(ck()-c0)>1e-3?"تغيّرت الشبكة بعد الاسترجاع (فرق "+(ck()-c0).toFixed(4)+")":"");
+      const o=["== تقرير الفحص | "+new Date().toISOString(),(wasStop?"(أُوقف يدوياً) ":"")+"المدة: "+((performance.now()-t0)/1000).toFixed(1)+"ث | اختبارات: "+T.length+" | أخطاء: "+ERR.length+" | انحراف الحالة: "+(drift||"لا يوجد"),"-- مراحل التحديث (عدد / متوسط / أقصى ms):"];
+      for(const k in PF.a){const a=PF.a[k];o.push(k+": "+a.n+" / "+(a.s/a.n).toFixed(1)+" / "+a.m.toFixed(1));}
+      o.push("-- الأبطأ (يشمل نحو إطارين):");[...T].sort((a,b)=>b.ms-a.ms).slice(0,20).forEach(x=>o.push(Math.round(x.ms)+"ms | "+x.l));
+      const nf=T.filter(x=>x.m&&!x.ch);o.push("-- تحكمات مجسم بلا أي تغيير في الشبكة ("+nf.length+"):");nf.slice(0,25).forEach(x=>o.push(x.l));
+      o.push("-- الأخطاء:");ERR.slice(0,40).forEach(x=>o.push(x));o.push(...notes);o.push("-- آخر السجل:");o.push(...LOG.slice(-20));
+      Q("#dgr").value=o.join("\n");op.textContent=(wasStop?"أُوقف":"اكتمل")+" · "+T.length+" اختبار · أخطاء: "+ERR.length;Q("#dgb").style.width="100%";Q("#dgr").scrollTop=0;run=false;ui(false);say("انتهى الفحص، انسخ التقرير");
+    }
+    Q("#dgs").onclick=go;Q("#dgx").onclick=()=>{if(run){stp=true;op.textContent="جاري الإيقاف...";Q("#dgx").disabled=true;}};
+    Q("#dgc").onclick=()=>{const ta=Q("#dgr");ta.select();try{navigator.clipboard.writeText(ta.value);}catch(e){document.execCommand("copy");}};
+  }
+  {
+    const dP=document.createElement("details");dP.open=true;
+    dP.innerHTML="<summary>الحزم الرسمية (ملابس، شعر، بشرات...)</summary><div class='r'><select id='pks' style='display:none'><option>جاري جلب قائمة الحزم...</option></select><button type='button' id='pksb' style='width:100%;display:flex;justify-content:space-between;align-items:center;background:#242430;border:1px solid #2f2f3a;border-radius:10px;padding:10px 12px;font-size:14px;color:#e5e7eb'><span id='pksv'></span><i style='font-style:normal'>▾</i></button><div id='pksl' style='display:none;max-height:180px;overflow-y:auto;border:1px solid #3a3a46;border-radius:8px;margin-top:4px;background:#1b1b22'></div><button id='pko' style='margin-top:8px'>فتح الحزمة المختارة</button><div id='pkm' style='font-size:13px;color:#fbbf24;margin-top:6px'></div></div>";
+    box.appendChild(dP);
+    {const sel=dP.querySelector("#pks"),b=dP.querySelector("#pksb"),l=dP.querySelector("#pksl"),vv=dP.querySelector("#pksv");
+     const lab=()=>{vv.textContent=sel.value||(sel.options[0]?sel.options[0].text:"");};
+     const build=()=>{l.innerHTML="";[...sel.options].forEach(o=>{const x=document.createElement("button");x.type="button";x.textContent=o.text;
+       x.style.cssText="display:block;width:100%;text-align:right;border:0;border-bottom:1px solid #2f2f3a;border-radius:0;padding:10px;font-size:14px;color:#e5e7eb;background:"+(o.value===sel.value?"#2a2340":"transparent");
+       x.onclick=()=>{sel.value=o.value;l.style.display="none";build();};l.appendChild(x);});lab();};
+     b.onclick=()=>{l.style.display=l.style.display=="block"?"none":"block";};
+     new MutationObserver(build).observe(sel,{childList:true});build();}
+    window.__fillMenus=()=>{
+      const lb=Object.fromEntries(OPT.eyes);
+      const fill=(sel,cat,none,def)=>{
+        if(!sel)return;const cur=sel.value,names=Object.keys(ASSETS[cat]).sort();
+        sel.innerHTML=(none?"<option value=''>"+none+"</option>":"")+names.map(n=>"<option value='"+n+"'>"+((cat==="eyes"&&lb[n])||n)+"</option>").join("");
+        sel.value=names.includes(cur)?cur:(none?"":(names.includes(def)?def:(names[0]||"")));
+      };
+      fill(SEL.eyes,"eyes",null,"brown");fill(SEL.hair,"hair","بدون");fill(SEL.eyebrows,"eyebrows","بدون","eyebrow001");fill(SEL.clothes,"clothes","بدون");fill(skinSel,"skins","بدون (لون واحد)");
+    };
+    const pm=t=>{$("pkm").textContent=t;};
+    $("pko").onclick=async()=>{
+      const n=$("pks").value;pm("جاري فتح "+n+" ...");
+      try{await openPack(n);window.__fillMenus();pm("تم فتح "+n+"، وأُضيفت عناصرها إلى القوائم أعلاه");}
+      catch(e){pm("فشل فتح الحزمة: "+e.message+" (افتح قسم التشخيص وانسخ السجل)");}
+    };
+    packList().then(L=>{$("pks").innerHTML=L.map(n=>"<option value='"+n+"'>"+n+"</option>").join("");});
+  }
+  const groups={};
+  mods.forEach(m=>(groups[m.group]=groups[m.group]||[]).push(m));
+  Object.keys(groups).filter(g=>g!=="genitals").forEach(g=>{
+    const d=document.createElement("details");
+    d.innerHTML="<summary>"+(GR[g]||g)+"</summary><div class='r'></div>";
+    const r=d.querySelector(".r"),seen={};
+    if(g==="breast"){
+      mc.bs=row(r,"حجم الصدر","أصغر","أكبر",0,1,S.bs,v=>{S.bs=v;});
+      mc.bf=row(r,"تماسك الصدر","مترهل","مشدود",0,1,S.bf,v=>{S.bf=v;});
+    }
+    groups[g].forEach(m=>{
+      const L=m.extra?{t:labx(m.t),pp:null}:lab(m.t);seen[L.t]=(seen[L.t]||0)+1;
+      const name=L.t+(seen[L.t]>1?" "+seen[L.t]:"");
+      m.inp=row(r,name,L.pp?L.pp[0]:"",L.pp?L.pp[1]:"",m.pair?-1:0,1,0,v=>{
+        m.v=v;
+        const sym=m.name.includes("/r-")?m.name.replace("/r-","/l-"):m.name.includes("/l-")?m.name.replace("/l-","/r-"):null;
+        if(sym&&by[sym]){by[sym].v=v;if(by[sym].inp)by[sym].inp.value=v;}
+      },()=>{getT(m.R);if(m.pair)getT(m.L);});
+    });
+    box.appendChild(d);
+  });
+  {
+    const BR=[[/^measure\/measure-bust-circ/,1],[/^measure\/measure-hips-circ/,1],[/^measure\/measure-waist-circ/,-1],[/^buttocks\/buttocks-volume/,1],[/^hip\/hip-scale-horiz/,1],[/^torso\/torso-vshape/,-1]];
+    const tg=[];mods.forEach(m=>{for(const [re,sg] of BR)if(re.test(m.name)&&m.pair){tg.push([m,sg]);break;}});
+    let prev=null;
+    window.__bst=row(r0,"تعزيز المفاتن الأنثوية (يعمل مع الجنس أنثى)","عادي","أقصى",0,1,0,v=>{
+      if(!tg.length){say("لا توجد تحكمات القياسات بعد، انتظر اكتمال التحميل");return;}
+      if(!prev)prev=tg.map(([m])=>m.v);
+      tg.forEach(([m,sg],i)=>{m.v=Math.max(-1,Math.min(1,prev[i]+sg*v*.7));if(m.inp)m.inp.value=m.v;});
+      if(v===0)prev=null;
+    });
+    window.__bstReset=()=>{prev=null;if(window.__bst)window.__bst.value=0;};
+  }
+  $("rs").onclick=()=>{
+    if(window.__bstReset)window.__bstReset();
+    Object.assign(S,JSON.parse(S0));
+    for(const k in mc)mc[k].value=S[k];
+    for(const k in rc)rc[k].value=S.r[k];
+    mods.forEach(m=>{m.v=0;if(m.inp)m.inp.value=0;});
+    dirty=true;
+    for(const k in tints)delete tints[k];
+    for(const k in tintIn)if(tintIn[k])tintIn[k].value="#ffffff";
+    ["hair","clothes"].forEach(s=>{setItem(s,"");if(SEL[s])SEL[s].value="";});
+    {const eb=ASSETS.eyebrows.eyebrow001?"eyebrow001":"";setItem("eyebrows",eb);if(SEL.eyebrows)SEL.eyebrows.value=eb;}
+    {const ey=ASSETS.eyes.brown?"brown":"";setItem("eyes",ey);if(SEL.eyes)SEL.eyes.value=ey;}
+    skinSel.value="";setSkin("");
+    LR.forEach(f=>f());
+  };
+  await loadBreastList();
+  await update();
+  {
+    const fl2=m=>m.pair?[m.L,m.R]:[m.R];
+    const baseKeys=()=>{
+      const out=[],GN=["female","male"],AG=["baby","child","young","old"],L3=["min","average","max"];
+      for(const gn of GN)for(const ag of AG){
+        for(const r of ["african","asian","caucasian"])out.push("macrodetails/"+r+"-"+gn+"-"+ag);
+        for(const mu of L3)for(const we of L3){
+          const k=gn+"-"+ag+"-"+mu+"muscle-"+we+"weight";
+          out.push("macrodetails/universal-"+k);
+          for(const h of ["min","max"])out.push("macrodetails/height/"+k+"-"+h+"height");
+          for(const pr of ["uncommon","ideal"])out.push("macrodetails/proportions/"+k+"-"+pr+"proportions");
+          if(gn==="female"&&BRSET!==null)for(const c of L3)for(const fm of L3){
+            const bn=k+"-"+c+"cup-"+fm+"firmness";
+            if(BRSET&&!BRSET.has(bn))continue;
+            out.push("breast/"+bn);
+          }
+        }
+      }
+      return out;
+    };
+    const all=[...new Set([...baseKeys(),...mods.filter(m=>!m.extra).flatMap(fl2),...mods.filter(m=>m.extra).flatMap(fl2)])];
+    PRE.total=all.length;let qi=0;
+    const saveGone=async()=>{try{const u=[...new Set([...GONESET,...GONE])];if(window.__SV)await window.__SV.metaPut("meta/gone.json",new TextEncoder().encode(JSON.stringify(u)).buffer);}catch(e){}};
+    /* ثلاثة عمال: ملفات الأساسيات أولاً ثم التفاصيل، ويتوقفون لحظة أثناء السحب */
+    const worker=async()=>{while(qi<all.length){while(dirty)await wait(120);const p=all[qi++];try{await getT(p);}catch(e){}PRE.done++;if(PRE.done%100===0||PRE.done===PRE.total)saveGone();}};
+    worker();worker();worker();
+    /* زر إعادة البحث: يمسح قائمة الأسماء غير الموجودة فقط (لا يمس الملفات المحفوظة) ثم يطلبها من جديد */
+    let rgBusy=false;
+    window.__regone=async()=>{
+      if(rgBusy)return;
+      const lst=[...new Set([...GONESET,...GONE])].filter(r=>r.indexOf("targets/")===0);
+      if(!lst.length){say("لا توجد ملفات غير موجودة مسجلة");return;}
+      rgBusy=true;
+      GONESET.clear();GONE.length=0;
+      try{if(window.__SV)await window.__SV.metaPut("meta/gone.json",new TextEncoder().encode("[]").buffer);}catch(e){}
+      lst.forEach(r=>{delete cache[r.slice(8,-7)];});
+      let i=0,d=0,found=0;
+      const w=async()=>{while(i<lst.length){const p=lst[i++].slice(8,-7);let t=null;try{t=await getT(p);}catch(e){}if(t)found++;d++;if(d%10===0)say("إعادة البحث: "+d+" من "+lst.length+" | ظهر "+found);}};
+      say("جاري إعادة البحث عن "+lst.length+" ملف...");
+      await Promise.all([w(),w(),w()]);
+      await saveGone();
+      say("انتهت إعادة البحث: ظهر "+found+" ملف جديد | لسه غير موجود: "+(lst.length-found));
+      rgBusy=false;
+    };
+  }
+  (async()=>{
+    let ok=false;
+    try{await openPack("makehuman_system_assets");ok=true;say("فُتحت الحزمة الرسمية من خادم ميك هيومن");}
+    catch(e){
+      LOG.push("تعذر فتح الحزمة من خادم ميك هيومن: "+e.message);
+      say("خادم الحزم لا يسمح لصفحتك بالقراءة، أنتقل إلى مستودع جيت هاب الرسمي...");
+      try{await openRepo();ok=true;}catch(e2){say("فشل المصدران: "+e2.message+" - اضغط فحص الحزم الرسمية وانسخ السجل");}
+    }
+    if(ok){
+      window.__fillMenus();
+      if(ASSETS.eyes.brown&&!items.eyes)setItem("eyes","brown");
+      if(ASSETS.eyebrows.eyebrow001&&!items.eyebrows)setItem("eyebrows","eyebrow001");
+    }
+  })();
+  let a=1e9,b=-1e9;
+  for(let i=0;i<idx.length;i++){const y=pos[idx[i]*3+1];if(y<a)a=y;if(y>b)b=y;}
+  const h=b-a;cam.target=new BABYLON.Vector3(0,(a+b)/2,0);cam.radius=h*1.5;
+  {const g=BABYLON.MeshBuilder.CreateGround("shadowGround",{width:h*3,height:h*3},scene);g.position.y=a-.02;const gm=new BABYLON.StandardMaterial("gm",scene);gm.diffuseColor=new BABYLON.Color3(.12,.12,.12);gm.specularColor=BABYLON.Color3.Black();g.material=gm;g.receiveShadows=true;}
+  cam.lowerRadiusLimit=h*.2;cam.upperRadiusLimit=h*4;
+  engine.runRenderLoop(()=>scene.render());
+  window.addEventListener("resize",()=>engine.resize());
+}
+$("cf").onclick=()=>{
+  const a=$("fx");a.value=FAILED.length?FAILED.join("\n"):"لا يوجد";a.focus();a.select();a.setSelectionRange(0,a.value.length);
+  let ok=false;try{ok=document.execCommand("copy");}catch(e){}
+  say(ok?"تم نسخ قائمة الفاشل ("+FAILED.length+" ملف). الصقها في المحادثة":"حدد النص داخل المربع يدوياً (اضغط مطولاً ثم تحديد الكل ثم نسخ)");
+};
+$("fl").onclick=()=>{openPop();show("alerts");};
+$("cc").oninput=e=>{CFG.conc=+e.target.value;$("valc").textContent=CFG.conc;};
+$("rr").oninput=e=>{CFG.retry=+e.target.value;$("valr").textContent=CFG.retry;};
+$("rf").onclick=()=>{if(window.__retry)window.__retry();else LOG.push("الصفحة لم تنتهِ من التهيئة بعد");};
+$("rg").onclick=()=>{if(window.__regone)window.__regone();else say("الصفحة لم تنتهِ من التهيئة بعد");};
+$("cp").onclick=async()=>{
+  const x=LOG.join("\n")+"\n--- FAILED ---\n"+FAILED.join("\n");
+  try{await navigator.clipboard.writeText(x);say("تم نسخ السجل");}catch(e){say("تعذر النسخ، حدد النص يدوياً");}
+};
+$("fp").onclick=async()=>{
+  LOG.push("--- فحص الحزم الرسمية ---");
+  const U=["https://files.makehumancommunity.org/asset_packs/makehuman_system_assets/makehuman_system_assets_cc0.zip",
+   "https://files2.makehumancommunity.org/asset_packs/makehuman_system_assets/makehuman_system_assets_cc0.zip"];
+  for(const u of U){
+    const h=u.split("/")[2];
+    try{
+      const r=await fetch(u,{method:"HEAD"});
+      LOG.push(h+": HEAD "+r.status+" | الحجم "+(r.headers.get("content-length")||"غير معروف"));
+      const r2=await fetch(u,{headers:{Range:"bytes=0-3"}});
+      LOG.push(h+": قراءة جزئية HTTP "+r2.status+(r2.status==206?" (تعمل)":" (لا تعمل)"));
+      r2.body&&r2.body.cancel();
+    }catch(e){LOG.push(h+": فشل - "+e.message+" (غالباً المتصفح يمنع القراءة من صفحة أخرى)");}
+  }
+  try{const r=await fetch(SPAGE+"index.html");LOG.push("static: صفحة الحزم HTTP "+r.status);}catch(e){LOG.push("static: فشل - "+e.message);}
+  say("انتهى الفحص، انسخ السجل بزر نسخ السجل");
+};
+$("ft").onclick=async()=>{
+  const tests=[["raw.githubusercontent",RAW+"modifiers/modeling_modifiers.json"],["jsdelivr",CDN+"modifiers/modeling_modifiers.json"],
+   ["api.github","https://api.github.com/rate_limit"],["babylon cdn","https://cdn.babylonjs.com/babylon.js"]];
+  LOG.push("--- فحص الاتصال ---");
+  for(const [n,u] of tests){
+    const t0=performance.now();
+    try{
+      const r=await fetch(u+(u.indexOf("?")<0?"?":"&")+"x="+Date.now(),{cache:"no-store"});
+      let extra="";
+      if(n=="api.github"&&r.ok){const j=await r.json();extra=" | المتبقي من الحد: "+j.resources.core.remaining;}
+      LOG.push(n+": HTTP "+r.status+" في "+Math.round(performance.now()-t0)+" مللي ثانية"+extra);
+    }catch(e){LOG.push(n+": فشل - "+e.message+" (غالباً حجب أو انقطاع)");}
+  }
+};
+setInterval(()=>{
+  $("st").textContent="تحميل مسبق لكل ملفات التحكم: "+PRE.done+" من "+PRE.total+" | نجح: "+okN+" | فشل: "+failN+" | غير موجود (طبيعي): "+GONE.length+" | جارٍ: "+active+" | منتظر: "+WQ.length;
+  if(!(window.getSelection&&String(window.getSelection()).length>0))$("lg").textContent=LOG.slice(-80).join("\n");
+  {const x=FAILED.length?FAILED.join("\n"):"لا يوجد";if($("fx").value!==x&&document.activeElement!==$("fx"))$("fx").value=x;}
+  const fl=$("fl");
+  if(failN>0){
+    fl.style.display="block";
+    fl.textContent="تنبيه: فشل "+failN+" ملف | غير موجود: "+GONE.length+" | كثرة طلبات أو حظر: "+RC.rate+" | انتهت المهلة: "+RC.to+" | الشبكة: "+RC.net+" (اضغط هنا للتفاصيل)";
+  }else fl.style.display="none";
+},1000);
+$("rl").onclick=async()=>{
+  say("جاري مسح كل شيء...");
+  try{if(window.caches){for(const k of await caches.keys())await caches.delete(k);}}catch(e){}
+  try{if(navigator.serviceWorker){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();}}catch(e){}
+  try{if(indexedDB&&indexedDB.databases){for(const d of await indexedDB.databases())indexedDB.deleteDatabase(d.name);}}catch(e){}
+  try{localStorage.clear();sessionStorage.clear();}catch(e){}
+  try{sessionStorage.setItem("fresh","1");}catch(e){}
+  location.reload();
+};
+(window.__libP||Promise.resolve()).then(()=>main()).catch(e=>say("فشل: "+e.message));
+</script>
+<script>
+(function(){
+const ICO={
+body:'<circle cx="12" cy="5" r="2.5"/><path d="M12 8v7M7 10l5 1 5-1M9 21l3-6 3 6"/>',
+face:'<circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.5 2.5 2 4 2s3-.5 4-2M9 9.5h.01M15 9.5h.01"/>',
+eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+look:'<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 0 0 3-3c0-5-4-11-8-11z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="11" r="1"/>',
+light:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+pack:'<path d="M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v8"/>',
+alerts:'<path d="M6 9a6 6 0 1 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/>',
+tools:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+ruler:'<path d="M3 17L17 3l4 4L7 21z"/><path d="M8 12l2 2M11 9l2 2M14 6l2 2"/>',
+swap:'<path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 12l-4 4 4 4"/>',
+plus:'<path d="M12 5v14M5 12h14"/>',sys:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',save:'<path d="M12 3v12M7 10l5 5 5-5M4 20h16"/>',close:'<path d="M6 6l12 12M18 6L6 18"/>',back:'<path d="M9 6l6 6-6 6"/>',v:'<rect x="7" y="3" width="10" height="18" rx="2"/>',h:'<rect x="3" y="7" width="18" height="10" rx="2"/>',pause:'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>',play:'<path d="M7 4l12 8-12 8z"/>',camera:'<path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>'};
+function ico(n){return '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(ICO[n]||ICO.plus)+'</svg>';}
+const TABS=[["body","body","الجسم"],["face","face","الوجه"],["look","look","المظهر"],["eyes","eye","اتجاهات العين"],["light","light","الإضاءة والجودة"],["pack","pack","الحزم"],["camera","camera","الكاميرا"],["alerts","alerts","التنبيهات"],["diag","tools","الأدوات"],["sys","sys","النظام"],["sv","save","الحفظ والاستيراد"],["dbg","play","كاشف الأخطاء"]];
+const FACE=["الرأس","العينان","الحاجبان","الأنف","الفم","الأذنان","الذقن","الخدان","الجبهة","الرقبة"];
+const IC={"الأساسيات":"tools","الرأس":"face","العينان":"eye","الحاجبان":"face","الأنف":"face","الفم":"face","الأذنان":"face","الذقن":"face","الخدان":"face","الجبهة":"face","الرقبة":"face","اتجاهات العين":"eye","الجذع":"body","الورك":"body","الأرداف":"body","الصدر":"body","البطن":"body","الحوض":"body","الذراعان والساقان":"body","القياسات":"ruler","عدم التماثل":"swap","أخرى":"plus"};
+const tabs=document.getElementById("tabs"),sl=document.getElementById("sl"),sr=document.getElementById("srch"),pn=document.createElement("div"),P={};
+sl.parentNode.insertBefore(pn,sl);
+TABS.forEach(([k,ic,t],i)=>{
+  const b=document.createElement("button");b.className="tb"+(i?"":" on");b.dataset.k=k;b.innerHTML="<b>"+ico(ic)+"</b>"+t;b.onclick=()=>show(k);tabs.appendChild(b);
+  const p=document.createElement("div");p.className="tp"+(i?"":" on");p.id="tp_"+k;pn.appendChild(p);P[k]=p;
+});
+P.sys.appendChild(document.getElementById("dg"));
+{const bx=document.createElement("div");bx.style.margin="6px 0";
+ ["rs","rl"].forEach(id=>{bx.appendChild(document.getElementById(id));bx.appendChild(document.createTextNode(" "));});
+ bx.appendChild(document.getElementById("fl"));P.sys.insertBefore(bx,P.sys.firstChild);}
+function show(k){tabs.querySelectorAll(".tb").forEach(b=>b.classList.toggle("on",b.dataset.k==k));for(const x in P)P[x].classList.toggle("on",x==k);{const pb=document.getElementById("pbody"),tt=document.getElementById("pt"),bb=tabs.querySelector(".tb.on");if(pb)pb.scrollTop=0;if(tt&&bb)tt.textContent=bb.textContent;}}
+function place(d){
+  if(d.dataset.done)return;d.dataset.done=1;
+  const sm=d.querySelector("summary"),s=sm?sm.textContent:"";let k="body";
+  if(s.indexOf("المظهر")==0)k="look";else if(s.indexOf("الإضاءة")==0)k="light";else if(s.indexOf("الحزم")==0)k="pack";else if(FACE.indexOf(s)>=0)k="face";else if(s=="اتجاهات العين")k="eyes";else if(s.indexOf("كاشف الأخطاء")==0)k="dbg";
+  if(IC[s])sm.innerHTML=ico(IC[s])+" "+s;
+  if(k=="body"||k=="face")d.open=(s=="الأساسيات");
+  P[k].appendChild(d);
+}
+function decorate(){
+  pn.querySelectorAll("input[type=range]").forEach(i=>{
+    if(i.dataset.vb)return;i.dataset.vb=1;
+    const lab=i.previousElementSibling;if(!lab||lab.tagName!="LABEL"||lab.querySelector("b"))return;
+    const sp=document.createElement("span");sp.className="vb";lab.appendChild(sp);
+    const mn=+i.min,mx=+i.max,def=i.value;
+    const f=()=>{sp.textContent=(mx<=1&&mn>=-1)?Math.round((+i.value-mn)/(mx-mn)*100)+"%":i.value;};
+    f();i.addEventListener("input",f);
+    i.addEventListener("dblclick",()=>{i.value=def;i.dispatchEvent(new Event("input"));});
+  });
+}
+new MutationObserver(()=>{[...sl.children].forEach(c=>{if(c.tagName=="DETAILS")place(c);});decorate();}).observe(sl,{childList:true});
+[...sl.children].forEach(c=>{if(c.tagName=="DETAILS")place(c);});
+setInterval(decorate,2000);
+sr.oninput=()=>{
+  const q=sr.value.trim();pn.classList.toggle("srch",!!q);
+  pn.querySelectorAll("details").forEach(d=>{
+    if(d.id=="dg")return;
+    const st=d.querySelector("summary").textContent;let any=false;
+    d.querySelectorAll(".r>div").forEach(w=>{
+      const lb=w.querySelector("label"),m=!q||(lb&&lb.textContent.indexOf(q)>=0)||st.indexOf(q)>=0;
+      w.style.display=m?"":"none";if(m)any=true;
+    });
+    d.style.display=(!q||any)?"":"none";if(q&&any)d.open=true;
+  });
+};
+let st=null;
+document.addEventListener("touchstart",e=>{const i=e.target;if(i&&i.type==="range"&&e.touches[0])st={i,x:e.touches[0].clientX,y:e.touches[0].clientY,v:i.value,d:false,vert:false};},{passive:true,capture:true});
+document.addEventListener("touchmove",e=>{
+  if(!st||!e.touches[0])return;
+  const dx=e.touches[0].clientX-st.x,dy=e.touches[0].clientY-st.y;
+  if(!st.d&&(Math.abs(dx)>8||Math.abs(dy)>8)){st.d=true;st.vert=Math.abs(dy)>Math.abs(dx);}
+},{passive:true,capture:true});
+document.addEventListener("input",e=>{if(st&&st.vert&&e.target===st.i){e.target.value=st.v;e.stopImmediatePropagation();}},true);
+["touchend","touchcancel"].forEach(n=>document.addEventListener(n,()=>{st=null;},true));
+const pop=document.createElement("div");pop.id="pop";pop.className="home";
+pop.innerHTML='<div id="ph"><button id="pk" aria-label="رجوع">'+ico("back")+'</button><span id="pm" style="display:flex;align-items:center;gap:6px"><span class="gr">'+ico("grip")+'</span><span id="pt"></span></span><button id="px" aria-label="إغلاق">'+ico("close")+'</button></div><div id="pbody"></div>';
+document.body.appendChild(pop);
+const pt=pop.querySelector("#pt"),pbd=pop.querySelector("#pbody");
+sr.style.display="none";pbd.appendChild(sr);pbd.appendChild(pn);pop.appendChild(tabs);
+let PS=1,HZ=false,PX=20,PY=20;
+function dims(){const bw=HZ?440:280,bh=HZ?240:340;return {bw,bh,s:Math.min(PS,(innerWidth-12)/bw,(innerHeight-12)/bh)};}
+function layout(x,y,noflip){
+  const {bw,bh,s}=dims(),W=bw*s,H=bh*s,m=6;
+  pop.style.width=bw+"px";pop.style.height=bh+"px";pop.style.transformOrigin="0 0";
+  let l=noflip?x:(x+W+m>innerWidth?x-W:x),tp=noflip?y:(y+H+m>innerHeight?y-H:y);
+  pop.style.left=Math.max(m,Math.min(innerWidth-W-m,l))+"px";
+  pop.style.top=Math.max(m,Math.min(innerHeight-H-m,tp))+"px";
+  pop.style.transform="scale("+(pop.classList.contains("on")?s:s*.92)+")";
+}
+function goHome(){pop.classList.add("home");pt.textContent="الإعدادات";}
+function openPop(x,y,keep){
+  if(!keep)goHome();
+  if(x==null){x=PX;y=PY;}
+  pop.classList.add("on");layout(x,y);
+}
+function closePop(){pop.classList.remove("on");layout(parseFloat(pop.style.left)||0,parseFloat(pop.style.top)||0,true);}
+pop.querySelector("#px").onclick=()=>{if(pop.classList.contains("home"))closePop();else goHome();};
+pop.querySelector("#pk").onclick=goHome;
+show("body");goHome();
+let ERRX=0,SEEN=0;
+const dot=document.createElement("span");dot.className="dot";tabs.querySelector('[data-k="alerts"]').appendChild(dot);
+tabs.addEventListener("click",e=>{const b=e.target.closest(".tb");if(!b)return;pop.classList.remove("home");if(b.dataset.k=="alerts")SEEN=failN+ERRX;});
+$("fl").onclick=()=>{openPop(null,null,true);show("alerts");pop.classList.remove("home");SEEN=failN+ERRX;};
+{const A=P.alerts,sec=x=>{const d=document.createElement("div");d.className="sec";d.textContent=x;return d;};
+ const lbl=[...document.querySelectorAll("#dg div")].find(d=>d.textContent.trim().indexOf("الملفات الفاشلة")==0);
+ const pz=document.createElement("button");pz.id="pz";
+ const pzUI=()=>{pz.innerHTML=ico(PAUSED?"play":"pause")+" "+(PAUSED?"إكمال التحميل":"إيقاف التحميل");};pzUI();
+ pz.onclick=()=>{PAUSED=!PAUSED;if(!PAUSED)WQ.splice(0).forEach(r=>r());say(PAUSED?"تم إيقاف التحميل مؤقتاً":"تم إكمال التحميل");pzUI();};
+ A.appendChild(sec("حالة التحميل"));A.appendChild($("msg"));A.appendChild(pz);{const rg=$("rg");rg.style.margin="6px 0";rg.style.display="block";A.appendChild(rg);}A.appendChild($("fl"));A.appendChild($("st"));
+ if(lbl){lbl.style.display="none";A.appendChild(sec("الملفات الفاشلة"));}
+ A.appendChild($("fx"));A.appendChild($("cf"));A.appendChild(sec("سجل العمليات"));A.appendChild($("lg"));}
+{const bad=s=>/تعذر|فشل|خطأ|انقطع|لم أصل|حظر/.test(s);
+ new MutationObserver(()=>{if(bad($("msg").textContent))ERRX++;}).observe($("msg"),{childList:true,characterData:true,subtree:true});
+ window.addEventListener("error",e=>{ERRX++;LOG.push("خطأ برمجي: "+(e.message||""));});
+ window.addEventListener("unhandledrejection",e=>{ERRX++;LOG.push("خطأ غير معالج: "+((e.reason&&e.reason.message)||e.reason));});
+ setInterval(()=>{dot.style.display=(failN+ERRX>SEEN)?"block":"none";},800);}
+{const c=document.createElement("div");c.className="r";
+ c.innerHTML='<div class="sec">القائمة المنبثقة</div><label>حجم القائمة: <b id="pszv">100</b>%</label><input type="range" id="psz" min="60" max="160" step="5" value="100"><div class="seg"><button id="pov" class="on">'+ico("v")+' رأسية</button><button id="poh">'+ico("h")+' أفقية</button></div>';
+ P.diag.insertBefore(c,P.diag.firstChild);
+ const re=()=>layout(parseFloat(pop.style.left)||PX,parseFloat(pop.style.top)||PY,true);
+ c.querySelector("#psz").oninput=e=>{PS=e.target.value/100;c.querySelector("#pszv").textContent=e.target.value;re();};
+ const sO=h=>{HZ=h;c.querySelector("#pov").classList.toggle("on",!h);c.querySelector("#poh").classList.toggle("on",h);re();};
+ c.querySelector("#pov").onclick=()=>sO(false);c.querySelector("#poh").onclick=()=>sO(true);}
+const CAMS={rot:1,pan:1,zoom:1,dolly:true};let CAM=null;
+function getCam(){
+  try{
+    const B=window.BABYLON;if(!B)return null;
+    const st=B.EngineStore||B.Engine,eng=(st.Instances||[])[0]||(B.Engine.Instances||[])[0];
+    const sc=(eng&&eng.scenes&&eng.scenes[0])||st.LastCreatedScene||B.Engine.LastCreatedScene;
+    return sc&&sc.activeCamera&&sc.activeCamera.inputs?sc.activeCamera:null;
+  }catch(e){return null;}
+}
+function applyCam(){
+  const c=CAM||(CAM=getCam());if(!c)return false;
+  const ip=c.inputs&&c.inputs.attached&&c.inputs.attached.pointers;
+  c.angularSensibilityX=c.angularSensibilityY=1000/CAMS.rot;
+  c.panningSensibility=500/CAMS.pan;
+  c.pinchPrecision=12/CAMS.zoom;c.wheelPrecision=20/CAMS.zoom;
+  c.zoomToMouseLocation=CAMS.dolly;
+  if(ip){ip.multiTouchPanning=true;ip.multiTouchPanAndZoom=true;}
+  return true;
+}
+{const tc=setInterval(()=>{if(applyCam())clearInterval(tc);},700);
+ const sl2=(k,l)=>'<div><label>'+l+': <b>1.0</b>×</label><input type="range" data-k="'+k+'" min="0.2" max="3" step="0.1" value="1"></div>';
+ const C=P.camera;
+ C.innerHTML='<div class="r"><div class="sec">حساسية السحب</div>'+sl2("rot","حساسية الدوران (إصبع واحد)")+sl2("pan","حساسية التحريك (إصبعان)")+sl2("zoom","حساسية التقريب والتبعيد")+
+  '<div class="sec">حركة الكاميرا عند التقريب</div><div class="seg"><button id="cdl" class="on">تتحرك للأمام والخلف</button><button id="cds">ثابتة</button></div></div>';
+ C.querySelectorAll("input[type=range]").forEach(i=>{i.oninput=()=>{CAMS[i.dataset.k]=+i.value;i.previousElementSibling.querySelector("b").textContent=(+i.value).toFixed(1);applyCam();};});
+ const sd=v=>{CAMS.dolly=v;C.querySelector("#cdl").classList.toggle("on",v);C.querySelector("#cds").classList.toggle("on",!v);applyCam();};
+ C.querySelector("#cdl").onclick=()=>sd(true);C.querySelector("#cds").onclick=()=>sd(false);}
+{const ph=pop.querySelector("#ph");let dr=null;
+ ph.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;dr={x:e.clientX,y:e.clientY,l:parseFloat(pop.style.left)||0,t:parseFloat(pop.style.top)||0};ph.setPointerCapture(e.pointerId);});
+ ph.addEventListener("pointermove",e=>{if(!dr)return;const {bw,bh,s}=dims(),m=4,W=bw*s,H=bh*s;
+  pop.style.left=Math.max(m,Math.min(innerWidth-W-m,dr.l+e.clientX-dr.x))+"px";
+  pop.style.top=Math.max(m,Math.min(innerHeight-H-m,dr.t+e.clientY-dr.y))+"px";});
+ ["pointerup","pointercancel"].forEach(n=>ph.addEventListener(n,()=>{dr=null;}));}
+const ORD={body:["الأساسيات","الجذع","الصدر","البطن","الورك","الأرداف","الحوض","الذراعان والساقان","القياسات","عدم التماثل","أخرى"],
+ face:["الرأس","الجبهة","الحاجبان","العينان","الخدان","الأنف","الفم","الذقن","الأذنان","الرقبة"]};
+const DIMS=["الحجم","الارتفاع","الطول","العرض","العمق","الإزاحة","الحركة","الزاوية","الميلان","الشكل","الاستدارة","الحدة","الانحناء","الفتح","الانتفاخ","الطية","الثنية","المحيط"];
+const BAS=["الجنس","العمر","الطول","الوزن","العضلات","النسب"],RAC=["الملامح الأفريقية","الملامح الآسيوية","الملامح الأوروبية"];
+const gname=d=>{const s=d.querySelector("summary");return s?s.textContent.trim():"";};
+const rname=r=>{const l=r.querySelector("label"),n=l&&l.childNodes[0];return n?n.textContent.replace(/:\s*$/,"").trim():"";};
+function regroup(d){
+  if(d.dataset.srt)return;const r=d.querySelector(".r");if(!r)return;
+  const rows=[...r.children].filter(x=>x.tagName=="DIV"&&x.querySelector("input[type=range]"));
+  if(rows.length<2)return;d.dataset.srt=1;
+  const sub=x=>{const e=document.createElement("div");e.className="sub";e.textContent=x;return e;};
+  const out=[];
+  if(gname(d)=="الأساسيات"){
+    const g=n=>rows.filter(x=>rname(x)==n);
+    BAS.forEach(n=>g(n).forEach(x=>out.push(x)));
+    const rc=[];RAC.forEach(n=>g(n).forEach(x=>rc.push(x)));
+    if(rc.length){out.push(sub("الملامح العرقية"));rc.forEach(x=>out.push(x));}
+    rows.filter(x=>out.indexOf(x)<0).forEach(x=>out.push(x));
+  }else{
+    const info=rows.map((x,i)=>{
+      let n=rname(x),sd=0;
+      if(n.indexOf("اليمين ")==0){sd=1;n=n.slice(7);}else if(n.indexOf("اليسار ")==0){sd=2;n=n.slice(7);}
+      const w=n.split(/\s+/);let di=-1;
+      for(let j=w.length-1;j>=0;j--)if(DIMS.indexOf(w[j])>=0){di=j;break;}
+      return {x,i,sd,dim:di>=0?DIMS.indexOf(w[di]):99,part:(di>=0?w.filter((_,j)=>j!=di):w).join(" ")};
+    });
+    const parts=[];info.forEach(o=>{if(parts.indexOf(o.part)<0)parts.push(o.part);});
+    parts.sort((a,b)=>(a===""?0:1)-(b===""?0:1));
+    parts.forEach(p=>{
+      if(parts.length>1)out.push(sub(p||"عام"));
+      info.filter(o=>o.part===p).sort((a,b)=>a.dim-b.dim||a.sd-b.sd||a.i-b.i).forEach(o=>out.push(o.x));
+    });
+  }
+  const m=document.createComment("");r.insertBefore(m,rows[0]);out.forEach(x=>r.insertBefore(x,m));m.remove();
+}
+const CUR={};let obs=null,otm=null;
+function organize(){
+  if(obs)obs.disconnect();
+  ["body","face","look","light","pack"].forEach(k=>{
+    const pane=P[k];if(!pane)return;
+    let ds=[...pane.children].filter(x=>x.tagName=="DETAILS");if(!ds.length)return;
+    const o=ORD[k]||[];
+    ds=ds.map((d,i)=>{d.classList.add("grp");if(k=="body"||k=="face")regroup(d);const n=gname(d),j=o.indexOf(n);return {d,n,k:j<0?999:j,i};}).sort((a,b)=>a.k-b.k||a.i-b.i);
+    let bar=pane.querySelector(".chips");
+    if(!bar){bar=document.createElement("div");bar.className="chips";pane.insertBefore(bar,pane.firstChild);}
+    const sig=ds.map(x=>x.n).join("|");
+    if(!CUR[k]||!ds.some(x=>x.n==CUR[k]))CUR[k]=ds[0].n;
+    if(bar.dataset.sig!=sig){
+      bar.dataset.sig=sig;bar.innerHTML="";
+      ds.forEach(x=>{const b=document.createElement("button");b.className="chip";b.dataset.n=x.n;
+        b.innerHTML=ico(IC[x.n]||"plus")+"<span>"+x.n+"</span>";
+        b.onclick=()=>{CUR[k]=x.n;organize();};bar.appendChild(b);});
+      ds.forEach(x=>pane.appendChild(x.d));
+    }
+    bar.style.display=ds.length>1?"flex":"none";
+    bar.querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.n==CUR[k]));
+    ds.forEach(x=>{const on=x.n==CUR[k]||ds.length==1;x.d.classList.toggle("cur",on);if(on)x.d.open=true;});
+  });
+  if(!obs)obs=new MutationObserver(()=>{clearTimeout(otm);otm=setTimeout(organize,150);});
+  obs.observe(pn,{childList:true,subtree:true});
+}
+organize();
+{const cv=$("cv");cv.oncontextmenu=e=>e.preventDefault();
+ let lp=null,lx=0,ly=0,np=0;
+ cv.addEventListener("pointerdown",e=>{np++;if(np>1){clearTimeout(lp);lp=null;return;}lx=e.clientX;ly=e.clientY;
+  lp=setTimeout(()=>{lp=null;PX=lx;PY=ly;openPop(lx,ly);},550);});
+ cv.addEventListener("pointermove",e=>{if(lp&&Math.hypot(e.clientX-lx,e.clientY-ly)>10){clearTimeout(lp);lp=null;}});
+ ["pointerup","pointercancel"].forEach(n=>cv.addEventListener(n,()=>{clearTimeout(lp);lp=null;np=Math.max(0,np-1);}));}
+})();
+</script>
+<script>
+(function(){
+  const dg=document.getElementById("dg");if(!dg||!window.__SV)return;
+  const el=document.createElement("details");el.id="svp";
+  el.innerHTML='<summary>حفظ المحمَّل على الهاتف</summary><div class="r"><div id="svs" style="font-size:13px;color:#fbbf24"></div><div style="margin:8px 0"><button id="svb" style="background:#166534">حفظ ما تم تحميله كملف</button></div><div style="margin:8px 0"><button id="svi" style="background:#1d4ed8">استيراد ملف محفوظ (zip)</button><input id="svf" type="file" accept=".zip,application/zip" style="display:none"></div></div>';
+  document.getElementById("tp_sv").appendChild(el);
+  const st=document.getElementById("svs"),bt=document.getElementById("svb");let busy=false;
+  async function ui(){if(busy||!window.indexedDB){if(!window.indexedDB)st.textContent="التخزين غير متاح في هذا المتصفح";return;}const n=await window.__SV.refresh(),s=window.__SV.stats();st.textContent="محفوظ تلقائياً على الهاتف: "+n+" ملف | قُرئ من الهاتف بدون إنترنت: "+s.hits+" | وصل بسرعة من ذاكرة المتصفح القديمة (تقدير): "+s.fast;}
+  ui();setInterval(ui,3000);
+  bt.onclick=async()=>{
+    if(busy)return;busy=true;bt.disabled=true;
+    try{
+      st.textContent="جاري تجهيز الملف...";
+      const r=await window.__SV.exportZip(t=>{st.textContent="جاري تجهيز الملف: "+t;});
+      const a=document.createElement("a");a.href=URL.createObjectURL(r.blob);a.download="mujassam_saved.zip";document.body.appendChild(a);a.click();
+      setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},120000);
+      st.textContent="تم تجهيز mujassam_saved.zip: "+r.n+" ملف، "+Math.round(r.size/1048576)+" ميجابايت. ابحث عنه في التنزيلات.";
+    }catch(e){st.textContent="تعذر الحفظ: "+e.message;}
+    busy=false;bt.disabled=false;
+  };
+  const bi=document.getElementById("svi"),fi=document.getElementById("svf");
+  bi.onclick=()=>{if(!busy)fi.click();};
+  fi.onchange=async()=>{
+    const f=fi.files&&fi.files[0];fi.value="";if(!f||busy)return;
+    busy=true;bi.disabled=true;bt.disabled=true;
+    try{
+      st.textContent="جاري قراءة "+f.name+" ...";
+      const r=await window.__SV.importZip(f,t=>{st.textContent="جاري الاستيراد: "+t;});
+      if(!r.n)throw new Error("لا يوجد في الملف شيء من ملفات الصفحة المحفوظة، تأكد أنه الملف الذي حفظته من هذه الصفحة");
+      st.textContent="تم استيراد "+r.n+" ملف. أعد فتح الصفحة ليبدأ التشغيل من المحفوظ.";
+    }catch(e){st.textContent="تعذر الاستيراد: "+e.message;}
+    busy=false;bi.disabled=false;bt.disabled=false;
+  };
+})();
+
+(function(){
+  const sv=document.getElementById("svp");if(!sv||!window.__SV)return;
+  const el=document.createElement("details");el.id="lpk";el.open=true;
+  el.innerHTML='<summary>استيراد الحزمة من الهاتف</summary><div class="r"><div id="lps" style="font-size:13px;color:#fbbf24">اختر ملف الحزمة makehuman_system_assets_cc0.zip، ويمكنك اختيار عدة ملفات حزم معاً.</div><div style="margin:8px 0"><button id="lpb" style="background:#7c3aed">اختيار الحزمة من الهاتف</button></div><input id="lpi" type="file" accept=".zip,application/zip" multiple style="display:none"></div>';
+  sv.insertAdjacentElement("afterend",el);
+  if(typeof openRepo==="function"){const oR=openRepo;window.openRepo=async function(){if(window.__localPack)return;return oR.apply(this,arguments);};}
+  const st=document.getElementById("lps"),bt=document.getElementById("lpb"),inp=document.getElementById("lpi");
+  bt.onclick=()=>inp.click();
+  inp.onchange=async()=>{
+    const fs=[...(inp.files||[])];if(!fs.length)return;
+    bt.disabled=true;let done=0,bad=[];
+    for(const f of fs){
+      st.textContent="جاري قراءة فهرس "+f.name+" ("+(done+bad.length+1)+" من "+fs.length+")...";
+      try{
+        const url="blob:local-pack-"+done+"-"+Date.now();
+        window.__SV.addLocal(url,f);
+        const pk=await openZip([url]);
+        if(!window.__localPack){for(const c in ASSETS)for(const n in ASSETS[c])if(ASSETS[c][n].pk===REPO)delete ASSETS[c][n];}
+        indexPack(pk);window.__localPack=true;
+        LOG.push("فُتحت الحزمة من الهاتف | "+f.name+" | الملفات: "+Object.keys(pk.ents).length);
+        done++;
+      }catch(e){bad.push(f.name+": "+e.message);}
+    }
+    try{
+      window.__fillMenus();
+      for(const t of ["لون العينين","الحاجبان"]){
+        const lb=[...document.querySelectorAll("label")].find(x=>x.textContent.trim()===t);
+        const s=lb&&lb.parentElement.querySelector("select");
+        if(s&&s.value)s.dispatchEvent(new Event("change"));
+      }
+    }catch(e){bad.push("القوائم: "+e.message);}
+    st.textContent="تم فتح "+done+" من "+fs.length+" ملف | شعر "+Object.keys(ASSETS.hair).length+" | ملابس "+Object.keys(ASSETS.clothes).length+" | بشرات "+Object.keys(ASSETS.skins).length+" | عيون "+Object.keys(ASSETS.eyes).length+" | حاجبان "+Object.keys(ASSETS.eyebrows).length+(bad.length?" | فشل: "+bad.join(" ; "):"");
+    bt.disabled=false;inp.value="";
+  };
+})();
+(function(){
+  const host=document.getElementById("lpk");if(!host)return;
+  const r0=host.querySelector(".r"),inp=document.getElementById("lpi"),bt=document.getElementById("lpb");if(!r0||!inp||!bt)return;
+  const box=document.createElement("div");box.id="zck";
+  box.style.cssText="margin-top:12px;padding-top:10px;border-top:1px solid #3a3a46";
+  box.innerHTML='<div style="font-weight:700;font-size:14px;margin-bottom:4px">كشف أخطاء الحزمة makehuman_system_assets_cc0.zip</div>'+
+    '<div id="zcs" style="font-size:12px;color:#fbbf24;min-height:16px"></div>'+
+    '<div style="height:6px;background:#2a2a33;border-radius:3px;overflow:hidden;margin:6px 0"><div id="zcb" style="height:100%;width:0;background:#fbbf24"></div></div>'+
+    '<div class="seg"><button type="button" id="zcr">بدء الفحص</button><button type="button" id="zcx" disabled>إيقاف</button></div>'+
+    '<textarea id="zct" readonly rows="10" style="width:100%;box-sizing:border-box;font-size:11px;direction:ltr;text-align:left;background:#2a2a33;color:#ddd;margin-top:6px"></textarea>'+
+    '<button type="button" id="zcc" style="width:100%;padding:9px;border-radius:8px;margin-top:6px">نسخ تقرير الحزمة</button>';
+  r0.appendChild(box);
+  const Q=s=>box.querySelector(s),sNode=document.createTextNode("اضغط «بدء الفحص» لفحص الحزمة بعد استيرادها.");Q("#zcs").appendChild(sNode);
+  const setS=t=>{sNode.nodeValue=t;};
+  /*ZCK-CORE-START*/
+  const HAS=typeof DecompressionStream!=="undefined",LIM=16*1048576;
+  const CT=(function(){const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let j=0;j<8;j++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  const crc=u=>{let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
+  async function inflate(u8){
+    const ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();
+    w.write(u8).catch(()=>{});w.close().catch(()=>{});
+    return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+  }
+  let act=0;const WQ2=[];
+  const lim=fn=>new Promise(res=>{const go=async()=>{act++;try{await fn();}finally{act--;const nx=WQ2.shift();if(nx)nx();res();}};if(act<3)go();else WQ2.push(go);});
+  function assetOf(n){const m=n.match(/(?:^|\/)(clothes|hair|eyebrows|eyelashes|eyes|skins|teeth|tongue|proxymeshes|topologies)\/([^\/]+)\//i);if(m)return m[1].toLowerCase()+"/"+m[2];const q=n.split("/");return q.length>2?q[q.length-3]+"/"+q[q.length-2]:(q.length>1?q[0]:"-");}
+  async function scanFile(f,upd){
+    const res={name:f.name,size:f.size,total:0,ok:0,bad:[],notes:[],cats:{}},sz=f.size,td=new TextDecoder();
+    const bad=(x,t,d)=>{res.bad.push({n:x.name,t:t,d:d});res.cats[t]=(res.cats[t]||0)+1;};
+    const tail=new Uint8Array(await f.slice(Math.max(0,sz-65600),sz).arrayBuffer());
+    let e=-1;for(let i=tail.length-22;i>=0;i--){if(tail[i]==0x50&&tail[i+1]==0x4b&&tail[i+2]==5&&tail[i+3]==6){e=i;break;}}
+    if(e<0){res.fatal="نهاية الأرشيف (الفهرس) غير موجودة: الملف ناقص أو ليس zip";return res;}
+    const dv=new DataView(tail.buffer,tail.byteOffset,tail.byteLength);
+    const n=dv.getUint16(e+10,true),cdSize=dv.getUint32(e+12,true),cdOff=dv.getUint32(e+16,true);
+    if(n===0xFFFF||cdOff===0xFFFFFFFF||cdSize===0xFFFFFFFF){res.fatal="الأرشيف بصيغة zip64 وهذا الفحص (والتطبيق) لا يدعمها";return res;}
+    if(cdOff+cdSize>sz){res.fatal="الفهرس يتجاوز حجم الملف: الملف مقطوع";return res;}
+    const cd=new Uint8Array(await f.slice(cdOff,cdOff+cdSize).arrayBuffer()),cv=new DataView(cd.buffer),ents=[];let p=0;
+    for(let i=0;i<n;i++){
+      if(p+46>cd.length||cv.getUint32(p,true)!==0x02014b50){res.notes.push("الفهرس انقطع عند الملف رقم "+i+" من "+n);break;}
+      const meth=cv.getUint16(p+10,true),cr=cv.getUint32(p+16,true),csz=cv.getUint32(p+20,true),usz=cv.getUint32(p+24,true),nl=cv.getUint16(p+28,true),xl=cv.getUint16(p+30,true),cl=cv.getUint16(p+32,true),lo=cv.getUint32(p+42,true);
+      const name=td.decode(cd.subarray(p+46,p+46+nl));p+=46+nl+xl+cl;
+      if(name.endsWith("/"))continue;
+      ents.push({name,meth,crc:cr,csz,usz,lo});
+    }
+    res.total=ents.length;
+    const seen=new Map();for(const x of ents){const k=x.name.toLowerCase();seen.set(k,(seen.get(k)||0)+1);}
+    const dup=[...seen].filter(([k,c])=>c>1);if(dup.length)res.notes.push("أسماء مكررة داخل الحزمة: "+dup.length+" (مثال: "+dup[0][0]+")");
+    if(!HAS)res.notes.push("المتصفح لا يدعم فك الضغط: فُحص الهيكل والملفات غير المضغوطة فقط");
+    ents.sort((a,b)=>a.lo-b.lo);
+    const ends=ents.map((x,i)=>i+1<ents.length?ents[i+1].lo:cdOff);
+    let i=0,done=0;
+    while(i<ents.length&&!stp){
+      let j=i;const base=ents[i].lo;
+      while(j+1<ents.length&&ends[j+1]-base<=LIM)j++;
+      const last=ends[j];
+      if(base>=sz||last>sz){for(let k=i;k<=j;k++)bad(ents[k],"الإزاحة خارج الملف","الملف أقصر مما يقوله الفهرس");done+=j-i+1;upd(done,ents.length,res.bad.length);i=j+1;continue;}
+      const buf=new Uint8Array(await f.slice(base,last).arrayBuffer()),bv=new DataView(buf.buffer),jobs=[];
+      for(let k=i;k<=j;k++){
+        const x=ents[k],o=x.lo-base;
+        if(o+30>buf.length||bv.getUint32(o,true)!==0x04034b50){bad(x,"توقيع محلي خاطئ","الملف لا يبدأ في موضعه (الإزاحة "+x.lo+")");continue;}
+        const lm=bv.getUint16(o+8,true),lnl=bv.getUint16(o+26,true),lxl=bv.getUint16(o+28,true),ds=o+30+lnl+lxl,de=ds+x.csz;
+        if(lm!==x.meth){bad(x,"اختلاف طريقة الضغط","محلي "+lm+" ومركزي "+x.meth);continue;}
+        const ln=td.decode(buf.subarray(o+30,o+30+lnl));
+        if(ln!==x.name){bad(x,"الاسم المحلي مختلف","المحلي: "+ln);continue;}
+        if(de>buf.length){bad(x,"البيانات تتجاوز موضعها","الحجم المضغوط "+x.csz+" يتخطى بداية الملف التالي");continue;}
+        const raw=buf.subarray(ds,de);
+        if(x.meth===0){if(x.csz!==x.usz)bad(x,"الحجم لا يطابق","مخزن بلا ضغط لكن الحجمين مختلفان");else if(crc(raw)!==x.crc)bad(x,"CRC لا يطابق","البيانات تالفة");else res.ok++;continue;}
+        if(x.meth!==8){bad(x,"طريقة ضغط غير مدعومة","رقم "+x.meth);continue;}
+        if(!HAS)continue;
+        jobs.push(lim(async()=>{
+          try{const d=await inflate(raw);
+            if(d.length!==x.usz)bad(x,"الحجم بعد الفك مختلف","المتوقع "+x.usz+" والفعلي "+d.length);
+            else if(crc(d)!==x.crc)bad(x,"CRC لا يطابق","البيانات تالفة");
+            else res.ok++;
+          }catch(er){bad(x,"فك الضغط فشل",String(er&&er.message||er));}
+        }));
+      }
+      await Promise.all(jobs);
+      done+=j-i+1;upd(done,ents.length,res.bad.length);
+      await new Promise(r=>setTimeout(r,0));
+      i=j+1;
+    }
+    return res;
+  }
+  function report(R,t0,stopped){
+    const o=["== فحص الحزمة | "+new Date().toISOString()+(stopped?" | أُوقف يدوياً":"")+" | المدة: "+((performance.now()-t0)/1000).toFixed(1)+"ث"];
+    for(const x of R){
+      o.push("","الملف: "+x.name+" | "+(x.size/1048576).toFixed(1)+" ميجابايت");
+      if(x.fatal){o.push("خطأ في الملف نفسه: "+x.fatal);continue;}
+      o.push("عدد الملفات داخل الحزمة: "+x.total+" | سليم: "+x.ok+" | به خطأ: "+x.bad.length);
+      x.notes.forEach(n=>o.push("ملاحظة: "+n));
+      if(x.bad.length){
+        o.push("-- أنواع الأخطاء:");for(const k in x.cats)o.push(x.cats[k]+" × "+k);
+        const g=new Map();x.bad.forEach(b=>{const a=assetOf(b.n);g.set(a,(g.get(a)||0)+1);});
+        o.push("-- العناصر المتأثرة ("+g.size+"):");[...g].slice(0,60).forEach(([a,c])=>o.push(a+" ("+c+" ملف)"));
+        o.push("-- تفاصيل الأخطاء (أول 60):");x.bad.slice(0,60).forEach(b=>o.push(b.n+" | "+b.t+" | "+b.d));
+        if(x.bad.length>60)o.push("... و "+(x.bad.length-60)+" خطأ آخر");
+      }
+      o.push(x.partial?"الخلاصة: لم يكتمل الفحص.":x.bad.length?"الخلاصة: الحزمة بها ملفات تالفة. نزّلها أو انسخها من جديد ثم استوردها.":"الخلاصة: الحزمة سليمة بالكامل. لو بقيت ملابس لا تظهر فالمشكلة في طريقة قراءة التطبيق وليس في الملف.");
+    }
+    return o.join("\n");
+  }
+  /*ZCK-CORE-END*/
+  let stp=false,running=false,last=[],cur=null,pend=false;
+  window.__zckWait=()=>cur||Promise.resolve();
+  const ui=on=>{Q("#zcr").disabled=on;Q("#zcx").disabled=!on;};
+  async function runAll(fs){
+    if(running||!fs.length)return;
+    running=true;stp=false;last=fs;ui(true);
+    const t0=performance.now(),R=[];let lastUp=0;
+    try{
+      for(let q=0;q<fs.length&&!stp;q++){
+        const f=fs[q],pre=fs.length>1?"("+(q+1)+"/"+fs.length+") ":"";
+        setS(pre+"جاري فحص "+f.name+" ...");Q("#zcb").style.width="0";
+        let res;
+        try{res=await scanFile(f,(d,t,b)=>{const now=performance.now();if(now-lastUp<150&&d<t)return;lastUp=now;const p=Math.round(d/Math.max(1,t)*100);Q("#zcb").style.width=p+"%";setS(pre+"فحص الحزمة: "+d+" / "+t+" · "+p+"% · "+((now-t0)/1000).toFixed(0)+"ث · أخطاء: "+b);});}
+        catch(er){res={name:f.name,size:f.size,total:0,ok:0,bad:[],notes:[],cats:{},fatal:"تعذرت قراءة الملف: "+(er&&er.message||er)};}
+        if(stp)res.partial=true;
+        R.push(res);
+      }
+    }finally{
+      const stopped=stp;stp=false;running=false;ui(false);
+      Q("#zct").value=report(R,t0,stopped);Q("#zcb").style.width="100%";
+      const nb=R.reduce((a,x)=>a+x.bad.length,0),nf=R.filter(x=>x.fatal).length;
+      setS((stopped?"أُوقف":"اكتمل")+" · "+(nf?"ملف به خطأ في هيكله · ":"")+"ملفات تالفة داخل الحزمة: "+nb);
+    }
+  }
+  const start=fs=>{cur=runAll(fs);return cur;};
+  inp.addEventListener("change",()=>{const fs=[...(inp.files||[])];if(fs.length){last=fs;pend=true;}});
+  Q("#zcr").onclick=()=>{if(!running&&last.length)start(last);else if(!last.length)setS("لا توجد حزمة مستوردة بعد.");};
+  Q("#zcx").onclick=()=>{if(running){stp=true;setS("جاري الإيقاف...");Q("#zcx").disabled=true;}};
+  Q("#zcc").onclick=()=>{const ta=Q("#zct");ta.select();try{navigator.clipboard.writeText(ta.value);}catch(e){document.execCommand("copy");}};
+})();
+</script>
+</body>
+</html>
