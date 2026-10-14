@@ -2659,6 +2659,11 @@ async function run(){
         "allprojects { repositories { google(); mavenCentral() } }",
         "allprojects { repositories { google(); mavenCentral(); maven { url 'https://jitpack.io' } } }"
       );
+      // BouncyCastle ومكتبة ADB تحملان ملفات META-INF مكررة، وهذا يكسر مرحلة mergeDebugJavaResource
+      textFiles['app/build.gradle'] = textFiles['app/build.gradle'].replace(
+        "namespace 'com.example.chatapp'\n",
+        "namespace 'com.example.chatapp'\n    packaging {\n        resources {\n            excludes += ['META-INF/versions/**', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/INDEX.LIST', 'META-INF/*.kotlin_module', '**/module-info.class']\n        }\n    }\n"
+      );
     }
     const xmlEsc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/^[@?]/, m => '\\' + m);
     const strXml = (m, app) => '<resources>\n' + (app ? '    <string name="app_name" formatted="false">' + xmlEsc(appname) + '</string>\n' : '') +
